@@ -19,42 +19,42 @@ class graphite::params {
 	$apache_pkg = $operatingsystem ? {
 		ubuntu => "apache2",
 		debian => "apache2",
-		rhel   => "httpd",
+		redhat => "httpd",
 		centos => "httpd"
 	}
 
 	$apache_python_pkg = $operatingsystem ? {
 		ubuntu => "libapache2-mod-python",
 		debian => "libapache2-mod-python",
-		rhel   => "mod_python",
+		redhat => "mod_python",
 		centos => "mod_python"
 	}
 
 	$apache_service_name = $operatingsystem ? {
 		ubuntu => "apache2",
 		debian => "apache2",
-		rhel   => "httpd",
+		redhat => "httpd",
 		centos => "httpd"
 	}
 
 	$web_user = $operatingsystem ? {
 		ubuntu => "www-data",
 		debian => "www-data",
-		rhel   => "apache",
+		redhat => "apache",
 		centos => "apache"
 	}
 
 	$apacheconf_dir = $operatingsystem ? {
 		ubuntu => "/etc/apache2/sites-available",
 		debian => "/etc/apache2/sites-available",
-		rhel   => "/etc/httpd/conf.d",
+		redhat => "/etc/httpd/conf.d",
 		centos => "/etc/httpd/conf.d"
 	}
 
 	$graphitepkgs = $operatingsystem ? {
 		ubuntu => ["python-cairo","python-twisted","python-django","python-django-tagging","python-ldap","python-memcache","python-sqlite","python-simplejson"],
 		debian => ["python-cairo","python-twisted","python-django","python-django-tagging","python-ldap","python-memcache","python-sqlite","python-simplejson"],
-		rhel   => ["pycairo", "Django", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python"],
+		redhat => ["pycairo", "Django", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python"],
 		centos => ["pycairo", "Django", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python"]
 	}
  
