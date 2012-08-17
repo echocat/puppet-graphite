@@ -4,7 +4,7 @@ class graphite::install inherits graphite::params {
   anchor { 'graphite::install::end': }
 
   case $operatingsystem {
-    centos,rhel: {
+    centos,redhat: {
       class { 'graphite::install::redhat':
         require => Anchor['graphite::install::begin'],
         before  => Anchor['graphite::install::end'],
