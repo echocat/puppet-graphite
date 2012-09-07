@@ -4,7 +4,7 @@ class graphite::config inherits graphite::params {
 	anchor { 'graphite::config::end': }
 
   Exec {
-    path => '/bin:/usr/bin',
+    path => '/bin:/usr/bin:/usr/sbin',
   }
 
 	# for full functionality we need this packages:

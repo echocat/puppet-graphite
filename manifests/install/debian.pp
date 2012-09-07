@@ -3,7 +3,7 @@ class graphite::install::debian {
 	require graphite::params
 
   Exec {
-    path => '/bin:/usr/bin',
+    path => '/bin:/usr/bin:/usr/sbin',
   }
 
 	# for full functionality we need this packages:
