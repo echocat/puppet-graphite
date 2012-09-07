@@ -2,6 +2,10 @@ class graphite::install::debian {
 
 	require graphite::params
 
+  Exec {
+    path => '/bin:/usr/bin:/usr/sbin',
+  }
+
 	# for full functionality we need this packages:
 	# madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
 	# optinal: python-ldap, python-memcache, memcached, python-sqlite
