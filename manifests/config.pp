@@ -3,6 +3,10 @@ class graphite::config inherits graphite::params {
 	anchor { 'graphite::config::begin': }
 	anchor { 'graphite::config::end': }
 
+  Exec {
+    path => '/bin:/usr/bin',
+  }
+
 	# for full functionality we need this packages:
 	# madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
 	# optinal: python-ldap, python-memcache, memcached, python-sqlite
