@@ -2,11 +2,9 @@
 
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
-@author: Daniel Werdermann / dwerdermann@web.de
-
 # Tested on
-RHEL/CentOS 6+ 
-Debian 6+ 
+RHEL/CentOS 6+   
+Debian 6+  
 Ubunutu 10.04 and newer
 
 # Requirements
@@ -23,3 +21,8 @@ node "graphite.my.domain" {
         include graphite
 }
 </pre>
+
+# Author
+
+written by Daniel Werdermann dwerdermann@web.de
+
