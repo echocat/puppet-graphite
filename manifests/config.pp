@@ -68,6 +68,7 @@ class graphite::config (
 			command => "python manage.py syncdb --noinput",
 			cwd => "/opt/graphite/webapp/graphite",
 			refreshonly => true,
+			notify => Exec["Chown graphite for apache"],
 			subscribe => Exec["Install $graphiteVersion"],
 			before => Exec["Chown graphite for apache"];
 	}
@@ -78,6 +79,7 @@ class graphite::config (
 		"Chown graphite for apache":
 			command => "chown -R $web_user:$web_user /opt/graphite/storage/",
 			cwd => "/opt/graphite/",
+			refreshonly => true,
 			require => Anchor["graphite::install::end"],
 	}
 
