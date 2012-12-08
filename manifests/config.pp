@@ -12,7 +12,8 @@ class graphite::config (
 	$gr_pickle_receiver_port = 2004,
 	$gr_use_insecure_unpickler = "False",
 	$gr_cache_query_interface = "0.0.0.0",
-	$gr_cache_query_port = 7002
+	$gr_cache_query_port = 7002,
+	$gr_timezone = 'Europe/Berlin'
 ) inherits graphite::params {
 
 	anchor { 'graphite::config::begin': }

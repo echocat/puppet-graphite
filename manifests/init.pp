@@ -12,7 +12,8 @@ class graphite (
 	$gr_pickle_receiver_port = 2004,
 	$gr_use_insecure_unpickler = "False",
 	$gr_cache_query_interface = "0.0.0.0",
-	$gr_cache_query_port = 7002
+	$gr_cache_query_port = 7002,
+	$gr_timezone = 'Europe/Berlin'
 ){
 
 	class { 'graphite::install':
@@ -21,19 +22,20 @@ class graphite (
 
 	class { 'graphite::config':
 		gr_user                      => $gr_user,
-    	gr_max_cache_size            => $gr_max_cache_size,
-    	gr_max_updates_per_second    => $gr_max_updates_per_second,
-    	gr_max_creates_per_minute    => $gr_max_creates_per_minute,
-    	gr_line_receiver_interface   => $gr_line_receiver_interface,
-    	gr_line_receiver_port        => $gr_line_receiver_port,
-    	gr_enable_udp_listener       => $gr_enable_udp_listener,
-    	gr_udp_receiver_interface    => $gr_udp_receiver_interface,
-    	gr_udp_receiver_port         => $gr_udp_receiver_port,
-    	gr_pickle_receiver_interface => $gr_pickle_receiver_interface,
-    	gr_pickle_receiver_port      => $gr_pickle_receiver_port,
-    	gr_use_insecure_unpickler    => $gr_use_insecure_unpickler,
-    	gr_cache_query_interface     => $gr_cache_query_interface,
-    	gr_cache_query_port          => $gr_cache_query_port,
+		gr_max_cache_size            => $gr_max_cache_size,
+		gr_max_updates_per_second    => $gr_max_updates_per_second,
+		gr_max_creates_per_minute    => $gr_max_creates_per_minute,
+		gr_line_receiver_interface   => $gr_line_receiver_interface,
+		gr_line_receiver_port        => $gr_line_receiver_port,
+		gr_enable_udp_listener       => $gr_enable_udp_listener,
+		gr_udp_receiver_interface    => $gr_udp_receiver_interface,
+		gr_udp_receiver_port         => $gr_udp_receiver_port,
+		gr_pickle_receiver_interface => $gr_pickle_receiver_interface,
+		gr_pickle_receiver_port      => $gr_pickle_receiver_port,
+		gr_use_insecure_unpickler    => $gr_use_insecure_unpickler,
+		gr_cache_query_interface     => $gr_cache_query_interface,
+		gr_cache_query_port          => $gr_cache_query_port,
+		gr_timezone                  => $gr_timezone,
 		require => Class['graphite::install']
 	}
 
