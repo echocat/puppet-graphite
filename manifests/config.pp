@@ -124,6 +124,25 @@ class graphite::config (
 			notify => Service["carbon-cache"];
 	}
 
+
+	# configure logrotate script for carbon
+
+	file {
+		"/opt/graphite/bin/carbon-logrotate.sh":
+			mode => 544,
+			content => template("graphite/opt/graphite/bin/carbon-logrotate.sh.erb"),
+			require => Anchor["graphite::install::end"];
+	}
+
+	cron {
+		"Rotate carbon logs":
+			command => "/opt/graphite/bin/carbon-logrotate.sh",
+			user => root,
+			hour => '1',
+			minute => '15',
+			require => File["/opt/graphite/bin/carbon-logrotate.sh"];
+	}
+
 	# startup carbon engine
 
 	service {
