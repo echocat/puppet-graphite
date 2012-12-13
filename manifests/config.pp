@@ -12,7 +12,8 @@ class graphite::config (
 	$gr_pickle_receiver_port = 2004,
 	$gr_use_insecure_unpickler = "False",
 	$gr_cache_query_interface = "0.0.0.0",
-	$gr_cache_query_port = 7002
+	$gr_cache_query_port = 7002,
+	$gr_timezone = 'Europe/Berlin'
 ) inherits graphite::params {
 
 	anchor { 'graphite::config::begin': }
@@ -68,6 +69,7 @@ class graphite::config (
 			command => "python manage.py syncdb --noinput",
 			cwd => "/opt/graphite/webapp/graphite",
 			refreshonly => true,
+			notify => Exec["Chown graphite for apache"],
 			subscribe => Exec["Install $graphiteVersion"],
 			before => Exec["Chown graphite for apache"];
 	}
@@ -78,6 +80,7 @@ class graphite::config (
 		"Chown graphite for apache":
 			command => "chown -R $web_user:$web_user /opt/graphite/storage/",
 			cwd => "/opt/graphite/",
+			refreshonly => true,
 			require => Anchor["graphite::install::end"],
 	}
 
