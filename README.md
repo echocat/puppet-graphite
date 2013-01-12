@@ -3,7 +3,7 @@
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
 # Tested on
-RHEL/CentOS/Scientific 6+
+RHEL/CentOS/Scientific 6+  
 Debian 6+  
 Ubunutu 10.04 and newer
 
@@ -13,6 +13,10 @@ Configure conf files as you need:
 
 templates/opt/graphite/conf/storage-schemas.conf.erb  
 templates/opt/graphite/webapp/graphite/local_settings.py.erb  
+
+Software versions needed:  
+facter > 1.6.2  
+puppet > 2.6.2  
 
 # Parameters
 

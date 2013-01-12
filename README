@@ -9,16 +9,32 @@ Ubunutu 10.04 and newer
 
 # Requirements:
 
-Configure conf files as you need:
+Configure conf files as you need: 
 
-templates/opt/graphite/conf/carbon.conf.erb  
-templates/opt/graphite/conf/storage-schemas.conf.erb 
-templates/opt/graphite/webapp/graphite/local_settings.py.erb
+templates/opt/graphite/conf/storage-schemas.conf.erb  
+templates/opt/graphite/webapp/graphite/local_settings.py.erb  
+
+Software versions needed:  
+facter > 1.6.2  
+puppet > 2.6.2  
 
 # Sample usage:
 
+### Out of the box graphite installation
+
 node "graphite.my.domain" {
         include graphite
+}
+
+### Tuned graphite installation
+
+  # This carbon cache will accept TCP and UDP datas and
+  # the cachesize is limited to 256mb
+node "graphite.my.domain" {
+	class {'graphite':
+		gr_max_cache_size => 256,
+		gr_enable_udp_listener => True
+	}
 }
 
 # Author
