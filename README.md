@@ -3,7 +3,7 @@
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
 # Tested on
-RHEL/CentOS 6+  
+RHEL/CentOS/Scientific 6+
 Debian 6+  
 Ubunutu 10.04 and newer
 
