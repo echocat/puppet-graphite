@@ -34,9 +34,9 @@ class graphite::config (
 		$apache_python_pkg: ensure => installed;
 	}
 
-	case $operatingsystem {
+	case $::osfamily {
 
-		ubuntu,debian: {
+		debian: {
 			exec { "Disable default apache site":
 				command => "a2dissite default",
 				onlyif => "test -f /etc/apache2/sites-enabled/000-default",
@@ -44,7 +44,7 @@ class graphite::config (
 				notify => Service["$apache_service_name"];
 			}
 		}
-		redhat,centos: {
+		redhat: {
 			file { "${apacheconf_dir}/welcome.conf":
 				ensure => absent,
 				require => Package["$apache_pkg"],
@@ -100,8 +100,8 @@ class graphite::config (
 			require => [Package["$apache_pkg"],Exec["Initial django db creation"]];
 	}
 
-	case $operatingsystem {
-		ubuntu,debian: {
+	case $::osfamily {
+		debian: {
 			file {
 				"/etc/apache2/sites-enabled/graphite.conf":
 					ensure => link,

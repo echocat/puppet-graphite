@@ -1,4 +1,4 @@
-# Works for Redhat 6+ and CentOS 6+
+# Works for Redhat 6+, CentOS 6+, and Scientific 6+
 
 class graphite::install::redhat {
 
@@ -22,7 +22,7 @@ class graphite::install::redhat {
 			before => Anchor["graphitepkg::end"]
 	}
 
-	# Install required python env special for redhat/centos
+	# Install required python env special for redhat and derivatives
 
 	package {
 		"python-setuptools":

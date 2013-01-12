@@ -16,46 +16,34 @@ class graphite::params {
 
 	$install_prefix = "/opt/"
 
-	$apache_pkg = $operatingsystem ? {
-		ubuntu => "apache2",
+	$apache_pkg = $::osfamily ? {
 		debian => "apache2",
 		redhat => "httpd",
-		centos => "httpd"
 	}
 
-	$apache_python_pkg = $operatingsystem ? {
-		ubuntu => "libapache2-mod-python",
+	$apache_python_pkg = $::osfamily ? {
 		debian => "libapache2-mod-python",
 		redhat => "mod_python",
-		centos => "mod_python"
 	}
 
-	$apache_service_name = $operatingsystem ? {
-		ubuntu => "apache2",
+	$apache_service_name = $::osfamily ? {
 		debian => "apache2",
 		redhat => "httpd",
-		centos => "httpd"
 	}
 
-	$web_user = $operatingsystem ? {
-		ubuntu => "www-data",
+	$web_user = $::osfamily ? {
 		debian => "www-data",
 		redhat => "apache",
-		centos => "apache"
 	}
 
-	$apacheconf_dir = $operatingsystem ? {
-		ubuntu => "/etc/apache2/sites-available",
+	$apacheconf_dir = $::osfamily ? {
 		debian => "/etc/apache2/sites-available",
 		redhat => "/etc/httpd/conf.d",
-		centos => "/etc/httpd/conf.d"
 	}
 
-	$graphitepkgs = $operatingsystem ? {
-		ubuntu => ["python-cairo","python-twisted","python-django","python-django-tagging","python-ldap","python-memcache","python-sqlite","python-simplejson"],
+	$graphitepkgs = $::osfamily ? {
 		debian => ["python-cairo","python-twisted","python-django","python-django-tagging","python-ldap","python-memcache","python-sqlite","python-simplejson"],
 		redhat => ["pycairo", "Django", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python"],
-		centos => ["pycairo", "Django", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python"]
 	}
  
 }
