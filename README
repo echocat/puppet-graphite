@@ -14,9 +14,15 @@ Configure conf files as you need:
 templates/opt/graphite/conf/storage-schemas.conf.erb  
 templates/opt/graphite/webapp/graphite/local_settings.py.erb  
 
-Software versions needed:  
+### Modules needed:  
+
+stdlib by puppetlabs  
+
+### Software versions needed:  
 facter > 1.6.2  
 puppet > 2.6.2  
+
+On Redhat distributions you need the EPEL or RPMforge repository, because Graphite needs packages, which are not part of the default repos.  
 
 # Sample usage:
 
