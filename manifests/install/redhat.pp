@@ -1,5 +1,11 @@
-# Works for Redhat 6+, CentOS 6+, and Scientific 6+
-
+# == Class: graphite::install::redhat
+#
+# This class installs graphite/carbon/whisper on Redhat and its derivates and SHOULD NOT be called directly.
+#
+# === Parameters
+#
+# None.
+#
 class graphite::install::redhat {
 
 	include graphite::params

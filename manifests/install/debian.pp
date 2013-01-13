@@ -1,3 +1,11 @@
+# == Class: graphite::install::debian
+#
+# This class installs graphite/carbon/whisper on Debian and its derivates and SHOULD NOT be called directly.
+#
+# === Parameters
+#
+# None.
+#
 class graphite::install::debian {
 
 	include graphite::params

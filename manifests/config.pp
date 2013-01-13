@@ -1,3 +1,11 @@
+# == Class: graphite::config
+#
+# This class configures graphite/carbon/whisper and SHOULD NOT be called directly.
+#
+# === Parameters
+#
+# None.
+#
 class graphite::config (
 	$gr_user = '',
 	$gr_max_cache_size = inf,
@@ -13,7 +21,7 @@ class graphite::config (
 	$gr_use_insecure_unpickler = False,
 	$gr_cache_query_interface = '0.0.0.0',
 	$gr_cache_query_port = 7002,
-	$gr_timezone = 'Europe/Berlin'
+	$gr_timezone = 'GMT'
 ) inherits graphite::params {
 
 	anchor { 'graphite::config::begin': }

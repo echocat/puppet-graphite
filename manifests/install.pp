@@ -1,3 +1,11 @@
+# == Class: graphite::install
+#
+# This class calls the OS specific install classes and SHOULD NOT be called directly.
+#
+# === Parameters
+#
+# None.
+#
 class graphite::install inherits graphite::params {
 
 	anchor { 'graphite::install::begin': }

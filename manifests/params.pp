@@ -1,3 +1,11 @@
+# == Class: graphite::params
+#
+# This class specifies default parameters for the graphite module and SHOULD NOT be called directly.
+#
+# === Parameters
+#
+# None.
+#
 class graphite::params {
 	$build_dir = '/usr/local/src/'
 
