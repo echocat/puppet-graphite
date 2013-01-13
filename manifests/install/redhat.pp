@@ -19,7 +19,7 @@ class graphite::install::redhat {
 	anchor { 'graphitepkg::begin': }
 	anchor { 'graphitepkg::end': }
 
-	package { "${::graphite::params::graphitepkgs}":
+	package { $::graphite::params::graphitepkgs :
 		ensure  => installed,
 		require => Anchor['graphitepkg::begin'],
 		before  => Anchor['graphitepkg::end']
@@ -52,15 +52,15 @@ class graphite::install::redhat {
 
 	exec {
 		"Download and untar ${::graphite::params::graphiteVersion}":
-			command => "curl -s -L ${::graphite::params::webapp_dl_url} | tar xz",
+			command => "wget -O - ${::graphite::params::webapp_dl_url} | tar xz",
 			creates => "${::graphite::params::build_dir}/${::graphite::params::graphiteVersion}",
 			cwd     => "${::graphite::params::build_dir}";
 		"Download and untar ${::graphite::params::carbonVersion}":
-			command => "curl -s -L ${::graphite::params::carbon_dl_url} | tar xz",
+			command => "wget -O - ${::graphite::params::carbon_dl_url} | tar xz",
 			creates => "${::graphite::params::build_dir}/${::graphite::params::carbonVersion}",
 			cwd     => "${::graphite::params::build_dir}";
 		"Download and untar ${::graphite::params::whisperVersion}":
-			command => "curl -s -L ${whisper_dl_url} | tar xz",
+			command => "wget -O - ${whisper_dl_url} | tar xz",
 			creates => "${::graphite::params::build_dir}/${::graphite::params::whisperVersion}",
 			cwd     => "${::graphite::params::build_dir}";
 	}

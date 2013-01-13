@@ -19,7 +19,7 @@ class graphite::install::debian {
 	anchor { 'graphitepkg::begin': }
 	anchor { 'graphitepkg::end': }
 
-	package { "${::graphite::params::graphitepkgs}":
+	package { $::graphite::params::graphitepkgs :
 			ensure  => installed,
 			require => Anchor['graphitepkg::begin'],
 			before  => Anchor['graphitepkg::end']
