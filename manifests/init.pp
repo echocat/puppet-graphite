@@ -1,24 +1,22 @@
 class graphite (
 	$gr_user = "",
-	$gr_max_cache_size = "inf",
+	$gr_max_cache_size = inf,
 	$gr_max_updates_per_second = 500,
 	$gr_max_creates_per_minute = 50,
-	$gr_line_receiver_interface = "0.0.0.0",
+	$gr_line_receiver_interface = '0.0.0.0',
 	$gr_line_receiver_port = 2003,
-	$gr_enable_udp_listener = "False",
-	$gr_udp_receiver_interface = "0.0.0.0",
+	$gr_enable_udp_listener = False,
+	$gr_udp_receiver_interface = '0.0.0.0',
 	$gr_udp_receiver_port = 2003,
 	$gr_pickle_receiver_interface = "0.0.0.0",
 	$gr_pickle_receiver_port = 2004,
-	$gr_use_insecure_unpickler = "False",
-	$gr_cache_query_interface = "0.0.0.0",
+	$gr_use_insecure_unpickler = False,
+	$gr_cache_query_interface = '0.0.0.0',
 	$gr_cache_query_port = 7002,
 	$gr_timezone = 'Europe/Berlin'
-){
+) {
 
-	class { 'graphite::install':
-		notify => Class['graphite::config'],
-	}
+	class { 'graphite::install': notify => Class['graphite::config'] }
 
 	class { 'graphite::config':
 		gr_user                      => $gr_user,
