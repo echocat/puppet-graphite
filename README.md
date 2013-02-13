@@ -3,26 +3,26 @@
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
 # Tested on
-RHEL/CentOS/Scientific 6+  
-Debian 6+  
+RHEL/CentOS/Scientific 6+
+Debian 6+
 Ubunutu 10.04 and newer
 
 # Requirements
 
-Configure conf files as you need: 
+Configure conf files as you need:
 
-templates/opt/graphite/conf/storage-schemas.conf.erb  
-templates/opt/graphite/webapp/graphite/local_settings.py.erb  
+templates/opt/graphite/conf/storage-schemas.conf.erb
+templates/opt/graphite/webapp/graphite/local_settings.py.erb
 
-### Modules needed:  
+### Modules needed:
 
-stdlib by puppetlabs  
+stdlib by puppetlabs
 
-### Software versions needed:  
-facter > 1.6.2  
-puppet > 2.6.2  
+### Software versions needed:
+facter > 1.6.2
+puppet > 2.6.2
 
-On Redhat distributions you need the EPEL or RPMforge repository, because Graphite needs packages, which are not part of the default repos.  
+On Redhat distributions you need the EPEL or RPMforge repository, because Graphite needs packages, which are not part of the default repos.
 
 # Parameters
 
@@ -75,6 +75,12 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>gr_cache_query_port</td><td>7002</td><td>Self explaining.</td>
   </tr>
+  <tr>
+    <td>gr_apache_port</td><td>80</td><td>The HTTP port apache will use.</td>
+  </tr>
+  <tr>
+    <td>gr_apache_port_https</td><td>443</td><td>The HTTPS port apache will use.</td>
+  </tr>
 </table>
 
 # Sample usage:
@@ -100,7 +106,31 @@ node "graphite.my.domain" {
 }
 </pre>
 
+## Optional
+
+### Move Apache to alternative ports:
+
+The default puppet set up won't work if you have an existing web server in
+place. In my case this was Nginx. For me moving apache off to another port was
+good enough. To allow this you do
+
+<pre>
+
+  # Move apache to alternate HTTP/HTTPS ports:
+node "graphite.my.domain" {
+    class {'graphite':
+        gr_apache_port => 2080,
+        gr_apache_port_https => 2443,
+    }
+}
+
+</pre>
+
+
 # Author
 
 written by Daniel Werdermann dwerdermann@web.de
 
+# Contributers
+
+ * Oisin Mulvihill, oisin dot mulvihill at gmail dot com.
