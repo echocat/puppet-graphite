@@ -50,6 +50,13 @@
 #   Timezone for graphite to be used.
 #   Default is GMT.
 #
+# [*gr_apache_port*]
+#   The port to run apache on if you have an existing web server on the default
+#   port 80.
+#   Default is 80.
+#
+
+
 # === Examples
 #
 # class {'graphite':
@@ -73,7 +80,9 @@ class graphite (
 	$gr_use_insecure_unpickler    = False,
 	$gr_cache_query_interface     = '0.0.0.0',
 	$gr_cache_query_port          = 7002,
-	$gr_timezone                  = 'GMT'
+	$gr_timezone                  = 'GMT',
+	$gr_apache_port               = 80,
+	$gr_apache_port_https         = 443
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'] }
@@ -94,6 +103,8 @@ class graphite (
 		gr_cache_query_interface     => $gr_cache_query_interface,
 		gr_cache_query_port          => $gr_cache_query_port,
 		gr_timezone                  => $gr_timezone,
+		gr_apache_port               => $gr_apache_port,
+		gr_apache_port_https         => $gr_apache_port_https,
 		require => Class['graphite::install']
 	}
 
