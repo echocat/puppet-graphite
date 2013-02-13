@@ -21,7 +21,9 @@ class graphite::config (
 	$gr_use_insecure_unpickler = False,
 	$gr_cache_query_interface = '0.0.0.0',
 	$gr_cache_query_port = 7002,
-	$gr_timezone = 'GMT'
+	$gr_timezone = 'GMT',
+	$gr_apache_port = 80,
+	$gr_apache_port_https = 443
 ) inherits graphite::params {
 
 	anchor { 'graphite::config::begin': }
@@ -39,8 +41,8 @@ class graphite::config (
 		"${::graphite::params::apache_pkg}":        ensure => installed;
 	}
 
-	package {	
-		"${::graphite::params::apache_python_pkg}": 
+	package {
+		"${::graphite::params::apache_python_pkg}":
 			ensure  => installed,
 			require => Package["${::graphite::params::apache_pkg}"]
 	}
@@ -103,6 +105,16 @@ class graphite::config (
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
 			content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb');
+		"${::graphite::params::apache_dir}/ports.conf":
+			ensure  => file,
+			owner   => $::graphite::params::web_user,
+			group   => $::graphite::params::web_user,
+			mode    => '0644',
+			content => template('graphite/etc/apache2/ports.conf.erb'),
+			require => [
+				Package["${::graphite::params::apache_python_pkg}"],
+				Exec['Initial django db creation']
+			];
 		"${::graphite::params::apacheconf_dir}/graphite.conf":
 			ensure  => file,
 			owner   => $::graphite::params::web_user,
@@ -110,8 +122,7 @@ class graphite::config (
 			mode    => '0644',
 			content => template('graphite/etc/apache2/sites-available/graphite.conf.erb'),
 			require => [
-				Package["${::graphite::params::apache_python_pkg}"],
-				Exec['Initial django db creation']
+				File["${::graphite::params::apache_dir}/ports.conf"],
 			];
 	}
 
