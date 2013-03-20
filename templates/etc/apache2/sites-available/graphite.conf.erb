@@ -1,4 +1,4 @@
-<VirtualHost *:<%= gr_apache_port %>>
+<VirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>>
 	ServerName <%= fqdn %>
 	DocumentRoot "/opt/graphite/webapp"
 

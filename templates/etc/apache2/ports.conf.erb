@@ -5,8 +5,8 @@
 # Debian etch). See /usr/share/doc/apache2.2-common/NEWS.Debian.gz and
 # README.Debian.gz
 
-NameVirtualHost *:<%= gr_apache_port %>
-Listen <%= gr_apache_port %>
+NameVirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>
+Listen <%= scope.lookupvar('graphite::gr_apache_port') %>
 
 <IfModule mod_ssl.c>
     # If you add NameVirtualHost *:443 here, you will also have to change
@@ -14,9 +14,9 @@ Listen <%= gr_apache_port %>
     # to <VirtualHost *:443>
     # Server Name Indication for SSL named virtual hosts is currently not
     # supported by MSIE on Windows XP.
-    Listen <%= gr_apache_port_https %>
+    Listen <%= scope.lookupvar('graphite::gr_apache_port_https') %>
 </IfModule>
 
 <IfModule mod_gnutls.c>
-    Listen <%= gr_apache_port_https %>
+    Listen <%= scope.lookupvar('graphite::gr_apache_port_https') %>
 </IfModule>
