@@ -20,7 +20,10 @@ class graphite::config inherits graphite::params {
 	# we need an apache with python support
 
 	package {
-		"${::graphite::params::apache_pkg}": ensure => installed;
+		"${::graphite::params::apache_pkg}": 
+			ensure => installed,
+			before => Exec['Chown graphite for apache'],
+			notify => Exec['Chown graphite for apache'];
 	}
 
 	package {
@@ -86,7 +89,11 @@ class graphite::config inherits graphite::params {
 			owner   => $::graphite::params::web_user,
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
-			content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb');
+			content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
+			require => [
+				Package["${::graphite::params::apache_pkg}"],
+				Exec['Chown graphite for apache']
+			];
 		"${::graphite::params::apache_dir}/ports.conf":
 			ensure  => file,
 			owner   => $::graphite::params::web_user,
@@ -95,7 +102,8 @@ class graphite::config inherits graphite::params {
 			content => template('graphite/etc/apache2/ports.conf.erb'),
 			require => [
 				Package["${::graphite::params::apache_python_pkg}"],
-				Exec['Initial django db creation']
+				Exec['Initial django db creation'],
+				Exec['Chown graphite for apache']
 			];
 		"${::graphite::params::apacheconf_dir}/graphite.conf":
 			ensure  => file,
