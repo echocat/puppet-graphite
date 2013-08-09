@@ -53,6 +53,12 @@
 #   The port to run apache on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
+# [*gr_django_1_4_or_less*]
+#   Set to true to use old Django settings style.
+#   Default is false.
+# [*gr_django_db_xxx*]
+#   Django database settings. (engine|name|user|password|host|port)
+#   Default is ''.
 #
 
 
@@ -80,8 +86,17 @@ class graphite (
 	$gr_cache_query_interface     = '0.0.0.0',
 	$gr_cache_query_port          = 7002,
 	$gr_timezone                  = 'GMT',
+
 	$gr_apache_port               = 80,
-	$gr_apache_port_https         = 443
+	$gr_apache_port_https         = 443,
+
+	$gr_django_1_4_or_less        = false,
+	$gr_django_db_engine          = '',
+	$gr_django_db_name            = '',
+	$gr_django_db_user            = '',
+	$gr_django_db_password        = '',
+	$gr_django_db_host            = '',
+	$gr_django_db_port            = ''
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'] }

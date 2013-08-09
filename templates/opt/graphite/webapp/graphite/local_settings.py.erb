@@ -56,25 +56,25 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 #
 # DON'T FORGET TO RUN 'manage.py syncdb' AFTER SETTING UP A NEW DB!
 #
-#DATABASE_ENGINE = 'mysql' # or 'postgres'
-#DATABASE_NAME = 'graphite'
-#DATABASE_USER = 'graphite'
-#DATABASE_PASSWORD = 'graphite-is-awesome'
-#DATABASE_HOST = 'mysql.mycompany.com'
-#DATABASE_PORT = '3306'
-
-# Django >1.4 support
+<% if scope.lookupvar('graphite::gr_django_1_4_or_less') %>
+DATABASE_ENGINE = '<%= scope.lookupvar('graphite::gr_django_db_engine') %>'
+DATABASE_NAME = '<%= scope.lookupvar('graphite::gr_django_db_name') %>'
+DATABASE_USER = '<%= scope.lookupvar('graphite::gr_django_db_user') %>'
+DATABASE_PASSWORD = '<%= scope.lookupvar('graphite::gr_django_db_password') %>'
+DATABASE_HOST = '<%= scope.lookupvar('graphite::gr_django_db_host') %>'
+DATABASE_PORT = '<%= scope.lookupvar('graphite::gr_django_db_port') %>'
+<% else %>
 DATABASES = {
    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql
-        'NAME': '/opt/graphite/storage/graphite.db', # Or path to database file if using
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used w
-        'PORT': '',                      # Set to empty string for default. Not used wit
+        'ENGINE': '<%= scope.lookupvar('graphite::gr_django_db_engine') %>',
+        'NAME': '<%= scope.lookupvar('graphite::gr_django_db_name') %>',
+        'USER': '<%= scope.lookupvar('graphite::gr_django_db_user') %>',
+        'PASSWORD': '<%= scope.lookupvar('graphite::gr_django_db_password') %>',
+        'HOST': '<%= scope.lookupvar('graphite::gr_django_db_host') %>',
+        'PORT': '<%= scope.lookupvar('graphite::gr_django_db_port') %>',
     }
-} 
-
+}
+<% end %>
 
 #########################
 # Cluster Configuration #
