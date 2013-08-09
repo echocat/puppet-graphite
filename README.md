@@ -81,6 +81,12 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>gr_apache_port_https</td><td>443</td><td>The HTTPS port apache will use.</td>
   </tr>
+  <tr>
+    <td>gr_django_1_4_or_less</td><td>false</td><td>Django settings style.</td>
+  </tr>
+  <tr>
+    <td>gr_django_db_xxx</td><td>''</td><td>Django database settings. (engine|name|user|password|host|port)</td>
+  </tr>
 </table>
 
 # Sample usage:
