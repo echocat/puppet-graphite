@@ -63,6 +63,18 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 #DATABASE_HOST = 'mysql.mycompany.com'
 #DATABASE_PORT = '3306'
 
+# Django >1.4 support
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql
+        'NAME': '/opt/graphite/storage/graphite.db', # Or path to database file if using
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used w
+        'PORT': '',                      # Set to empty string for default. Not used wit
+    }
+} 
+
 
 #########################
 # Cluster Configuration #
