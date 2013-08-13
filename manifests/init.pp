@@ -86,6 +86,13 @@ class graphite (
 	$gr_cache_query_interface     = '0.0.0.0',
 	$gr_cache_query_port          = 7002,
 	$gr_timezone                  = 'GMT',
+	$gr_storage                   = [
+	  {
+	    name       => "default",
+	    pattern    => ".*",
+	    retentions => "1s:30m,1m:1d,5m:2y"
+          }
+	],
 
 	$gr_apache_port               = 80,
 	$gr_apache_port_https         = 443,
