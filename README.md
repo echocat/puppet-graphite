@@ -77,12 +77,12 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>gr_storage_schemas</td><td><pre>[
-          {
-            name       => "default",
-            pattern    => ".*",
-            retentions => "1s:30m,1m:1d,5m:2y"
-          }
-        ]</pre></td><td>The storage schemas.</td>
+  {    
+    name       => "default",
+    pattern    => ".*",
+    retentions => "1s:30m,1m:1d,5m:2y"
+  }
+]</pre></td><td>The storage schemas.</td>
   <tr>
     <td>gr_apache_port</td><td>80</td><td>The HTTP port apache will use.</td>
   </tr>
