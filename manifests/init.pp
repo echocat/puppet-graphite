@@ -49,6 +49,9 @@
 # [*gr_timezone*]
 #   Timezone for graphite to be used.
 #   Default is GMT.
+# [*gr_storage_schemas*]
+#  The storage schemas.
+#  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
 # [*gr_apache_port*]
 #   The port to run apache on if you have an existing web server on the default
 #   port 80.
@@ -58,7 +61,7 @@
 #   Default is false.
 # [*gr_django_db_xxx*]
 #   Django database settings. (engine|name|user|password|host|port)
-#   Default is ''.
+#   Default is empty.
 #
 
 
@@ -86,7 +89,7 @@ class graphite (
 	$gr_cache_query_interface     = '0.0.0.0',
 	$gr_cache_query_port          = 7002,
 	$gr_timezone                  = 'GMT',
-	$gr_storage                   = [
+	$gr_storage_schemas           = [
 	  {
 	    name       => "default",
 	    pattern    => ".*",
