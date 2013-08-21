@@ -53,6 +53,13 @@
 #   The port to run apache on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
+# [*gr_default_storage_retention*]
+#   The default retention policy to be used in Graphite's storage-schemas.conf.
+#   Default is '1s:30m,60s:24h,300s:730d'.
+#   This means that all data is stored for 2 years with a precision of
+#     1 seconds for last 30 minutes
+#     60 seconds for last day
+#     5 minutes for last 2 years
 #
 
 
@@ -65,32 +72,33 @@
 # }
 #
 class graphite (
-	$gr_user                      = '',
-	$gr_max_cache_size            = inf,
-	$gr_max_updates_per_second    = 500,
-	$gr_max_creates_per_minute    = 50,
-	$gr_line_receiver_interface   = '0.0.0.0',
-	$gr_line_receiver_port        = 2003,
-	$gr_enable_udp_listener       = False,
-	$gr_udp_receiver_interface    = '0.0.0.0',
-	$gr_udp_receiver_port         = 2003,
-	$gr_pickle_receiver_interface = '0.0.0.0',
-	$gr_pickle_receiver_port      = 2004,
-	$gr_use_insecure_unpickler    = False,
-	$gr_cache_query_interface     = '0.0.0.0',
-	$gr_cache_query_port          = 7002,
-	$gr_timezone                  = 'GMT',
-	$gr_apache_port               = 80,
-	$gr_apache_port_https         = 443
+  $gr_user                      = '',
+  $gr_max_cache_size            = inf,
+  $gr_max_updates_per_second    = 500,
+  $gr_max_creates_per_minute    = 50,
+  $gr_line_receiver_interface   = '0.0.0.0',
+  $gr_line_receiver_port        = 2003,
+  $gr_enable_udp_listener       = False,
+  $gr_udp_receiver_interface    = '0.0.0.0',
+  $gr_udp_receiver_port         = 2003,
+  $gr_pickle_receiver_interface = '0.0.0.0',
+  $gr_pickle_receiver_port      = 2004,
+  $gr_use_insecure_unpickler    = False,
+  $gr_cache_query_interface     = '0.0.0.0',
+  $gr_cache_query_port          = 7002,
+  $gr_timezone                  = 'GMT',
+  $gr_apache_port               = 80,
+  $gr_apache_port_https         = 443,
+  $gr_default_storage_retention = '1s:30m,60s:24h,300s:730d'
 ) {
 
-	class { 'graphite::install': notify => Class['graphite::config'] }
+  class { 'graphite::install': notify => Class['graphite::config'] }
 
-	class { 'graphite::config':	require => Class['graphite::install'] }
+  class { 'graphite::config':	require => Class['graphite::install'] }
 
-	# Allow the end user to establish relationships to the "main" class
-	# and preserve the relationship to the implementation classes through
-	# a transitive relationship to the composite class.
-	anchor { 'graphite::begin': before => Class['graphite::install'] }
-	anchor { 'graphite::end':  require => Class['graphite::config'] }
+  # Allow the end user to establish relationships to the "main" class
+  # and preserve the relationship to the implementation classes through
+  # a transitive relationship to the composite class.
+  anchor { 'graphite::begin': before => Class['graphite::install'] }
+  anchor { 'graphite::end':  require => Class['graphite::config'] }
 }
