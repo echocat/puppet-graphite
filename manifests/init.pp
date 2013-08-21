@@ -94,14 +94,14 @@ class graphite (
   $gr_timezone                  = 'GMT',
   $gr_storage_schemas           = [
     {
-      name       => "carbon",
-      pattern    => "^carbon\.",
-      retentions => "1m:90d"
+      name       => 'carbon',
+      pattern    => '^carbon\.',
+      retentions => '1m:90d'
     },
     {
-      name       => "default",
-      pattern    => ".*",
-      retentions => "1s:30m,1m:1d,5m:2y"
+      name       => 'default',
+      pattern    => '.*',
+      retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
   $gr_apache_port               = 80,
