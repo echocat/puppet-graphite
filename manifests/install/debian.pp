@@ -28,48 +28,48 @@ class graphite::install::debian {
 	# Download graphite sources
 
 	exec {
-		"Download and untar ${::graphite::params::graphiteVersion}":
+		"Download and untar webapp ${::graphite::params::graphiteVersion}":
 			command => "wget -O - ${::graphite::params::webapp_dl_url} | tar xz",
-			creates => "${::graphite::params::build_dir}/${::graphite::params::graphiteVersion}",
+			creates => "${::graphite::params::webapp_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";
-		"Download and untar ${::graphite::params::carbonVersion}":
+		"Download and untar carbon ${::graphite::params::carbonVersion}":
 			command => "wget -O - ${::graphite::params::carbon_dl_url} | tar xz",
-			creates => "${::graphite::params::build_dir}/${::graphite::params::carbonVersion}",
+			creates => "${::graphite::params::carbon_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";
-		"Download and untar ${::graphite::params::whisperVersion}":
+		"Download and untar whisper ${::graphite::params::whisperVersion}":
 			command => "wget -O - ${::graphite::params::whisper_dl_url} | tar xz",
-			creates => "${::graphite::params::build_dir}/${::graphite::params::whisperVersion}",
+			creates => "${::graphite::params::whisper_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";
 	}
 
 	# Install graphite from source
 
 	exec {
-		"Install ${::graphite::params::graphiteVersion}":
+		"Install webapp ${::graphite::params::graphiteVersion}":
 			command     => 'python setup.py install',
-			cwd         => "${::graphite::params::build_dir}/${::graphite::params::graphiteVersion}",
-			subscribe   => Exec["Download and untar ${::graphite::params::graphiteVersion}"],
+			cwd         => "${::graphite::params::webapp_dl_loc}",
+			subscribe   => Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
 			refreshonly => true,
 			require     => [
-				Exec["Download and untar ${::graphite::params::graphiteVersion}"],
+				Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
 				Anchor['graphitepkg::end']
 			];
-		"Install ${::graphite::params::carbonVersion}":
+		"Install carbon ${::graphite::params::carbonVersion}":
 			command     => 'python setup.py install',
-			cwd         => "${::graphite::params::build_dir}/${::graphite::params::carbonVersion}",
-			subscribe   => Exec["Download and untar ${::graphite::params::carbonVersion}"],
+			cwd         => "${::graphite::params::carbon_dl_loc}",
+			subscribe   => Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
 			refreshonly => true,
 			require     => [
-				Exec["Download and untar ${::graphite::params::carbonVersion}"],
+				Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
 				Anchor['graphitepkg::end']
 			];
-		"Install ${::graphite::params::whisperVersion}":
+		"Install whisper ${::graphite::params::whisperVersion}":
 			command     => 'python setup.py install',
-			cwd         => "${::graphite::params::build_dir}/${::graphite::params::whisperVersion}",
-			subscribe   => Exec["Download and untar ${::graphite::params::whisperVersion}"],
+			cwd         => "${::graphite::params::whisper_dl_loc}",
+			subscribe   => Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
 			refreshonly => true,
 			require     => [
-				Exec["Download and untar ${::graphite::params::whisperVersion}"],
+				Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
 				Anchor["graphitepkg::end"]
 			];
 	}
