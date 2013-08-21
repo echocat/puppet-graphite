@@ -49,11 +49,23 @@
 # [*gr_timezone*]
 #   Timezone for graphite to be used.
 #   Default is GMT.
+# [*gr_storage_schemas*]
+#  The storage schemas.
+#  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
 # [*gr_apache_port*]
 #   The port to run apache on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
-#
+# [*gr_django_1_4_or_less*]
+#   Set to true to use old Django settings style.
+#   Default is false.
+# [*gr_django_db_xxx*]
+#   Django database settings. (engine|name|user|password|host|port)
+#   Default is a local sqlite3 db.
+# [*secretKey*]
+#   Secret used as salt for things like hashes, cookies, sessions etc.
+#   Has to be the same on all nodes of a graphite cluster.
+#   Default is UNSAFE_DEFAULT (CHANGE IT!)
 
 
 # === Examples
@@ -80,9 +92,28 @@ class graphite (
   $gr_cache_query_interface     = '0.0.0.0',
   $gr_cache_query_port          = 7002,
   $gr_timezone                  = 'GMT',
+  $gr_storage_schemas           = [
+    {
+      name       => "carbon",
+      pattern    => "^carbon\.",
+      retentions => "1m:90d"
+    },
+    {
+      name       => "default",
+      pattern    => ".*",
+      retentions => "1s:30m,1m:1d,5m:2y"
+    }
+  ],
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
-  $gr_secretKey                 = 'UNSAFE_DEFAULT'
+  $gr_django_1_4_or_less        = false,
+  $gr_django_db_engine          = 'django.db.backends.sqlite3',
+  $gr_django_db_name            = '/opt/graphite/storage/graphite.db',
+  $gr_django_db_user            = '',
+  $gr_django_db_password        = '',
+  $gr_django_db_host            = '',
+  $gr_django_db_port            = '',
+  $secretKey                    = 'UNSAFE_DEFAULT'
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'], }

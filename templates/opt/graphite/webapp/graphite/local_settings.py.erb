@@ -7,7 +7,7 @@
 # install. This key is used for salting of hashes used in auth tokens,
 # CRSF middleware, cookie storage, etc. This should be set identically among
 # instances if used behind a load balancer.
-SECRET_KEY = '<%= scope.lookupvar('graphite::gr_secretKey') %>'
+SECRET_KEY = '<%= scope.lookupvar('graphite::secretKey') %>'
 
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
@@ -144,17 +144,25 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 # The default is 'django.db.backends.sqlite3' with file 'graphite.db'
 # located in STORAGE_DIR
 #
-#DATABASES = {
-#    'default': {
-#        'NAME': '/opt/graphite/storage/graphite.db',
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'USER': '',
-#        'PASSWORD': '',
-#        'HOST': '',
-#        'PORT': ''
-#    }
-#}
-#
+<% if scope.lookupvar('graphite::gr_django_1_4_or_less') %>
+DATABASE_ENGINE = '<%= scope.lookupvar('graphite::gr_django_db_engine') %>'
+DATABASE_NAME = '<%= scope.lookupvar('graphite::gr_django_db_name') %>'
+DATABASE_USER = '<%= scope.lookupvar('graphite::gr_django_db_user') %>'
+DATABASE_PASSWORD = '<%= scope.lookupvar('graphite::gr_django_db_password') %>'
+DATABASE_HOST = '<%= scope.lookupvar('graphite::gr_django_db_host') %>'
+DATABASE_PORT = '<%= scope.lookupvar('graphite::gr_django_db_port') %>'
+<% else %>
+DATABASES = {
+   'default': {
+        'ENGINE': '<%= scope.lookupvar('graphite::gr_django_db_engine') %>',
+        'NAME': '<%= scope.lookupvar('graphite::gr_django_db_name') %>',
+        'USER': '<%= scope.lookupvar('graphite::gr_django_db_user') %>',
+        'PASSWORD': '<%= scope.lookupvar('graphite::gr_django_db_password') %>',
+        'HOST': '<%= scope.lookupvar('graphite::gr_django_db_host') %>',
+        'PORT': '<%= scope.lookupvar('graphite::gr_django_db_port') %>',
+    }
+}
+<% end %>
 
 
 #########################

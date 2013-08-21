@@ -2,20 +2,8 @@
 
 # Schema definitions for whisper files. Entries are scanned in order,
 # and first match wins.
-#
-#  [name]
-#  pattern = regex
-#  retentions = timePerPoint:timeToStore, timePerPoint:timeToStore, ...
-
-[carbon]
-pattern = ^carbon\.
-retentions = 60s:90d
-
-# all datas are stored for 2 years with a precision of
-# 1 seconds for last 30 minutes
-# 60 seconds for last day
-# 5 minutes for last 2 years
-
-[default]
-pattern = .*
-retentions = 1s:30m,60s:24h,300s:730d
+<% scope.lookupvar('graphite::gr_storage_schemas').each do |schema| %>
+[<%= schema['name'] %>]
+pattern = <%= schema['pattern'] %>
+retentions = <%= schema['retentions'] %>
+<% end %>
