@@ -81,6 +81,9 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>gr_apache_port_https</td><td>443</td><td>The HTTPS port apache will use.</td>
   </tr>
+  <tr>
+      <td>gr_default_storage_retention</td><td>1s:30m,60s:24h,300s:730d</td><td>The retention to be used by default on collected metrics.</td>
+    </tr>
 </table>
 
 # Sample usage:

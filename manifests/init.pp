@@ -81,7 +81,8 @@ class graphite (
 	$gr_cache_query_port          = 7002,
 	$gr_timezone                  = 'GMT',
 	$gr_apache_port               = 80,
-	$gr_apache_port_https         = 443
+	$gr_apache_port_https         = 443,
+    $gr_default_storage_retention = '1s:30m,60s:24h,300s:730d'
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'] }

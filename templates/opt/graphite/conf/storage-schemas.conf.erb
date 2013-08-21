@@ -18,4 +18,4 @@ retentions = 60s:90d
 
 [default]
 pattern = .*
-retentions = 1s:30m,60s:24h,300s:730d
+retentions = <%= scope.lookupvar('graphite::gr_default_storage_retention') %>
