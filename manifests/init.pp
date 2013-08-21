@@ -53,6 +53,13 @@
 #   The port to run apache on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
+# [*gr_default_storage_retention*]
+#   The default retention policy to be used in Graphite's storage-schemas.conf.
+#   Default is '1s:30m,60s:24h,300s:730d'.
+#   This means that all data is stored for 2 years with a precision of
+#     1 seconds for last 30 minutes
+#     60 seconds for last day
+#     5 minutes for last 2 years
 #
 
 
