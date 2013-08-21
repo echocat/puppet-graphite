@@ -92,7 +92,7 @@ class graphite::config inherits graphite::params {
 			owner   => $::graphite::params::web_user,
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
-			content => template("graphite/opt/graphite/webapp/graphite/local_settings.py_${::fqdn}.erb");
+			content => template("graphite/opt/graphite/webapp/graphite/local_settings.py.erb");
         '/opt/graphite/conf/graphite.wsgi':
             ensure  => file,
             owner   => $::graphite::params::web_user,
