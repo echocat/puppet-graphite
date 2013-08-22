@@ -9,9 +9,9 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
-  $graphiteVersion = '0.9.11'
-  $carbonVersion   = '0.9.11'
-  $whisperVersion  = '0.9.11'
+  $graphiteVersion = '0.9.12'
+  $carbonVersion   = '0.9.12'
+  $whisperVersion  = '0.9.12'
 
   $whisper_dl_url = "http://github.com/graphite-project/whisper/archive/${::graphite::params::whisperVersion}.tar.gz"
   $whisper_dl_loc = "${build_dir}/whisper-${::graphite::params::whisperVersion}"
