@@ -32,6 +32,12 @@ class graphite::config inherits graphite::params {
 			require => Package["${::graphite::params::apache_pkg}"]
 	}
 
+  package {
+    "${::graphite::params::apache_wsgi_pkg}":
+    ensure  => installed,
+    require => Package["${::graphite::params::apache_pkg}"]
+  }
+
 	case $::osfamily {
 		debian: {
 			exec { 'Disable default apache site':
@@ -68,7 +74,7 @@ class graphite::config inherits graphite::params {
 		cwd         => '/opt/graphite/webapp/graphite',
 		refreshonly => true,
 		notify      => Exec['Chown graphite for apache'],
-		subscribe   => Exec["Install ${::graphite::params::graphiteVersion}"],
+		subscribe   => Exec["Install webapp ${::graphite::params::graphiteVersion}"],
 		before      => Exec['Chown graphite for apache'],
 		require     => File['/opt/graphite/webapp/graphite/local_settings.py'];
 	}
@@ -79,7 +85,10 @@ class graphite::config inherits graphite::params {
 		command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_user} /opt/graphite/storage/",
 		cwd         => '/opt/graphite/',
 		refreshonly => true,
-		require     => Anchor['graphite::install::end'],
+		require     => [
+			Anchor['graphite::install::end'],
+			Package["${::graphite::params::apache_pkg}"]
+		]
 	}
 
 	# Deploy configfiles
@@ -90,7 +99,14 @@ class graphite::config inherits graphite::params {
 			owner   => $::graphite::params::web_user,
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
-			content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
+			content => template("graphite/opt/graphite/webapp/graphite/local_settings.py.erb"),
+			require => Package["${::graphite::params::apache_pkg}"];
+		'/opt/graphite/conf/graphite.wsgi':
+			ensure  => file,
+			owner   => $::graphite::params::web_user,
+			group   => $::graphite::params::web_user,
+			mode    => '0644',
+			content => template("graphite/opt/graphite/conf/graphite.wsgi.erb"),
 			require => Package["${::graphite::params::apache_pkg}"];
 		"${::graphite::params::apache_dir}/ports.conf":
 			ensure  => file,
@@ -171,7 +187,7 @@ class graphite::config inherits graphite::params {
 	}
 
 	file { '/etc/init.d/carbon-cache':
-		ensure  => present,
+		ensure  => file,
 		mode    => '0750',
 		content => template('graphite/etc/init.d/carbon-cache.erb'),
 		require => File['/opt/graphite/conf/carbon.conf'];

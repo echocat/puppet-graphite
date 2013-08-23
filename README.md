@@ -77,12 +77,13 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>gr_storage_schemas</td><td><pre>[
-  {    
+  {
     name       => "default",
     pattern    => ".*",
     retentions => "1s:30m,1m:1d,5m:2y"
   }
 ]</pre></td><td>The storage schemas.</td>
+  </tr>
   <tr>
     <td>gr_apache_port</td><td>80</td><td>The HTTP port apache will use.</td>
   </tr>
@@ -93,7 +94,10 @@ For further information take a look at the file templates/opt/graphite/conf/carb
     <td>gr_django_1_4_or_less</td><td>false</td><td>Django settings style.</td>
   </tr>
   <tr>
-    <td>gr_django_db_xxx</td><td>''</td><td>Django database settings. (engine|name|user|password|host|port)</td>
+    <td>gr_django_db_xxx</td><td>sqlite3 settings</td><td>Django database settings. (engine|name|user|password|host|port)</td>
+  </tr>
+  <tr>
+    <td>secretKey</td><td>UNSAFE_DEFAULT</td><td>CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.</td>
   </tr>
 </table>
 

@@ -61,8 +61,11 @@
 #   Default is false.
 # [*gr_django_db_xxx*]
 #   Django database settings. (engine|name|user|password|host|port)
-#   Default is empty.
-#
+#   Default is a local sqlite3 db.
+# [*secretKey*]
+#   Secret used as salt for things like hashes, cookies, sessions etc.
+#   Has to be the same on all nodes of a graphite cluster.
+#   Default is UNSAFE_DEFAULT (CHANGE IT!)
 
 
 # === Examples
@@ -74,44 +77,48 @@
 # }
 #
 class graphite (
-	$gr_user                      = '',
-	$gr_max_cache_size            = inf,
-	$gr_max_updates_per_second    = 500,
-	$gr_max_creates_per_minute    = 50,
-	$gr_line_receiver_interface   = '0.0.0.0',
-	$gr_line_receiver_port        = 2003,
-	$gr_enable_udp_listener       = False,
-	$gr_udp_receiver_interface    = '0.0.0.0',
-	$gr_udp_receiver_port         = 2003,
-	$gr_pickle_receiver_interface = '0.0.0.0',
-	$gr_pickle_receiver_port      = 2004,
-	$gr_use_insecure_unpickler    = False,
-	$gr_cache_query_interface     = '0.0.0.0',
-	$gr_cache_query_port          = 7002,
-	$gr_timezone                  = 'GMT',
-	$gr_storage_schemas           = [
-	  {
-	    name       => "default",
-	    pattern    => ".*",
-	    retentions => "1s:30m,1m:1d,5m:2y"
-          }
-	],
-
-	$gr_apache_port               = 80,
-	$gr_apache_port_https         = 443,
-
-	$gr_django_1_4_or_less        = false,
-	$gr_django_db_engine          = '',
-	$gr_django_db_name            = '',
-	$gr_django_db_user            = '',
-	$gr_django_db_password        = '',
-	$gr_django_db_host            = '',
-	$gr_django_db_port            = ''
+  $gr_user                      = '',
+  $gr_max_cache_size            = inf,
+  $gr_max_updates_per_second    = 500,
+  $gr_max_creates_per_minute    = 50,
+  $gr_line_receiver_interface   = '0.0.0.0',
+  $gr_line_receiver_port        = 2003,
+  $gr_enable_udp_listener       = 'False',
+  $gr_udp_receiver_interface    = '0.0.0.0',
+  $gr_udp_receiver_port         = 2003,
+  $gr_pickle_receiver_interface = '0.0.0.0',
+  $gr_pickle_receiver_port      = 2004,
+  $gr_use_insecure_unpickler    = 'False',
+  $gr_cache_query_interface     = '0.0.0.0',
+  $gr_cache_query_port          = 7002,
+  $gr_timezone                  = 'GMT',
+  $gr_storage_schemas           = [
+    {
+      name       => 'carbon',
+      pattern    => '^carbon\.',
+      retentions => '1m:90d'
+    },
+    {
+      name       => 'default',
+      pattern    => '.*',
+      retentions => '1s:30m,1m:1d,5m:2y'
+    }
+  ],
+  $gr_apache_port               = 80,
+  $gr_apache_port_https         = 443,
+  $gr_django_1_4_or_less        = false,
+  $gr_django_db_engine          = 'django.db.backends.sqlite3',
+  $gr_django_db_name            = '/opt/graphite/storage/graphite.db',
+  $gr_django_db_user            = '',
+  $gr_django_db_password        = '',
+  $gr_django_db_host            = '',
+  $gr_django_db_port            = '',
+  $secretKey                    = 'UNSAFE_DEFAULT'
 ) {
 
-	class { 'graphite::install': notify => Class['graphite::config'] }
+	class { 'graphite::install': notify => Class['graphite::config'], }
 
-	class { 'graphite::config':	require => Class['graphite::install'] }
+	class { 'graphite::config':	require => Class['graphite::install'], }
 
 	# Allow the end user to establish relationships to the "main" class
 	# and preserve the relationship to the implementation classes through
