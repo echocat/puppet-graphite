@@ -207,3 +207,7 @@ DATABASES = {
 # MIDDLEWARE_CLASSES or APPS
 #from graphite.app_settings import *
 
+<% unless scope.lookupvar('graphite::gr_django_1_4_or_less') %>
+# Configure static URL prefix for Django admin pages
+STATIC_URL = '/static/'
+<% end %>
