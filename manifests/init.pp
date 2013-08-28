@@ -52,8 +52,13 @@
 # [*gr_storage_schemas*]
 #  The storage schemas.
 #  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
+# [*gr_web_server*]
+#   The web server to use.
+#   Valid values are 'apache' and 'nginx'. 'nginx' is only supported on
+#   Debian-like systems.
+#   Default is 'apache'.
 # [*gr_apache_port*]
-#   The port to run apache on if you have an existing web server on the default
+#   The port to run web server on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
 # [*gr_django_1_4_or_less*]
@@ -104,6 +109,7 @@ class graphite (
       retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
+  $gr_web_server                = 'apache',
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
   $gr_django_1_4_or_less        = false,
