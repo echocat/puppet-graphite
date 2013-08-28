@@ -27,30 +27,24 @@ class graphite::config inherits graphite::params {
 	}
 
 	package {
-		"${::graphite::params::apache_python_pkg}":
-			ensure  => installed,
-			require => Package["${::graphite::params::apache_pkg}"]
+		"${::graphite::params::apache_wsgi_pkg}":
+		ensure  => installed,
+ 		require => Package["${::graphite::params::apache_pkg}"]
 	}
-
-  package {
-    "${::graphite::params::apache_wsgi_pkg}":
-    ensure  => installed,
-    require => Package["${::graphite::params::apache_pkg}"]
-  }
 
 	case $::osfamily {
 		debian: {
 			exec { 'Disable default apache site':
 				command => 'a2dissite default',
 				onlyif  => 'test -f /etc/apache2/sites-enabled/000-default',
-				require => Package["${::graphite::params::apache_python_pkg}"],
+				require => Package["${::graphite::params::apache_wsgi_pkg}"],
 				notify  => Service["${::graphite::params::apache_service_name}"];
 			}
 		}
 		redhat: {
 			file { "${::graphite::params::apacheconf_dir}/welcome.conf":
 				ensure  => absent,
-				require => Package["${::graphite::params::apache_python_pkg}"],
+				require => Package["${::graphite::params::apache_wsgi_pkg}"],
 				notify  => Service["${::graphite::params::apache_service_name}"];
 			}
 		}
@@ -115,7 +109,7 @@ class graphite::config inherits graphite::params {
 			mode    => '0644',
 			content => template('graphite/etc/apache2/ports.conf.erb'),
 			require => [
-				Package["${::graphite::params::apache_python_pkg}"],
+				Package["${::graphite::params::apache_wsgi_pkg}"],
 				Exec['Initial django db creation'],
 				Exec['Chown graphite for apache']
 			];
