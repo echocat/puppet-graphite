@@ -71,6 +71,11 @@
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
+# [*nginx_htpasswd*]
+#   The user and salted SHA-1 (SSHA) password for Nginx authentication.
+#   If set, Nginx will be configured to use HTTP Basic authentication with the
+#   given user & password.
+#   Default is undefined
 
 
 # === Examples
@@ -119,7 +124,8 @@ class graphite (
   $gr_django_db_password        = '',
   $gr_django_db_host            = '',
   $gr_django_db_port            = '',
-  $secretKey                    = 'UNSAFE_DEFAULT'
+  $secretKey                    = 'UNSAFE_DEFAULT',
+  $nginx_htpassword             = undef,
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'], }
