@@ -67,7 +67,7 @@
 # [*gr_django_db_xxx*]
 #   Django database settings. (engine|name|user|password|host|port)
 #   Default is a local sqlite3 db.
-# [*secretKey*]
+# [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
@@ -124,7 +124,7 @@ class graphite (
   $gr_django_db_password        = '',
   $gr_django_db_host            = '',
   $gr_django_db_port            = '',
-  $secretKey                    = 'UNSAFE_DEFAULT',
+  $secret_key                   = 'UNSAFE_DEFAULT',
   $nginx_htpassword             = undef,
 ) {
 
