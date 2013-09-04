@@ -27,6 +27,10 @@ class graphite::install::debian {
 
 	# Download graphite sources
 
+	package { 'ca-certificates':
+		# needed to download from httpS://github.com/
+		ensure => installed,
+	} ->
 	exec {
 		"Download and untar webapp ${::graphite::params::graphiteVersion}":
 			command => "wget -O - ${::graphite::params::webapp_dl_url} | tar xz",
