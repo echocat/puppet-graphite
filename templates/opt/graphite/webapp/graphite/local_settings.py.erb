@@ -7,7 +7,7 @@
 # install. This key is used for salting of hashes used in auth tokens,
 # CRSF middleware, cookie storage, etc. This should be set identically among
 # instances if used behind a load balancer.
-SECRET_KEY = '<%= scope.lookupvar('graphite::secretKey') %>'
+SECRET_KEY = '<%= scope.lookupvar('graphite::secret_key') %>'
 
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
@@ -207,3 +207,7 @@ DATABASES = {
 # MIDDLEWARE_CLASSES or APPS
 #from graphite.app_settings import *
 
+<% unless scope.lookupvar('graphite::gr_django_1_4_or_less') %>
+# Configure static URL prefix for Django admin pages
+STATIC_URL = '/static/'
+<% end %>

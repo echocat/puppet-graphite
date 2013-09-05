@@ -14,57 +14,21 @@ class graphite::config inherits graphite::params {
 	Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
 	# for full functionality we need this packages:
-	# madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
-	# optinal: python-ldap, python-memcache, memcached, python-sqlite
+	# mandatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
+	# optional: python-ldap, python-memcache, memcached, python-sqlite
 
-	# we need an apache with python support
-
-	package {
-		"${::graphite::params::apache_pkg}": 
-			ensure => installed,
-			before => Exec['Chown graphite for apache'],
-			notify => Exec['Chown graphite for apache'];
-	}
-
-	package {
-		"${::graphite::params::apache_python_pkg}":
-			ensure  => installed,
-			require => Package["${::graphite::params::apache_pkg}"]
-	}
-
-  package {
-    "${::graphite::params::apache_wsgi_pkg}":
-    ensure  => installed,
-    require => Package["${::graphite::params::apache_pkg}"]
-  }
-
-	case $::osfamily {
-		debian: {
-			exec { 'Disable default apache site':
-				command => 'a2dissite default',
-				onlyif  => 'test -f /etc/apache2/sites-enabled/000-default',
-				require => Package["${::graphite::params::apache_python_pkg}"],
-				notify  => Service["${::graphite::params::apache_service_name}"];
-			}
+	# we need an web server with python support
+	# apache with mod_wsgi or nginx with gunicorn
+	case $graphite::gr_web_server {
+		'apache': {
+			include graphite::config_apache
 		}
-		redhat: {
-			file { "${::graphite::params::apacheconf_dir}/welcome.conf":
-				ensure  => absent,
-				require => Package["${::graphite::params::apache_python_pkg}"],
-				notify  => Service["${::graphite::params::apache_service_name}"];
-			}
+		'nginx': {
+			include graphite::config_nginx
 		}
 		default: {
-			fail("Module graphite is not supported on ${::operatingsystem}")
-      		}
-	}
-
-	service { "${::graphite::params::apache_service_name}":
-		ensure     => running,
-		enable     => true,
-		hasrestart => true,
-		hasstatus  => true,
-		require    => Exec['Chown graphite for apache'];
+			fail('The only supported web servers are \'apache\' and \'nginx\'')
+		}
 	}
 
 	# first init of user db for graphite
@@ -73,21 +37,21 @@ class graphite::config inherits graphite::params {
 		command     => 'python manage.py syncdb --noinput',
 		cwd         => '/opt/graphite/webapp/graphite',
 		refreshonly => true,
-		notify      => Exec['Chown graphite for apache'],
+		notify      => Exec['Chown graphite for web user'],
 		subscribe   => Exec["Install webapp ${::graphite::params::graphiteVersion}"],
-		before      => Exec['Chown graphite for apache'],
+		before      => Exec['Chown graphite for web user'],
 		require     => File['/opt/graphite/webapp/graphite/local_settings.py'];
 	}
 
-	# change access permissions for apache
+	# change access permissions for web server
 
-	exec { 'Chown graphite for apache':
+	exec { 'Chown graphite for web user':
 		command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_user} /opt/graphite/storage/",
 		cwd         => '/opt/graphite/',
 		refreshonly => true,
 		require     => [
 			Anchor['graphite::install::end'],
-			Package["${::graphite::params::apache_pkg}"]
+			Package["${::graphite::params::web_server_pkg}"]
 		]
 	}
 
@@ -100,46 +64,14 @@ class graphite::config inherits graphite::params {
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
 			content => template("graphite/opt/graphite/webapp/graphite/local_settings.py.erb"),
-			require => Package["${::graphite::params::apache_pkg}"];
+			require => Package["${::graphite::params::web_server_pkg}"];
 		'/opt/graphite/conf/graphite.wsgi':
 			ensure  => file,
 			owner   => $::graphite::params::web_user,
 			group   => $::graphite::params::web_user,
 			mode    => '0644',
 			content => template("graphite/opt/graphite/conf/graphite.wsgi.erb"),
-			require => Package["${::graphite::params::apache_pkg}"];
-		"${::graphite::params::apache_dir}/ports.conf":
-			ensure  => file,
-			owner   => $::graphite::params::web_user,
-			group   => $::graphite::params::web_user,
-			mode    => '0644',
-			content => template('graphite/etc/apache2/ports.conf.erb'),
-			require => [
-				Package["${::graphite::params::apache_python_pkg}"],
-				Exec['Initial django db creation'],
-				Exec['Chown graphite for apache']
-			];
-		"${::graphite::params::apacheconf_dir}/graphite.conf":
-			ensure  => file,
-			owner   => $::graphite::params::web_user,
-			group   => $::graphite::params::web_user,
-			mode    => '0644',
-			content => template('graphite/etc/apache2/sites-available/graphite.conf.erb'),
-			require => [
-				File["${::graphite::params::apache_dir}/ports.conf"],
-			];
-	}
-
-	case $::osfamily {
-		debian: {
-			file { '/etc/apache2/sites-enabled/graphite.conf':
-				ensure  => link,
-				target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
-				require => File['/etc/apache2/sites-available/graphite.conf'],
-				notify  => Service["${::graphite::params::apache_service_name}"];
-			}
-		}
-		default: {}
+			require => Package["${::graphite::params::web_server_pkg}"];
 	}
 
 	# configure carbon engine

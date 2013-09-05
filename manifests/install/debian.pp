@@ -27,16 +27,23 @@ class graphite::install::debian {
 
 	# Download graphite sources
 
+	package { 'ca-certificates':
+		# needed to download from httpS://github.com/
+		ensure => installed,
+	}
 	exec {
 		"Download and untar webapp ${::graphite::params::graphiteVersion}":
+			require => Package['ca-certificates'],
 			command => "wget -O - ${::graphite::params::webapp_dl_url} | tar xz",
 			creates => "${::graphite::params::webapp_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";
 		"Download and untar carbon ${::graphite::params::carbonVersion}":
+			require => Package['ca-certificates'],
 			command => "wget -O - ${::graphite::params::carbon_dl_url} | tar xz",
 			creates => "${::graphite::params::carbon_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";
 		"Download and untar whisper ${::graphite::params::whisperVersion}":
+			require => Package['ca-certificates'],
 			command => "wget -O - ${::graphite::params::whisper_dl_url} | tar xz",
 			creates => "${::graphite::params::whisper_dl_loc}",
 			cwd     => "${::graphite::params::build_dir}";

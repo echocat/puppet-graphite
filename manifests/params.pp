@@ -44,11 +44,6 @@ class graphite::params {
     redhat => 'httpd',
   }
 
-  $web_user = $::osfamily ? {
-    debian => 'www-data',
-    redhat => 'apache',
-  }
-
   $apacheconf_dir = $::osfamily ? {
     debian => '/etc/apache2/sites-available',
     redhat => '/etc/httpd/conf.d',
@@ -57,6 +52,19 @@ class graphite::params {
   $apache_dir = $::osfamily ? {
     debian => '/etc/apache2',
     redhat => '/etc/httpd',
+  }
+
+  $nginxconf_dir = '/etc/nginx/sites-available'
+
+  $web_server_pkg = $graphite::gr_web_server ? {
+    apache  => $apache_pkg,
+    nginx   => 'nginx',
+    default => fail('The only supported web servers are \'apache\' and \'nginx\''),
+  }
+
+  $web_user = $::osfamily ? {
+    debian => 'www-data',
+    redhat => 'apache',
   }
 
   $graphitepkgs = $::osfamily ? {
