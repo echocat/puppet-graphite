@@ -29,11 +29,6 @@ class graphite::params {
     redhat => 'httpd',
   }
 
-  $apache_python_pkg = $::osfamily ? {
-    debian => 'libapache2-mod-python',
-    redhat => 'mod_python',
-  }
-
   $apache_wsgi_pkg = $::osfamily ? {
     debian => 'libapache2-mod-wsgi',
     redhat => 'mod_wsgi',
