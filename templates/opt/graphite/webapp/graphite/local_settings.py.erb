@@ -58,6 +58,7 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 # of these is relative to GRAPHITE_ROOT
 #CONF_DIR = '/opt/graphite/conf'
 #STORAGE_DIR = '/opt/graphite/storage'
+STORAGE_DIR = '<%= scope.lookupvar('graphite::gr_storage_dir') %>'
 #CONTENT_DIR = '/opt/graphite/webapp/content'
 
 # To further or fully customize the paths, modify the following. Note that the

@@ -35,6 +35,9 @@
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
 ENABLE_LOGROTATION = True
 
+STORAGE_DIR = <%= scope.lookupvar('graphite::gr_storage_dir') %>
+LOCAL_DATA_DIR = <%= scope.lookupvar('graphite::gr_local_data_dir') %>
+
 # Specify the user to drop privileges to
 # If this is blank carbon runs as the user that invokes it
 # This user must have write access to the local data directory
