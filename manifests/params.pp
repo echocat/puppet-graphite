@@ -34,6 +34,11 @@ class graphite::params {
     redhat => 'mod_wsgi',
   }
 
+  $apache_wsgi_socket_prefix = $::osfamily ? {
+    debian => '/var/run/apache2/wsgi',
+    redhat => 'run/wsgi',
+  }
+
   $apache_service_name = $::osfamily ? {
     debian => 'apache2',
     redhat => 'httpd',
