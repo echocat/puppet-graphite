@@ -10,7 +10,7 @@
 
 # XXX You need to set this up!
 # Read http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGISocketPrefix
-WSGISocketPrefix /var/run/apache2/wsgi
+WSGISocketPrefix <%= scope.lookupvar('graphite::apache_wsgi_socket_prefix') %>
 
 <VirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>>
 	ServerName <%= fqdn %>
