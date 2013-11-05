@@ -57,6 +57,9 @@
 #   Valid values are 'apache' and 'nginx'. 'nginx' is only supported on
 #   Debian-like systems.
 #   Default is 'apache'.
+# [*gr_web_cors_allow_from_all*]
+#   Include CORS Headers for all hosts (*) in web server config
+#   Default is false.
 # [*gr_apache_port*]
 #   The port to run web server on if you have an existing web server on the default
 #   port 80.
@@ -115,6 +118,7 @@ class graphite (
     }
   ],
   $gr_web_server                = 'apache',
+  $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
   $gr_django_1_4_or_less        = false,
