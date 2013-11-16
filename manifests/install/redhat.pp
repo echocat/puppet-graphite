@@ -35,15 +35,15 @@ class graphite::install::redhat {
 
 	exec {
 		'Install django-tagging':
-			command => 'easy_install django-tagging',
+			command => 'easy_install django-tagging==0.3.1',
 			cwd     => "${::graphite::params::build_dir}",
 			require => Anchor['graphitepkg::end'];
 		'Install twisted':
-			command => 'easy_install twisted',
+			command => 'easy_install twisted==11.1.0',
 			cwd     => "${::graphite::params::build_dir}",
 			require => Anchor['graphitepkg::end'];
 		'Install txamqp':
-			command => 'easy_install txamqp',
+			command => 'easy_install txamqp==0.4',
 			cwd     => "${::graphite::params::build_dir}",
 			require => Anchor['graphitepkg::end'];
 	}
