@@ -76,6 +76,9 @@ For further information take a look at the file templates/opt/graphite/conf/carb
     <td>gr_cache_query_port</td><td>7002</td><td>Self explaining.</td>
   </tr>
   <tr>
+    <td>gr_timezone</td><td>GMT</td><td>Timezone for graphite to be used.</td>
+  </tr>
+  <tr>
     <td>gr_storage_schemas</td><td><pre>[
   {
     name       => "default",
@@ -83,6 +86,12 @@ For further information take a look at the file templates/opt/graphite/conf/carb
     retentions => "1s:30m,1m:1d,5m:2y"
   }
 ]</pre></td><td>The storage schemas.</td>
+  </tr>
+  <tr>
+    <td>gr_web_server</td><td>apache</td><td>The web server to use. Valid values are 'apache' and 'nginx'. 'nginx' is only supported on Debian-like systems.</td>
+  </tr>
+  <tr>
+    <td>gr_web_cors_allow_from_all</td><td>false</td><td>Include CORS Headers for all hosts (*) in web server config.</td>
   </tr>
   <tr>
     <td>gr_apache_port</td><td>80</td><td>The HTTP port apache will use.</td>
@@ -98,6 +107,9 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>secret_key</td><td>UNSAFE_DEFAULT</td><td>CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.</td>
+  </tr>
+  <tr>
+    <td>nginx_htpasswd</td><td>undef</td><td>The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password.</td>
   </tr>
 </table>
 
