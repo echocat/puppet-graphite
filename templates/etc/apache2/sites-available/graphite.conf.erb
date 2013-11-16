@@ -50,6 +50,11 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 			Order deny,allow
 			Allow from all
 	</Directory>
-
+	
+<% if scope.lookupvar('graphite::gr_web_cors_allow_from_all') %>
+	Header set Access-Control-Allow-Origin "*"
+	Header set Access-Control-Allow-Methods "GET, OPTIONS, POST"
+	Header set Access-Control-Allow-Headers "origin, authorization, accept"
+<% end %>
 
 </VirtualHost>
