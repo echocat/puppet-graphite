@@ -24,6 +24,8 @@ class graphite::params {
 
   $install_prefix = '/opt/'
 
+  $enable_carbon_relay = false
+
   $apache_pkg = $::osfamily ? {
     debian => 'apache2',
     redhat => 'httpd',

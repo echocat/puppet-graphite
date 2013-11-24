@@ -224,10 +224,10 @@ ENABLE_LOGROTATION = True
 # This user must have write access to the local data directory
 USER = <%= scope.lookupvar('graphite::gr_user') %>
 
-LINE_RECEIVER_INTERFACE = 0.0.0.0
-LINE_RECEIVER_PORT = 2013
-PICKLE_RECEIVER_INTERFACE = 0.0.0.0
-PICKLE_RECEIVER_PORT = 2014
+LINE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_relay_line_interface') %>
+LINE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_relay_line_port') %>
+PICKLE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_relay_pickle_interface') %>
+PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_relay_pickle_port') %>
 
 # Set to false to disable logging of successful connections
 LOG_LISTENER_CONNECTIONS = True
@@ -246,7 +246,7 @@ LOG_LISTENER_CONNECTIONS = True
 # instance.
 # Enable this for carbon-relays that send to a group of carbon-aggregators
 #RELAY_METHOD = aggregated-consistent-hashing
-RELAY_METHOD = rules
+RELAY_METHOD = <%= scope.lookupvar('graphite::gr_relay_method') %>
 
 # If you use consistent-hashing you can add redundancy by replicating every
 # datapoint to more than one machine.
@@ -268,18 +268,18 @@ REPLICATION_FACTOR = 1
 #
 # If using RELAY_METHOD = rules, all destinations used in relay-rules.conf
 # must be defined in this list
-DESTINATIONS = 127.0.0.1:2004
+DESTINATIONS = <%= scope.lookupvar('graphite::gr_relay_destinations').join(', ') %>
 
 # This defines the maximum "message size" between carbon daemons.
 # You shouldn't need to tune this unless you really know what you're doing.
 MAX_DATAPOINTS_PER_MESSAGE = 500
-MAX_QUEUE_SIZE = 10000
+MAX_QUEUE_SIZE = <%= scope.lookupvar('graphite::gr_relay_max_queue_size') %>
 
 # Set this to False to drop datapoints when any send queue (sending datapoints
 # to a downstream carbon daemon) hits MAX_QUEUE_SIZE. If this is True (the
 # default) then sockets over which metrics are received will temporarily stop accepting
 # data until the send queues fall below 80% MAX_QUEUE_SIZE.
-USE_FLOW_CONTROL = True
+USE_FLOW_CONTROL = <%= scope.lookupvar('graphite::gr_relay_use_flow_control') %>
 
 # Set this to True to enable whitelisting and blacklisting of metrics in
 # CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
