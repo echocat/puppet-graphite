@@ -79,6 +79,9 @@
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
 #   given user & password.
 #   Default is undefined
+# [*gr_storage_dir*]
+#   Use the given directory to store data.
+#   Default is '/opt/graphite/storage'
 
 
 # === Examples
@@ -117,6 +120,7 @@ class graphite (
       retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
+  $gr_storage_dir               = '/opt/graphite/storage',
   $gr_web_server                = 'apache',
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
@@ -146,6 +150,7 @@ class graphite (
   $secret_key                   = 'UNSAFE_DEFAULT',
   $nginx_htpassword             = undef,
 ) {
+	$gr_local_data_dir            = "${gr_storage_dir}/whisper"
 
 	class { 'graphite::install': notify => Class['graphite::config'], }
 
