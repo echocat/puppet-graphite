@@ -70,6 +70,35 @@
 # [*gr_django_db_xxx*]
 #   Django database settings. (engine|name|user|password|host|port)
 #   Default is a local sqlite3 db.
+# [*gr_enable_carbon_relay*]
+#   Enable carbon relay.
+#   Default is false.
+# [*gr_relay_line_interface*]
+#   Default is '0.0.0.0'
+# [*gr_relay_line_port*]
+#   Default is 2013.
+# [*gr_relay_pickle_interface*]
+#   Default is '0.0.0.0'
+# [*gr_relay_pickle_port*]
+#   Default is 2014.
+# [*gr_relay_method*]
+#   Default is 'rules'
+# [*gr_relay_destinations*]
+#   Array of backend carbons for relay.
+#   Default  is [ '127.0.0.1:2004' ]
+# [*gr_relay_max_queue_size*]
+#   Default is 10000.
+# [*gr_relay_use_flow_control*]
+#   Default is 'True'
+# [*gr_relay_rules*]
+#   Relay rule set.
+#   Default is 
+#   {
+#   all       => { pattern      => '.*',
+#                  destinations => [ '127.0.0.1:2004' ] },
+#   'default' => { 'default'    => true,
+#                  destinations => [ '127.0.0.1:2004:a' ] },
+#   }
 # [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
