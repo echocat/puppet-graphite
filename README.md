@@ -10,8 +10,8 @@ Ubunutu 10.04 and newer
 # Requirements
 
 Configure conf files as you need:
-
-templates/opt/graphite/conf/storage-schemas.conf.erb
+  
+Only if you want to use memcached, carbon-link clusters or ldap you should edit:  
 templates/opt/graphite/webapp/graphite/local_settings.py.erb
 
 ### Modules needed:
