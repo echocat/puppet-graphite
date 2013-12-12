@@ -13,7 +13,7 @@
 WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefix') %>
 
 <VirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>>
-	ServerName <%= fqdn %>
+	ServerName <%= @fqdn %>
 	DocumentRoot "/opt/graphite/webapp"
 
 	ErrorLog /opt/graphite/storage/error.log
