@@ -169,19 +169,19 @@ WHISPER_FALLOCATE_CREATE = True
 # CARBON_METRIC_INTERVAL = 60
 
 # Enable AMQP if you want to receve metrics using an amqp broker
-# ENABLE_AMQP = False
+ENABLE_AMQP = <%= scope.lookupvar('graphite::gr_amqp_enable') %>
 
 # Verbose means a line will be logged for every metric received
 # useful for testing
-# AMQP_VERBOSE = False
+AMQP_VERBOSE = <%= scope.lookupvar('graphite::gr_amqp_verbose') %>
 
-# AMQP_HOST = localhost
-# AMQP_PORT = 5672
-# AMQP_VHOST = /
-# AMQP_USER = guest
-# AMQP_PASSWORD = guest
-# AMQP_EXCHANGE = graphite
-# AMQP_METRIC_NAME_IN_BODY = False
+AMQP_HOST = <%= scope.lookupvar('graphite::gr_amqp_host') %>
+AMQP_PORT = <%= scope.lookupvar('graphite::gr_amqp_port') %>
+AMQP_VHOST = <%= scope.lookupvar('graphite::gr_amqp_vhost') %>
+AMQP_USER = <%= scope.lookupvar('graphite::gr_amqp_user') %>
+AMQP_PASSWORD = <%= scope.lookupvar('graphite::gr_amqp_password') %>
+AMQP_EXCHANGE = <%= scope.lookupvar('graphite::gr_amqp_exchange') %>
+AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in_body') %>
 
 # The manhole interface allows you to SSH into the carbon daemon
 # and get a python interpreter. BE CAREFUL WITH THIS! If you do
