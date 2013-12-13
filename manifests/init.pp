@@ -99,6 +99,34 @@
 #   'default' => { 'default'    => true,
 #                  destinations => [ '127.0.0.1:2004:a' ] },
 #   }
+# [*gr_amqp_enable*]
+#   Set this to 'True' to enable the AMQP.
+#   Default is 'False'.
+# [*gr_amqp_verbose*]
+#   Set this to 'True' to enable. Verbose means a line will be logged for every 
+#   metric received useful for testing
+#   Default is 'False'.
+# [*gr_amqp_host*]
+#   Self explaining.
+#   Default is localhost.
+# [*gr_amqp_port*]
+#   Self explaining.
+#   Default is 5672.
+# [*gr_amqp_vhost*]
+#   Virtual host of AMQP. Set the name without the slash, eg. 'graphite'.
+#   Default is '/'.
+# [*gr_amqp_user*]
+#   Self explaining.
+#   Default is guest.
+# [*gr_amqp_password*]
+#   Self explaining.
+#   Default is guest.
+# [*gr_amqp_exchange*]
+#   Self explaining.
+#   Default is graphite.
+# [*gr_amqp_metric_name_in_body*]
+#   Self explaining.
+#   Default is 'False'.
 # [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
@@ -172,6 +200,15 @@ class graphite (
     'default' => { 'default'    => true,
                    destinations => [ '127.0.0.1:2004:a' ] },
   },
+  $gr_amqp_enable               = 'False',
+  $gr_amqp_verbose              = 'False',
+  $gr_amqp_host                 = 'localhost',
+  $gr_amqp_port                 = 5672,
+  $gr_amqp_vhost                = '/',
+  $gr_amqp_user                 = 'guest',
+  $gr_amqp_password             = 'guest',
+  $gr_amqp_exchange             = 'graphite',
+  $gr_amqp_metric_name_in_body  = 'False',
   $secret_key                   = 'UNSAFE_DEFAULT',
   $nginx_htpassword             = undef,
 ) {
