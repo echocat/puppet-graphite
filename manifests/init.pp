@@ -16,6 +16,9 @@
 # [*gr_max_creates_per_minute*]
 #   Softly limits the number of whisper files that get created each minute.
 #   Default is 50.
+# [*gr_carbon_metric_interval*]
+#   The interval (in seconds) between sending internal performance metrics.
+#   Default is 60; 0 to disable instrumentation
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
@@ -52,6 +55,19 @@
 # [*gr_storage_schemas*]
 #  The storage schemas.
 #  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
+# [*gr_storage_aggregation_rules*]
+#   rule set for storage aggregation ... items get sorted, first match wins
+#   pattern = <regex>
+#   factor = <float between 0 and 1>
+#   method = <average|sum|last|max|min>
+#   Default is :
+#   {
+#     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+#     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+#     '01_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+#     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+#   }
+#   (matches the exammple configuration from graphite 0.9.12)
 # [*gr_web_server*]
 #   The web server to use.
 #   Valid values are 'apache' and 'nginx'. 'nginx' is only supported on
@@ -127,6 +143,15 @@
 # [*gr_amqp_metric_name_in_body*]
 #   Self explaining.
 #   Default is 'False'.
+# [*gr_memcache_enable*]
+#   Enable configuration / use of memcache
+#   Memcache installation is NOT handled by this module
+#   SELinux Note:   sudo setsebool -P httpd_can_network_memcache 1
+#   may be required to permit httpd to connect to memcached
+#   Default is false.
+# [*gr_memcache_hosts*]
+#   Array of memcache hosts, as a string. 
+#   Defalut is  "['127.0.0.1:11211']"
 # [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
@@ -151,6 +176,7 @@ class graphite (
   $gr_max_cache_size            = inf,
   $gr_max_updates_per_second    = 500,
   $gr_max_creates_per_minute    = 50,
+  $gr_carbon_metric_interval    = 60,
   $gr_line_receiver_interface   = '0.0.0.0',
   $gr_line_receiver_port        = 2003,
   $gr_enable_udp_listener       = 'False',
@@ -174,6 +200,12 @@ class graphite (
       retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
+  $gr_storage_aggregation_rules  = {
+    '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+    '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+    '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+    '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+  },
   $gr_web_server                = 'apache',
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
@@ -209,6 +241,8 @@ class graphite (
   $gr_amqp_password             = 'guest',
   $gr_amqp_exchange             = 'graphite',
   $gr_amqp_metric_name_in_body  = 'False',
+  $gr_memcache_enable           = false,
+  $gr_memcache_hosts            = "['127.0.0.1:11211']",
   $secret_key                   = 'UNSAFE_DEFAULT',
   $nginx_htpassword             = undef,
 ) {
