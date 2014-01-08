@@ -132,7 +132,7 @@
 #   Memcache installation is NOT handled by this module
 #   SELinux Note:   sudo setsebool -P httpd_can_network_memcache 1
 #   may be required to permit httpd to connect to memcached
-#   Default is 'False'.
+#   Default is false.
 # [*gr_memcache_hosts*]
 #   Array of memcache hosts, as a string. 
 #   Defalut is  "['127.0.0.1:11211']"
@@ -218,7 +218,7 @@ class graphite (
   $gr_amqp_password             = 'guest',
   $gr_amqp_exchange             = 'graphite',
   $gr_amqp_metric_name_in_body  = 'False',
-  $gr_memcache_enable           = 'False',
+  $gr_memcache_enable           = false,
   $gr_memcache_hosts            = "['127.0.0.1:11211']",
   $secret_key                   = 'UNSAFE_DEFAULT',
   $nginx_htpassword             = undef,
