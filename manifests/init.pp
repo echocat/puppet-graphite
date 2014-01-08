@@ -55,6 +55,15 @@
 # [*gr_storage_schemas*]
 #  The storage schemas.
 #  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
+# [*gr_storage_aggregation_rules*]
+#   rule set for storage aggregation. default will match example config from graphite 0.9.12
+#   {
+#     'min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+#     'max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+#     'sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+#     'default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+#   }
+#   'factor' change the xFilesFactor
 # [*gr_web_server*]
 #   The web server to use.
 #   Valid values are 'apache' and 'nginx'. 'nginx' is only supported on
@@ -187,6 +196,12 @@ class graphite (
       retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
+  gr_storage_aggregation_rules  = {
+    'min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+    'max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+    'sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+    'default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+  },
   $gr_web_server                = 'apache',
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
