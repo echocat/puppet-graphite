@@ -196,7 +196,7 @@ class graphite (
       retentions => '1s:30m,1m:1d,5m:2y'
     }
   ],
-  gr_storage_aggregation_rules  = {
+  $gr_storage_aggregation_rules  = {
     'min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
     'max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
     'sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
