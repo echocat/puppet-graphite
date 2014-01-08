@@ -44,10 +44,8 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>gr_max_creates_per_minute</td><td>50</td><td>Softly limits the number of whisper files that get created each minute.</td>
-  </tr>gr_carbon_metric_interval</td><td>60</td><td>Set the interval between sending internal performance metrics; affects all carbon daemons.</td>
+  </tr><td>gr_carbon_metric_interval</td><td>60</td><td>Set the interval between sending internal performance metrics; affects all carbon daemons.</td>
   </tr>
-  <tr>
-    <td>
   <tr>
     <td>gr_line_receiver_interface</td><td>0.0.0.0</td><td>Interface the line receiver listens</td>
   </tr>
