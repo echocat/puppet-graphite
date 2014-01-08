@@ -166,7 +166,7 @@ WHISPER_FALLOCATE_CREATE = True
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 # CARBON_METRIC_PREFIX = carbon
-# CARBON_METRIC_INTERVAL = 60
+CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
 
 # Enable AMQP if you want to receve metrics using an amqp broker
 ENABLE_AMQP = <%= scope.lookupvar('graphite::gr_amqp_enable') %>
@@ -290,8 +290,7 @@ USE_FLOW_CONTROL = <%= scope.lookupvar('graphite::gr_relay_use_flow_control') %>
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 # CARBON_METRIC_PREFIX = carbon
-# CARBON_METRIC_INTERVAL = 60
-
+CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
 
 [aggregator]
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
@@ -373,4 +372,4 @@ MAX_AGGREGATION_INTERVALS = 5
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 # CARBON_METRIC_PREFIX = carbon
-# CARBON_METRIC_INTERVAL = 60
+CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>

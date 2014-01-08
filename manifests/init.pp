@@ -16,6 +16,9 @@
 # [*gr_max_creates_per_minute*]
 #   Softly limits the number of whisper files that get created each minute.
 #   Default is 50.
+# [*gr_carbon_metric_interval*]
+#   The interval (in seconds) between sending internal performance metrics.
+#   Default is 60; 0 to disable instrumentation
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
@@ -160,6 +163,7 @@ class graphite (
   $gr_max_cache_size            = inf,
   $gr_max_updates_per_second    = 500,
   $gr_max_creates_per_minute    = 50,
+  $gr_carbon_metric_interval    = 60,
   $gr_line_receiver_interface   = '0.0.0.0',
   $gr_line_receiver_port        = 2003,
   $gr_enable_udp_listener       = 'False',
