@@ -90,7 +90,7 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   }
 ]</pre></td><td>The storage schemas.</td>
   </tr>
-  <tr>gr_storage_aggregation_rules</td><td><pre>{
+  <tr><td>gr_storage_aggregation_rules</td><td><pre>{
      '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
      '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
      '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
