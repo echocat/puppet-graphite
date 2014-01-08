@@ -38,7 +38,7 @@
   rules.each do |name, rule| %>
 [<%= name %>]
 <%- if rule['pattern'] then %>pattern = <%= rule['pattern'] %><% end %>
-<%- if rule['factor'] then %>xFilesFactor = <%= rule['xfilesfactor'] %><% end %>
+<%- if rule['factor'] then %>xFilesFactor = <%= rule['factor'] %><% end %>
 <%- if rule['method'] then %>aggregationMethod = <%= rule['method'] %><% end %>
 
 <% end %>
