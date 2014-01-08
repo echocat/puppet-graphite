@@ -44,7 +44,10 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>gr_max_creates_per_minute</td><td>50</td><td>Softly limits the number of whisper files that get created each minute.</td>
+  </tr>gr_carbon_metric_interval</td><td>60</td><td>Set the interval between sending internal performance metrics; affects all carbon daemons.</td>
   </tr>
+  <tr>
+    <td>
   <tr>
     <td>gr_line_receiver_interface</td><td>0.0.0.0</td><td>Interface the line receiver listens</td>
   </tr>
@@ -87,6 +90,13 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   }
 ]</pre></td><td>The storage schemas.</td>
   </tr>
+  <tr>gr_storage_aggregation_rules</td><td><pre>{
+     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+     '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+   }</pre></td><td>The storage aggregation rules</td>
+  </tr>
   <tr>
     <td>gr_web_server</td><td>apache</td><td>The web server to use. Valid values are 'apache' and 'nginx'. 'nginx' is only supported on Debian-like systems.</td>
   </tr>
@@ -104,6 +114,10 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   </tr>
   <tr>
     <td>gr_django_db_xxx</td><td>sqlite3 settings</td><td>Django database settings. (engine|name|user|password|host|port)</td>
+  </tr>
+  <tr><td>gr_memcache_enable</td><td>false</td><td>Enable / Disable memcache usage</td>
+  </tr>
+  <tr><td>gr_memcache_hosts</td><td><pre>"['127.0.0.1:11211']"</pre></td><td>List of memcache hosts to use.</td>
   </tr>
   <tr>
     <td>secret_key</td><td>UNSAFE_DEFAULT</td><td>CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.</td>
