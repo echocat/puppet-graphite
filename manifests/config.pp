@@ -169,7 +169,7 @@ class graphite::config inherits graphite::params {
   	  hasstatus  => true,
   	  hasrestart => true, 
   	  before     => Anchor['graphite::config::end'],
-  	  require    => File['/etc/iniit.d/carbon-aggregator'];
+  	  require    => File['/etc/init.d/carbon-aggregator'];
     }
 
     file { '/etc/init.d/carbon-aggregator':
