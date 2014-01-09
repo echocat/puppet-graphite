@@ -137,7 +137,6 @@
 #   Default is 'True'
 # [*gr_aggregator_max_intervals*]
 #   Default is 5
-#
 # [*gr_aggregator_rules*]
 #   Array of aggregation rules, as configuration file lines
 #   Default is {
