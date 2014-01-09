@@ -113,7 +113,41 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>gr_django_db_xxx</td><td>sqlite3 settings</td><td>Django database settings. (engine|name|user|password|host|port)</td>
   </tr>
-  <tr><td>gr_memcache_enable</td><td>false</td><td>Enable / Disable memcache usage</td>
+  <tr>
+  <td>gr_enable_carbon_aggregator</td><td>false</td><td>Enable the carbon aggregator daemon</td>
+</tr>
+<tr>
+  <td>gr_aggregator_line_interface</td><td>'0.0.0.0'</td><td>address for line interface to listen on </td>
+</tr>
+<tr>
+  <td>gr_aggregator_line_port</td><td>2023</td><td>TCP port for line interface to listen on</td>
+</tr>
+<tr>
+  <td>gr_aggregator_pickle_interface</td><td>'0.0.0.0'</td><td>address for pickle interface</td>
+</tr>
+<tr>
+  <td>gr_aggregator_pickle_port</td><td>2024</td><td>pickle port</td>
+</tr>
+<tr>
+  <td>gr_aggregator_forward_all</td><td>'True'</td><td>Forward all metrics to the destination(s)</td>
+</tr>
+  <tr><td>gr_aggregator_destinations</td><td><pre>[ '127.0.0.1:2004' ]</pre></td><td>array of backend carbons</td>
+</tr>
+<tr>
+  <td>gr_aggregator_max_queue_size</td><td>10000</td><td>maximum queue size</td>
+</tr>
+<tr>
+  <td>gr_aggregator_use_flow_control</td><td>'True"</td><td>Enable flow control</td>
+</tr>
+<tr>
+  <td>gr_aggregator_max_intervals</td><td>5</td><td>maximum # intervals to keep around</td></tr>
+<tr>
+  <td>gr_aggregator_rules</td><td><pre>{
+    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+    }</pre></td><td>array of carbon aggregation rules</td>
+</tr>
+<tr><td>gr_memcache_enable</td><td>false</td><td>Enable / Disable memcache usage</td>
   </tr>
   <tr><td>gr_memcache_hosts</td><td><pre>"['127.0.0.1:11211']"</pre></td><td>List of memcache hosts to use.</td>
   </tr>

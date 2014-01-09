@@ -301,11 +301,10 @@ ENABLE_LOGROTATION = True
 # This user must have write access to the local data directory
 USER = <%= scope.lookupvar('graphite::gr_user') %>
 
-LINE_RECEIVER_INTERFACE = 0.0.0.0
-LINE_RECEIVER_PORT = 2023
-
-PICKLE_RECEIVER_INTERFACE = 0.0.0.0
-PICKLE_RECEIVER_PORT = 2024
+LINE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_aggregator_line_interface') %>
+LINE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_aggregator_line_port') %>
+PICKLE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_aggregator_pickle_interface') %>
+PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_aggregator_pickle_port') %>
 
 # Set to false to disable logging of successful connections
 LOG_LISTENER_CONNECTIONS = True
@@ -313,7 +312,7 @@ LOG_LISTENER_CONNECTIONS = True
 # If set true, metric received will be forwarded to DESTINATIONS in addition to
 # the output of the aggregation rules. If set false the carbon-aggregator will
 # only ever send the output of aggregation.
-FORWARD_ALL = True
+FORWARD_ALL = <%= scope.lookupvar('graphite::gr_aggregator_forward_all') %>
 
 # This is a list of carbon daemons we will send any relayed or
 # generated metrics to. The default provided would send to a single
@@ -328,7 +327,7 @@ FORWARD_ALL = True
 # Note that if the destinations are all carbon-caches then this should
 # exactly match the webapp's CARBONLINK_HOSTS setting in terms of
 # instances listed (order matters!).
-DESTINATIONS = 127.0.0.1:2004
+DESTINATIONS = <%= scope.lookupvar('graphite::gr_aggregator_destinations').join(', ') %>
 
 # If you want to add redundancy to your data by replicating every
 # datapoint to more than one machine, increase this.
@@ -338,13 +337,13 @@ REPLICATION_FACTOR = 1
 # for a single destination. Once this limit is hit, we will
 # stop accepting new data if USE_FLOW_CONTROL is True, otherwise
 # we will drop any subsequently received datapoints.
-MAX_QUEUE_SIZE = 10000
+MAX_QUEUE_SIZE = <%= scope.lookupvar('graphite::gr_aggregator_max_queue_size') %>
 
 # Set this to False to drop datapoints when any send queue (sending datapoints
 # to a downstream carbon daemon) hits MAX_QUEUE_SIZE. If this is True (the
 # default) then sockets over which metrics are received will temporarily stop accepting
 # data until the send queues fall below 80% MAX_QUEUE_SIZE.
-USE_FLOW_CONTROL = True
+USE_FLOW_CONTROL = <%= scope.lookupvar('graphite::gr_aggregator_use_flow_control') %>
 
 # This defines the maximum "message size" between carbon daemons.
 # You shouldn't need to tune this unless you really know what you're doing.
@@ -353,7 +352,7 @@ MAX_DATAPOINTS_PER_MESSAGE = 500
 # This defines how many datapoints the aggregator remembers for
 # each metric. Aggregation only happens for datapoints that fall in
 # the past MAX_AGGREGATION_INTERVALS * intervalSize seconds.
-MAX_AGGREGATION_INTERVALS = 5
+MAX_AGGREGATION_INTERVALS = <%= scope.lookupvar('graphite::gr_aggregator_max_intervals') %>
 
 # By default (WRITE_BACK_FREQUENCY = 0), carbon-aggregator will write back
 # aggregated data points once every rule.frequency seconds, on a per-rule basis.
