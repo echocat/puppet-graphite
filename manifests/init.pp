@@ -265,10 +265,10 @@ class graphite (
   $gr_aggregator_line_interface = '0.0.0.0',
   $gr_aggregator_line_port      = 2023,
   $gr_aggregator_pickle_interface = '0.0.0.0',
-  $gr_aggregator_pickle_port    = 2024
-  $gr_aggregator_forward_all    = 'True'
+  $gr_aggregator_pickle_port    = 2024,
+  $gr_aggregator_forward_all    = 'True',
   $gr_aggregator_destinations   = [ '127.0.0.1:2004' ],
-  $gr_aggregator_max_queue_size = 10000
+  $gr_aggregator_max_queue_size = 10000,
   $gr_aggregator_use_flow_control = 'True',
   $gr_aggregator_max_intervals  = 5,
   $gr_aggregator_rules          = {
