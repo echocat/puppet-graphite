@@ -74,21 +74,38 @@ class graphite::config inherits graphite::params {
 			require => Package["${::graphite::params::web_server_pkg}"];
 	}
 
-	# configure carbon engine
+	# configure carbon engines
+	if $::graphite::gr_enable_carbon_relay && $::graphite::gr_enable_carbon_aggregator {
+		$notify_services = [ Service['carbon-aggregator'], Service['carbon-relay'], Service['carbon-cache'] ]
+   	} else if $::graphite::gr_enable_carbon_relay {
+   		$notify_services = [ Service['carbon-relay'], Service['carbon-cache'] ] 
+   	} else if $::graphite::gr_enable_carbon_aggregator {
+   		$notify_services = [ Service['carbon-aggregator'], Service['carbon-cache'] ]
+   	} else {
+	    $notify_services = [ Service['carbon-cache'] ]
+   	}
 
-  if $::graphite::gr_enable_carbon_relay {
-    $notify_services = [ Service['carbon-relay'], Service['carbon-cache'] ] 
+  	if $::graphite::gr_enable_carbon_relay {
 
-    file {
-      '/opt/graphite/conf/relay-rules.conf':
-        mode    => '0644',
-        content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
-        require => Anchor['graphite::install::end'],
-        notify  => $notify_services;
-    }
-  } else {
-    $notify_services = [ Service['carbon-cache'] ]
-  }
+	    file {
+	        '/opt/graphite/conf/relay-rules.conf':
+	        mode    => '0644',
+	        content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
+	        require => Anchor['graphite::install::end'],
+	        notify  => $notify_services;
+	    }
+	}
+
+	if $::graphite::gr_enable_carbon_aggregator {
+
+		file {
+			'/opt/graphite/conf/aggregation-rules.conf':
+			mode    => '0644',
+			content => template('graphite/opt/graphite/conf/aggregation-rules.conf.erb'),
+			require => Anchor['graphite::install::end'],
+			notify  => $notify_services;
+		}
+	}
 
 	file {
 		'/opt/graphite/conf/storage-schemas.conf':
