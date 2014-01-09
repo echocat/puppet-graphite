@@ -75,19 +75,17 @@ class graphite::config inherits graphite::params {
 	}
 
 	# configure carbon engines
+    $notify_services = [ Service['carbon-cache'] ]
+ 	if $::graphite::gr_enable_carbon_relay {
+   		$notify_services = [ Service['carbon-relay'], Service['carbon-cache'] ] 
+   	} 
+   	if $::graphite::gr_enable_carbon_aggregator {
+   		$notify_services = [ Service['carbon-aggregator'], Service['carbon-cache'] ]
+   	} 
 	if $::graphite::gr_enable_carbon_relay and $::graphite::gr_enable_carbon_aggregator {
 		$notify_services = [ Service['carbon-aggregator'], Service['carbon-relay'], Service['carbon-cache'] ]
    	} 
-   	elseif $::graphite::gr_enable_carbon_relay {
-   		$notify_services = [ Service['carbon-relay'], Service['carbon-cache'] ] 
-   	} 
-   	elseif $::graphite::gr_enable_carbon_aggregator {
-   		$notify_services = [ Service['carbon-aggregator'], Service['carbon-cache'] ]
-   	} 
-   	else {
-	    $notify_services = [ Service['carbon-cache'] ]
-   	}
-
+     	
   	if $::graphite::gr_enable_carbon_relay {
 
 	    file {
