@@ -115,6 +115,22 @@
 #   'default' => { 'default'    => true,
 #                  destinations => [ '127.0.0.1:2004:a' ] },
 #   }
+# [*gr_enable_carbon_aggregator*]
+#   Enable the carbon aggregator daemon
+#   Default is false.
+# graphite::gr_aggregator_line_interface
+# graphite::gr_aggregator_line_port
+# graphite::gr_aggregator_pickle_interface
+# graphite::gr_aggregator_pickle_port
+# graphite::gr_aggregator_forward_all
+# graphite::gr_aggregator_destinations
+# graphite::gr_aggregator_max_queue_size
+# graphite::gr_aggregator_use_flow_control
+# graphite::gr_aggregator_max_intervals
+
+# [*gr_aggregator_rules*]
+#   Array of aggregation rules, as configuration file lines
+#   Default is {}.
 # [*gr_amqp_enable*]
 #   Set this to 'True' to enable the AMQP.
 #   Default is 'False'.
@@ -232,6 +248,17 @@ class graphite (
     'default' => { 'default'    => true,
                    destinations => [ '127.0.0.1:2004:a' ] },
   },
+  $gr_enable_carbon_aggregator  = false,
+  $gr_aggregator_line_interface = '0.0.0.0',
+  $gr_aggregator_line_port      = 2023,
+  $gr_aggregator_pickle_interface = '0.0.0.0',
+  $gr_aggregator_pickle_port    = 2024
+  $gr_aggregator_forward_all    = 'True'
+  $gr_aggregator_destinations   = [ '127.0.0.1:2004' ],
+  $gr_aggregator_max_queue_size = 10000
+  $gr_aggregator_use_flow_control = 'True',
+  $gr_aggregator_max_intervals  = 5,
+  $gr_aggregator_rules          = [],
   $gr_amqp_enable               = 'False',
   $gr_amqp_verbose              = 'False',
   $gr_amqp_host                 = 'localhost',

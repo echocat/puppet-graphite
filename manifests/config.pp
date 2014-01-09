@@ -161,4 +161,22 @@ class graphite::config inherits graphite::params {
       require => File['/opt/graphite/conf/carbon.conf'];
     }
   }
+
+  if $graphite::gr_enable_carbon_aggregator {
+  	service {'carbon-aggregator':
+  	  ensure     => running,
+  	  enable     => true,
+  	  hasstatus  => true,
+  	  hasrestart => true, 
+  	  before     => Anchor['graphite::config::end'],
+  	  require    => File['/etc/iniit.d/carbon-aggregator'];
+    }
+
+    file { '/etc/init.d/carbon-aggregator':
+      ensure  => file,
+      mode    => '0750',
+      content => template('graphite/etc/init.d/carbon-aggregator.erb'),
+      require => File['/opt/graphite/conf/carbon.conf'];
+    }
+  }
 }
