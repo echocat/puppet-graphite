@@ -118,19 +118,32 @@
 # [*gr_enable_carbon_aggregator*]
 #   Enable the carbon aggregator daemon
 #   Default is false.
-# graphite::gr_aggregator_line_interface
-# graphite::gr_aggregator_line_port
-# graphite::gr_aggregator_pickle_interface
-# graphite::gr_aggregator_pickle_port
-# graphite::gr_aggregator_forward_all
-# graphite::gr_aggregator_destinations
-# graphite::gr_aggregator_max_queue_size
-# graphite::gr_aggregator_use_flow_control
-# graphite::gr_aggregator_max_intervals
-
+# [*gr_aggregator_line_interface*]
+#   Default is '0.0.0.0'
+# [*gr_aggregator_line_port*]
+#   Default is 2023.
+# [*gr_aggregator_pickle_interface*]
+#   Default is '0.0.0.0'
+# [*gr_aggregator_pickle_port*]
+#   Default is 2024.
+# [*gr_aggregator_forward_all*]
+#   Default is 'True'
+# [*gr_aggregator_destinations*]
+#   Array of backend carbons
+#   Default is [ '127.0.0.1:2004' ]
+# [*gr_aggregator_max_queue_size*]
+#   Default is 10000
+# [*gr_aggregator_use_flow_control*]
+#   Default is 'True'
+# [*gr_aggregator_max_intervals*]
+#   Default is 5
+#
 # [*gr_aggregator_rules*]
 #   Array of aggregation rules, as configuration file lines
-#   Default is {}.
+#   Default is {
+#    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+#    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+#    }
 # [*gr_amqp_enable*]
 #   Set this to 'True' to enable the AMQP.
 #   Default is 'False'.
@@ -258,7 +271,10 @@ class graphite (
   $gr_aggregator_max_queue_size = 10000
   $gr_aggregator_use_flow_control = 'True',
   $gr_aggregator_max_intervals  = 5,
-  $gr_aggregator_rules          = [],
+  $gr_aggregator_rules          = {
+    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+    },
   $gr_amqp_enable               = 'False',
   $gr_amqp_verbose              = 'False',
   $gr_amqp_host                 = 'localhost',
