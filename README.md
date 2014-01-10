@@ -222,12 +222,3 @@ node "graphite.my.domain" {
 }
 
 </pre>
-
-
-# Author
-
-written by Daniel Werdermann dwerdermann@web.de
-
-# Contributers
-
- * Oisin Mulvihill, oisin dot mulvihill at gmail dot com.
