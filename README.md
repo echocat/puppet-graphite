@@ -11,7 +11,7 @@ Ubunutu 10.04 and newer
 
 Configure conf files as you need:
   
-Only if you want to use memcached, carbon-link clusters or ldap you should edit:  
+Only if you want to use carbon-link clusters or ldap you should edit:  
 templates/opt/graphite/webapp/graphite/local_settings.py.erb
 
 ### Modules needed:
