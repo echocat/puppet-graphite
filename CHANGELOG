@@ -2,6 +2,12 @@ The full list and newest Release can be found on Github.com
 
 https://github.com/echocat/puppet-graphite
 
+2014-01-10 - 5.0.0 (Major release)
+  !!! Be aware that this module overwrites
+  !!! carbon-aggregator and memcached configs now.
+* allow to configure carbon aggregator
+* allow to set vhost name web gui
+* allow to configure memcached
 2013-12-11 - 4.0.0 (Major release)
 * implementation of carbon-relay configuration
 2013-08-28 - 3.0.1 (Bugfix release)
