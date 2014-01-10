@@ -73,6 +73,9 @@
 #   Valid values are 'apache' and 'nginx'. 'nginx' is only supported on
 #   Debian-like systems.
 #   Default is 'apache'.
+# [*gr_web_servername*]
+#   Virtualhostname of Graphite webgui.
+#   Default is FQDN.
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
@@ -235,6 +238,7 @@ class graphite (
     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
   },
   $gr_web_server                = 'apache',
+  $gr_web_servername            = $::fqdn,
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,

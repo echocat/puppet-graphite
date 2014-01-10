@@ -99,6 +99,9 @@ For further information take a look at the file templates/opt/graphite/conf/carb
     <td>gr_web_server</td><td>apache</td><td>The web server to use. Valid values are 'apache' and 'nginx'. 'nginx' is only supported on Debian-like systems.</td>
   </tr>
   <tr>
+    <td>gr_web_servername</td><td>FQDN</td><td>Virtualhostname of Graphite webgui.</td>
+  </tr>
+  <tr>
     <td>gr_web_cors_allow_from_all</td><td>false</td><td>Include CORS Headers for all hosts (*) in web server config.</td>
   </tr>
   <tr>
@@ -179,6 +182,24 @@ node "graphite.my.domain" {
 		gr_max_cache_size => 256,
 		gr_enable_udp_listener => True
 	}
+}
+</pre>
+
+### Using MySQL Backend and Aggregator
+
+<pre>
+
+node "graphite.my.domain" {
+  class { 'graphite':
+    gr_django_db_engine   => 'django.db.backends.mysql',
+    gr_django_db_name     => 'graphite',
+    gr_django_db_user     => 'graphite',
+    gr_django_db_password => 'SECRET123',
+    gr_django_db_host     => 'mysql.my.domain',
+    gr_django_db_port     => 3306,
+    gr_enable_carbon_aggregator => true,
+    secret_key => 'ABCD1234',
+  }
 }
 </pre>
 

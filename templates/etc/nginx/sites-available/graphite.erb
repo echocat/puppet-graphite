@@ -1,7 +1,7 @@
 # Serve static files directly and redirect remaining requests to graphite
 server {
 	listen   <%= scope.lookupvar('graphite::gr_apache_port') %>;
-	server_name <%= fqdn %>;
+	server_name <%= scope.lookupvar('graphite::gr_web_servername') %>;
 
 	client_max_body_size 64M;
 	keepalive_timeout 5;
