@@ -250,7 +250,7 @@ RELAY_METHOD = <%= scope.lookupvar('graphite::gr_relay_method') %>
 
 # If you use consistent-hashing you can add redundancy by replicating every
 # datapoint to more than one machine.
-REPLICATION_FACTOR = 1
+REPLICATION_FACTOR = <%= scope.lookupvar('graphite::gr_relay_replication_factor') %>
 
 # This is a list of carbon daemons we will send any relayed or
 # generated metrics to. The default provided would send to a single
@@ -331,7 +331,7 @@ DESTINATIONS = <%= scope.lookupvar('graphite::gr_aggregator_destinations').join(
 
 # If you want to add redundancy to your data by replicating every
 # datapoint to more than one machine, increase this.
-REPLICATION_FACTOR = 1
+REPLICATION_FACTOR = <%= scope.lookupvar('graphite::gr_aggregator_replication_factor') %>
 
 # This is the maximum number of datapoints that can be queued up
 # for a single destination. Once this limit is hit, we will
