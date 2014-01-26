@@ -187,6 +187,18 @@
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
+# [*gr_cluster_enable*]
+#   en/dis-able cluster configuration.   Default: false
+# [*gr_cluster_servers*]
+#   list of IP:port tuples for the servers in the cluster.  Default: "[]"
+# [*gr_cluster_fetch_timeout*]
+#    Timeout to fetch series data.   Default = 6
+# [*gr_cluster_find_timeout*]
+#    Timeout for metric find requests.   Default = 2.5
+# [*gr_cluster_retry_delay*]
+#    Time before retrying a failed remote webapp.  Default = 60
+# [*gr_cluster_cache_duration*]
+#    Time to cache remote metric find results.  Default = 300
 # [*nginx_htpasswd*]
 #   The user and salted SHA-1 (SSHA) password for Nginx authentication.
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
@@ -292,6 +304,12 @@ class graphite (
   $gr_memcache_enable           = false,
   $gr_memcache_hosts            = "['127.0.0.1:11211']",
   $secret_key                   = 'UNSAFE_DEFAULT',
+  $gr_cluster_enable            = false,
+  $gr_cluster_servers           = "[]",
+  $gr_cluster_fetch_timeout     = 6,
+  $gr_cluster_find_timeout      = 2.5,
+  $gr_cluster_retry_delay       = 60,
+  $gr_cluster_cache_duration    = 300,
   $nginx_htpassword             = undef,
 ) {
 
