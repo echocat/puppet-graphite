@@ -102,6 +102,8 @@
 #   Default is 2014.
 # [*gr_relay_method*]
 #   Default is 'rules'
+# [*gr_relay_replication_factor*]
+#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
 # [*gr_relay_destinations*]
 #   Array of backend carbons for relay.
 #   Default  is [ '127.0.0.1:2004' ]
@@ -134,6 +136,8 @@
 # [*gr_aggregator_destinations*]
 #   Array of backend carbons
 #   Default is [ '127.0.0.1:2004' ]
+# [*gr_aggregator_replication_factor*]
+#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
 # [*gr_aggregator_max_queue_size*]
 #   Default is 10000
 # [*gr_aggregator_use_flow_control*]
