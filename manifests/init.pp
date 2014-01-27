@@ -102,6 +102,8 @@
 #   Default is 2014.
 # [*gr_relay_method*]
 #   Default is 'rules'
+# [*gr_relay_replication_factor*]
+#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
 # [*gr_relay_destinations*]
 #   Array of backend carbons for relay.
 #   Default  is [ '127.0.0.1:2004' ]
@@ -134,6 +136,8 @@
 # [*gr_aggregator_destinations*]
 #   Array of backend carbons
 #   Default is [ '127.0.0.1:2004' ]
+# [*gr_aggregator_replication_factor*]
+#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
 # [*gr_aggregator_max_queue_size*]
 #   Default is 10000
 # [*gr_aggregator_use_flow_control*]
@@ -187,6 +191,18 @@
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
+# [*gr_cluster_enable*]
+#   en/dis-able cluster configuration.   Default: false
+# [*gr_cluster_servers*]
+#   list of IP:port tuples for the servers in the cluster.  Default: "[]"
+# [*gr_cluster_fetch_timeout*]
+#    Timeout to fetch series data.   Default = 6
+# [*gr_cluster_find_timeout*]
+#    Timeout for metric find requests.   Default = 2.5
+# [*gr_cluster_retry_delay*]
+#    Time before retrying a failed remote webapp.  Default = 60
+# [*gr_cluster_cache_duration*]
+#    Time to cache remote metric find results.  Default = 300
 # [*nginx_htpasswd*]
 #   The user and salted SHA-1 (SSHA) password for Nginx authentication.
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
@@ -255,6 +271,7 @@ class graphite (
   $gr_relay_pickle_interface    = '0.0.0.0',
   $gr_relay_pickle_port         = 2014,
   $gr_relay_method              = 'rules',
+  $gr_relay_replication_factor  = 1,
   $gr_relay_destinations        = [ '127.0.0.1:2004' ],
   $gr_relay_max_queue_size      = 10000,
   $gr_relay_use_flow_control    = 'True',
@@ -271,6 +288,7 @@ class graphite (
   $gr_aggregator_pickle_port    = 2024,
   $gr_aggregator_forward_all    = 'True',
   $gr_aggregator_destinations   = [ '127.0.0.1:2004' ],
+  $gr_aggregator_replication_factor = 1,
   $gr_aggregator_max_queue_size = 10000,
   $gr_aggregator_use_flow_control = 'True',
   $gr_aggregator_max_intervals  = 5,
@@ -290,6 +308,12 @@ class graphite (
   $gr_memcache_enable           = false,
   $gr_memcache_hosts            = "['127.0.0.1:11211']",
   $secret_key                   = 'UNSAFE_DEFAULT',
+  $gr_cluster_enable            = false,
+  $gr_cluster_servers           = "[]",
+  $gr_cluster_fetch_timeout     = 6,
+  $gr_cluster_find_timeout      = 2.5,
+  $gr_cluster_retry_delay       = 60,
+  $gr_cluster_cache_duration    = 300,
   $nginx_htpassword             = undef,
 ) {
 

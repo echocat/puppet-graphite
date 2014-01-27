@@ -178,6 +178,14 @@ DATABASES = {
 # remote server in the cluster. These servers must each have local access to
 # metric data. Note that the first server to return a match for a query will be
 # used.
+<% if scope.lookupvar('graphite::gr_cluster_enable') %>
+CLUSTER_SERVERS = <%= scope.lookupvar('graphite::gr_cluster_servers') %>
+
+REMOTE_STORE_FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
+REMOTE_STORE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
+REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
+REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
+<% else %>
 #CLUSTER_SERVERS = ["10.0.2.2:80", "10.0.2.3:80"]
 
 ## These are timeout values (in seconds) for requests to remote webapps
@@ -185,6 +193,7 @@ DATABASES = {
 #REMOTE_STORE_FIND_TIMEOUT = 2.5  # Timeout for metric find requests
 #REMOTE_STORE_RETRY_DELAY = 60    # Time before retrying a failed remote webapp
 #REMOTE_FIND_CACHE_DURATION = 300 # Time to cache remote metric find results
+<% end %>
 
 ## Remote rendering settings
 # Set to True to enable rendering of Graphs on a remote webapp
