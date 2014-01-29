@@ -314,7 +314,7 @@ class graphite (
   $gr_cluster_find_timeout      = 2.5,
   $gr_cluster_retry_delay       = 60,
   $gr_cluster_cache_duration    = 300,
-  $nginx_htpassword             = undef,
+  $nginx_htpasswd               = undef,
 ) {
 
 	class { 'graphite::install': notify => Class['graphite::config'], }
