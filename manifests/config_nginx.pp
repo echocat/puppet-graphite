@@ -77,7 +77,7 @@ class graphite::config_nginx inherits graphite::params {
   }
 
   # HTTP basic authentication
-  $nginx_htpasswd_file_presence = $graphite::nginx_htpassword ? {
+  $nginx_htpasswd_file_presence = $graphite::nginx_htpasswd ? {
     undef   => absent,
     default => file,
   }
@@ -86,7 +86,7 @@ class graphite::config_nginx inherits graphite::params {
       ensure  => $nginx_htpasswd_file_presence,
       mode    => '0400',
       owner   => "${::graphite::params::web_user}",
-      content => $graphite::nginx_htpassword,
+      content => $graphite::nginx_htpasswd,
       require => Package['nginx'],
       notify  => Service['nginx'];
   }
