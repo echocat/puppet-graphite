@@ -88,6 +88,16 @@ class graphite::config_apache inherits graphite::params {
 				notify  => Service["${::graphite::params::apache_service_name}"];
 			}
 		}
+      redhat: {
+         if "${::graphite::gr_apache_port}" != "80" {
+			  file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
+			  	  ensure  => link,
+				  target  => "${::graphite::params::apache_dir}/ports.conf",
+				  require => File["${::graphite::params::apache_dir}/ports.conf"],
+				  notify  => Service["${::graphite::params::apache_service_name}"];
+			  }
+         }
+      }
 		default: {}
 	}
 }
