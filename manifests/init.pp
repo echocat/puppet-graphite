@@ -83,6 +83,8 @@
 #   The port to run web server on if you have an existing web server on the default
 #   port 80.
 #   Default is 80.
+# [*gr_apache_24*]
+#   Set to true if you are using Apache 2.4 or later
 # [*gr_django_1_4_or_less*]
 #   Set to true to use old Django settings style.
 #   Default is false.
@@ -258,6 +260,7 @@ class graphite (
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
+  $gr_apache_24        		= false,
   $gr_django_1_4_or_less        = false,
   $gr_django_db_engine          = 'django.db.backends.sqlite3',
   $gr_django_db_name            = '/opt/graphite/storage/graphite.db',
@@ -314,16 +317,16 @@ class graphite (
   $gr_cluster_find_timeout      = 2.5,
   $gr_cluster_retry_delay       = 60,
   $gr_cluster_cache_duration    = 300,
-  $nginx_htpasswd               = undef,
+  $nginx_htpassword             = undef,
 ) {
 
-  class { 'graphite::install': notify => Class['graphite::config'], }
+	class { 'graphite::install': notify => Class['graphite::config'], }
 
-  class { 'graphite::config':  require => Class['graphite::install'], }
+	class { 'graphite::config':	require => Class['graphite::install'], }
 
-  # Allow the end user to establish relationships to the "main" class
-  # and preserve the relationship to the implementation classes through
-  # a transitive relationship to the composite class.
-  anchor { 'graphite::begin': before => Class['graphite::install'] }
-  anchor { 'graphite::end':  require => Class['graphite::config'] }
+	# Allow the end user to establish relationships to the "main" class
+	# and preserve the relationship to the implementation classes through
+	# a transitive relationship to the composite class.
+	anchor { 'graphite::begin': before => Class['graphite::install'] }
+	anchor { 'graphite::end':  require => Class['graphite::config'] }
 }
