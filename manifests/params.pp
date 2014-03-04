@@ -51,6 +51,11 @@ class graphite::params {
     redhat => '/etc/httpd/conf.d',
   }
 
+  $apacheports_file = $::osfamily ? {
+    debian => 'ports.conf',
+    redhat => 'graphite_ports.conf',
+  }
+
   $apache_dir = $::osfamily ? {
     debian => '/etc/apache2',
     redhat => '/etc/httpd',
