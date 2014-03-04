@@ -28,6 +28,10 @@ class graphite::config_apache inherits graphite::params {
 
   case $::osfamily {
     debian: {
+      exec { 'enable mod_headers':
+        command => 'a2enmod headers',
+        require => Package["${::graphite::params::apache_wsgi_pkg}"]
+      }
       exec { 'Disable default apache site':
         command => 'a2dissite default',
         onlyif  => 'test -f /etc/apache2/sites-enabled/000-default',
