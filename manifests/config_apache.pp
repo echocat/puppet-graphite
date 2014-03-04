@@ -28,9 +28,12 @@ class graphite::config_apache inherits graphite::params {
 
   case $::osfamily {
     debian: {
-      exec { 'enable mod_headers':
-        command => 'a2enmod headers',
-        require => Package["${::graphite::params::apache_wsgi_pkg}"]
+      # mod_header is disabled on Ubuntu by default, but we need it for CORS headers
+      if ( $::graphite::gr_web_cors_allow_from_all != 'false' ) {
+        exec { 'enable mod_headers':
+          command => 'a2enmod headers',
+          require => Package["${::graphite::params::apache_wsgi_pkg}"]
+        }
       }
       exec { 'Disable default apache site':
         command => 'a2dissite default',
