@@ -98,6 +98,14 @@ MEMCACHE_HOSTS = <%= scope.lookupvar('graphite::gr_memcache_hosts') %>
 #####################################
 # Authentication Configuration #
 #####################################
+<% if scope.lookupvar('graphite::gr_use_ldap') %>
+USE_LDAP_AUTH = True
+LDAP_URI = "<%= scope.lookupvar('graphite::gr_ldap_uri') %>"
+LDAP_SEARCH_BASE = "<%= scope.lookupvar('graphite::gr_ldap_search_base') %>"
+LDAP_BASE_USER = "<%= scope.lookupvar('graphite::gr_ldap_base_user') %>"
+LDAP_BASE_PASS = "<%= scope.lookupvar('graphite::gr_ldap_base_pass') %>"
+LDAP_USER_QUERY = "<%= scope.lookupvar('graphite::gr_ldap_user_query') %>"
+<% else %>
 ## LDAP / ActiveDirectory authentication setup
 #USE_LDAP_AUTH = True
 #LDAP_SERVER = "ldap.mycompany.com"
@@ -108,6 +116,7 @@ MEMCACHE_HOSTS = <%= scope.lookupvar('graphite::gr_memcache_hosts') %>
 #LDAP_BASE_USER = "CN=some_readonly_account,DC=mycompany,DC=com"
 #LDAP_BASE_PASS = "readonly_account_password"
 #LDAP_USER_QUERY = "(username=%s)"  #For Active Directory use "(sAMAccountName=%s)"
+<% end %>
 #
 # If you want to further customize the ldap connection options you should
 # directly use ldap.set_option to set the ldap module's global options.
