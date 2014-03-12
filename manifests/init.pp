@@ -208,6 +208,8 @@
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
 #   given user & password.
 #   Default is undefined
+# [*manage_ca_certificate*]
+#   Used to determine to install ca-certificate or not. default = true
 
 
 # === Examples
@@ -315,6 +317,7 @@ class graphite (
   $gr_cluster_retry_delay       = 60,
   $gr_cluster_cache_duration    = 300,
   $nginx_htpasswd               = undef,
+  $manage_ca_certificate        = true,
 ) {
 
   class { 'graphite::install': notify => Class['graphite::config'], }
