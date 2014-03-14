@@ -160,6 +160,9 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>nginx_htpasswd</td><td>undef</td><td>The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password.</td>
   </tr>
+  <tr>
+    <td>manage_ca_certificate</td><td>true</td><td>Used to determine if the module should install ca-certificate on deiban machines during the initial installation.</td>
+  </tr>
 </table>
 
 # Sample usage:
