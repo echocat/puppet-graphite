@@ -210,7 +210,18 @@
 #   Default is undefined
 # [*manage_ca_certificate*]
 #   Used to determine to install ca-certificate or not. default = true
-
+# [*gr_use_ldap*]
+#   Turn ldap authentication on/off. Default = false
+# [*gr_ldap_uri*]
+#   Set ldap uri.  Default = ''
+# [*gr_ldap_search_base*]
+#   Set the ldap search base.  Default = ''
+# [*gr_ldap_base_user*]
+#   Set ldap base user.  Default = ''
+# [*gr_ldap_base_pass*]
+#   Set ldap password.  Default = ''
+# [*gr_ldap_user_query*]
+#   Set ldap user query.  Default = '(username=%s)'
 
 # === Examples
 #
@@ -318,6 +329,12 @@ class graphite (
   $gr_cluster_cache_duration    = 300,
   $nginx_htpasswd               = undef,
   $manage_ca_certificate        = true,
+  $gr_use_ldap                  = false,
+  $gr_ldap_uri                  = '',
+  $gr_ldap_search_base          = '',
+  $gr_ldap_base_user            = '',
+  $gr_ldap_base_pass            = '',
+  $gr_ldap_user_query           = '(username=%s)',
 ) {
 
   class { 'graphite::install': notify => Class['graphite::config'], }

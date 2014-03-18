@@ -163,6 +163,24 @@ For further information take a look at the file templates/opt/graphite/conf/carb
   <tr>
     <td>manage_ca_certificate</td><td>true</td><td>Used to determine if the module should install ca-certificate on debian machines during the initial installation.</td>
   </tr>
+    <tr>
+    <td>gr_use_ldap</td><td>false</td><td>Turn ldap authentication on/off.</td>
+  </tr>
+    <tr>
+    <td>gr_ldap_uri</td><td>''</td><td>Set ldap uri.</td>
+  </tr>
+    <tr>
+    <td>gr_ldap_search_base</td><td>''</td><td>Set the ldap search base.</td>
+  </tr>
+    <tr>
+    <td>gr_ldap_base_user</td><td>''</td><td>Set ldap base user.</td>
+  </tr>
+    <tr>
+    <td>gr_ldap_base_pass</td><td>''</td><td>Set ldap password.</td>
+  </tr>
+    <tr>
+    <td>gr_ldap_user_query</td><td>(username=%s)</td><td>Set ldap user query.</td>
+  </tr>
 </table>
 
 # Sample usage:
