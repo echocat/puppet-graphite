@@ -2,6 +2,13 @@ The full list and newest Release can be found on Github.com
 
 https://github.com/echocat/puppet-graphite
 
+2014-03-17 - 5.1.1 (Bugfix release)
+* allow Redhat based systems to use a different apache port correctly
+* parameterize the install of ca-certificate on Debian distributions
+* enable mod_headers on Debian apache if CORS is enabled
+* fix install of txamqp for Debian 7.4
+* some whitespace reformating
+
 2014-01-27 - 5.1.0 (Feature release)
 * add replication factor support
 * added controls for handling cluster configuration in the web application
