@@ -25,15 +25,18 @@ class graphite::config inherits graphite::params {
       $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
     }
     'nginx': {
+      # Configure gunicorn and nginx.
+      include graphite::config_gunicorn
       include graphite::config_nginx
       $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
     }
-    'none': {
-      # Take no action regarding webserver configs.
+    'wsgionly': {
+      # Configure gunicorn only without nginx.
+      include graphite::config_gunicorn
       $web_server_package_require = []
     }
     default: {
-      fail('The only supported web servers are \'apache\', \'nginx\' and \'none\'')
+      fail('The only supported web servers are \'apache\', \'nginx\' and \'wsgionly\'')
     }
   }
 

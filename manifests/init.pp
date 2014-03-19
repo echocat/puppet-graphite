@@ -70,11 +70,11 @@
 #   (matches the exammple configuration from graphite 0.9.12)
 # [*gr_web_server*]
 #   The web server to use.
-#   Valid values are 'apache', 'nginx' and 'none'. 'nginx' is only supported on
+#   Valid values are 'apache', 'nginx' and 'wsgionly'. 'nginx' is only supported on
 #   Debian-like systems.
-#   'none' will omit apache and nginx, allowing you to run your own webserver and communicate
+#   'wsgionly' will omit apache and nginx, allowing you to run your own webserver and communicate
 #   via wsgi to the unix socket. Handy for servers with multiple vhosts/purposes etc.
-#   All other webserver settings below are irrelevant if this is 'none'.
+#   All other webserver settings below are irrelevant if this is 'wsgionly'.
 #   Default is 'apache'.
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
