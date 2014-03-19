@@ -29,8 +29,16 @@ class graphite::install::debian {
   # https://github.com/echocat/puppet-graphite/issues/38
   if $::graphite::gr_amqp_enable {
 
-    if !defined(Package["python-pip"]) {
+    if !defined(Package['python-pip']) {
       package { 'python-pip': 
+        ensure => installed,
+        require => Anchor['graphitepkg::begin'],
+        before  => Anchor['graphitepkg::end']
+      }
+    }
+
+    if !defined(Package['python-dev']) {
+      package { 'python-dev': 
         ensure => installed,
         require => Anchor['graphitepkg::begin'],
         before  => Anchor['graphitepkg::end']
@@ -40,7 +48,7 @@ class graphite::install::debian {
     package { 'txamqp':
       ensure   => installed,
       provider => pip,
-      require  => Package['python-pip'],
+      require  => [Package['python-pip'],Package['python-dev']],
     }
 
   }
