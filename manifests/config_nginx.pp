@@ -51,6 +51,24 @@ class graphite::config_nginx inherits graphite::params {
       ];
   }
 
+  # Ensure that some directories exist first. This is normally handled by the package, but if we uninstall and reinstall nginx
+  # and delete /etc/nginx - by default the package manager won't replace the directory.
+
+  file {
+    '/etc/nginx':
+      ensure  => directory,
+      mode    => '0755',
+      require => Package['nginx'];
+    '/etc/nginx/sites-available':
+      ensure  => directory,
+      mode    => '0755',
+      require => File['/etc/nginx'];
+    '/etc/nginx/sites-enabled':
+      ensure  => directory,
+      mode    => '0755',
+      require => File['/etc/nginx'];
+  }
+
   # Deploy configfiles
 
   file {
@@ -65,14 +83,17 @@ class graphite::config_nginx inherits graphite::params {
       mode    => '0644',
       content => template('graphite/etc/nginx/sites-available/graphite.erb'),
       require => [
-        Package['nginx'],
+        File['/etc/nginx/sites-available'],
         Exec['Initial django db creation'],
         Exec['Chown graphite for web user']
       ];
     '/etc/nginx/sites-enabled/graphite':
       ensure  => link,
       target  => '/etc/nginx/sites-available/graphite',
-      require => File['/etc/nginx/sites-available/graphite'],
+      require => [
+        File['/etc/nginx/sites-available/graphite'],
+        File['/etc/nginx/sites-enabled']
+      ],
       notify  => Service['nginx'];
   }
 

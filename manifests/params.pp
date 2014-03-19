@@ -66,7 +66,8 @@ class graphite::params {
   $web_server_pkg = $graphite::gr_web_server ? {
     apache  => $apache_pkg,
     nginx   => 'nginx',
-    default => fail('The only supported web servers are \'apache\' and \'nginx\''),
+    none    => 'dont-install-webserver-package',
+    default => fail('The only supported web servers are \'apache\', \'nginx\' and \'none\''),
   }
 
   $web_user = $::osfamily ? {

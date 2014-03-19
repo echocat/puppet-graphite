@@ -22,12 +22,18 @@ class graphite::config inherits graphite::params {
   case $graphite::gr_web_server {
     'apache': {
       include graphite::config_apache
+      $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
     }
     'nginx': {
       include graphite::config_nginx
+      $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
+    }
+    'none': {
+      # Take no action regarding webserver configs.
+      $web_server_package_require = []
     }
     default: {
-      fail('The only supported web servers are \'apache\' and \'nginx\'')
+      fail('The only supported web servers are \'apache\', \'nginx\' and \'none\'')
     }
   }
 
@@ -51,7 +57,7 @@ class graphite::config inherits graphite::params {
     refreshonly => true,
     require     => [
       Anchor['graphite::install::end'],
-      Package["${::graphite::params::web_server_pkg}"]
+      $web_server_package_require
     ]
   }
 
@@ -64,14 +70,14 @@ class graphite::config inherits graphite::params {
       group   => $::graphite::params::web_user,
       mode    => '0644',
       content => template("graphite/opt/graphite/webapp/graphite/local_settings.py.erb"),
-      require => Package["${::graphite::params::web_server_pkg}"];
+      require => $web_server_package_require;
     '/opt/graphite/conf/graphite.wsgi':
       ensure  => file,
       owner   => $::graphite::params::web_user,
       group   => $::graphite::params::web_user,
       mode    => '0644',
       content => template("graphite/opt/graphite/conf/graphite.wsgi.erb"),
-      require => Package["${::graphite::params::web_server_pkg}"];
+      require => $web_server_package_require;
   }
 
   # configure carbon engines
