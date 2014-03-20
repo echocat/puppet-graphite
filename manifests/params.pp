@@ -64,10 +64,10 @@ class graphite::params {
   $nginxconf_dir = '/etc/nginx/sites-available'
 
   $web_server_pkg = $graphite::gr_web_server ? {
-    apache  => $apache_pkg,
-    nginx   => 'nginx',
-    none    => 'dont-install-webserver-package',
-    default => fail('The only supported web servers are \'apache\', \'nginx\' and \'none\''),
+    apache   => $apache_pkg,
+    nginx    => 'nginx',
+    wsgionly => 'dont-install-webserver-package',
+    default  => fail('The only supported web servers are \'apache\', \'nginx\' and \'wsgionly\''),
   }
 
   $web_user = $::osfamily ? {
