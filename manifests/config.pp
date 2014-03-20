@@ -64,6 +64,25 @@ class graphite::config inherits graphite::params {
     ]
   }
 
+  # change access permissions for carbon-cache to align with gr_user (if different from web_user)
+
+  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::params::web_user {
+    file {
+      '/opt/graphite/storage/whisper':
+        ensure  => directory,
+        owner   => $::graphite::gr_user,
+        group   => $::graphite::gr_user,
+        mode    => '0755',
+        require => Exec['Chown graphite for web user'];
+      '/opt/graphite/storage/log/carbon-cache':
+        ensure  => directory,
+        owner   => $::graphite::gr_user,
+        group   => $::graphite::gr_user,
+        mode    => '0755',
+        require => Exec['Chown graphite for web user'];
+    }
+  }
+
   # Deploy configfiles
 
   file {
