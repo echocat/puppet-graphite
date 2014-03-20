@@ -27,7 +27,7 @@ class graphite::install::debian {
 
   # Debian 7.4 does not provide package python-txamqp anymore
   # https://github.com/echocat/puppet-graphite/issues/38
-  if $::graphite::gr_amqp_enable {
+  if ( $::graphite::gr_amqp_enable == 'True' ) {
 
     if !defined(Package['python-pip']) {
       package { 'python-pip': 
