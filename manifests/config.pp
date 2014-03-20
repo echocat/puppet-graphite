@@ -25,15 +25,21 @@ class graphite::config inherits graphite::params {
       $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
     }
     'nginx': {
+      # Configure gunicorn and nginx.
+      include graphite::config_gunicorn
       include graphite::config_nginx
       $web_server_package_require = [Package["${::graphite::params::web_server_pkg}"]]
     }
+    'wsgionly': {
+      # Configure gunicorn only without nginx.
+      include graphite::config_gunicorn
+      $web_server_package_require = []
     'none': {
-      # Take no action regarding webserver configs.
+      # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       $web_server_package_require = []
     }
     default: {
-      fail('The only supported web servers are \'apache\', \'nginx\' and \'none\'')
+      fail('The only supported web servers are \'apache\', \'nginx\', \'wsgionly\' and \'none\'')
     }
   }
 
@@ -59,6 +65,25 @@ class graphite::config inherits graphite::params {
       Anchor['graphite::install::end'],
       $web_server_package_require
     ]
+  }
+
+  # change access permissions for carbon-cache to align with gr_user (if different from web_user)
+
+  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::params::web_user {
+    file {
+      '/opt/graphite/storage/whisper':
+        ensure  => directory,
+        owner   => $::graphite::gr_user,
+        group   => $::graphite::gr_user,
+        mode    => '0755',
+        require => Exec['Chown graphite for web user'];
+      '/opt/graphite/storage/log/carbon-cache':
+        ensure  => directory,
+        owner   => $::graphite::gr_user,
+        group   => $::graphite::gr_user,
+        mode    => '0755',
+        require => Exec['Chown graphite for web user'];
+    }
   }
 
   # Deploy configfiles

@@ -1,6 +1,6 @@
 # == Class: graphite::config_nginx
 #
-# This class configures graphite/carbon/whisper and SHOULD NOT be called directly.
+# This class configures nginx to talk to graphite/carbon/whisper and SHOULD NOT be called directly.
 #
 # === Parameters
 #
@@ -21,13 +21,10 @@ class graphite::config_nginx inherits graphite::params {
       ensure => installed,
       before => Exec['Chown graphite for web user'],
       notify => Exec['Chown graphite for web user'];
-    'gunicorn':
-      ensure => installed;
   }
 
-  exec { 'Disable default nginx site':
-    command => 'unlink /etc/nginx/sites-enabled/default',
-    onlyif  => 'test -f /etc/nginx/sites-enabled/default',
+  file { '/etc/nginx/sites-enabled/default':
+    ensure => absent,
     require => Package['nginx'],
     notify  => Service['nginx'];
   }
@@ -39,16 +36,6 @@ class graphite::config_nginx inherits graphite::params {
       hasrestart => true,
       hasstatus  => true,
       require    => Exec['Chown graphite for web user'];
-    'gunicorn':
-      ensure     => running,
-      enable     => true,
-      hasrestart => true,
-      hasstatus  => false,
-      subscribe  => File['/opt/graphite/webapp/graphite/local_settings.py'],
-      require    => [
-        Package['gunicorn'],
-        Exec['Chown graphite for web user'],
-      ];
   }
 
   # Ensure that some directories exist first. This is normally handled by the package, but if we uninstall and reinstall nginx
@@ -72,12 +59,6 @@ class graphite::config_nginx inherits graphite::params {
   # Deploy configfiles
 
   file {
-    '/etc/gunicorn.d/graphite':
-      ensure  => file,
-      mode    => '0644',
-      content => template('graphite/etc/gunicorn.d/graphite.erb'),
-      require => Package['gunicorn'],
-      notify  => Service['gunicorn'];
     '/etc/nginx/sites-available/graphite':
       ensure  => file,
       mode    => '0644',
