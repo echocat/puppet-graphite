@@ -67,7 +67,8 @@ class graphite::params {
     apache   => $apache_pkg,
     nginx    => 'nginx',
     wsgionly => 'dont-install-webserver-package',
-    default  => fail('The only supported web servers are \'apache\', \'nginx\' and \'wsgionly\''),
+    none     => 'dont-install-webserver-package',
+    default  => fail('The only supported web servers are \'apache\', \'nginx\',  \'wsgionly\' and \'none\''),
   }
 
   $web_user = $::osfamily ? {
