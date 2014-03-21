@@ -1,245 +1,349 @@
-# Module graphite
+#graphite
+
+####Table of Contents
+
+1. [Overview - What is the graphite module?](#overview)
+2. [Module Description - What does this module do?](#module-description)
+3. [Setup - The basics of getting started with apache](#setup)
+    * [Beginning with apache - Installation](#beginning-with-graphite)
+    * [Configure a virtual host - Basic options for getting started](#configure-mysql-and-memcached)
+4. [Usage - The class and available configurations](#usage)
+7. [Requirements](#requirements)
+5. [Limitations - OS compatibility, etc.](#limitations)
+6. [Contributing to the graphite module](#contributing)
+
+##Overview
 
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
-# Tested on
-RHEL/CentOS/Scientific 6+
-Debian 6+
-Ubunutu 10.04 and newer
+##Module Description
 
-# Requirements
+[Graphite](http://graphite.readthedocs.org/en/latest/overview.html), and its components Carbon and Whispter, is an enterprise-scale monitoring tool. This module sets up a simple graphite server with all its components. Furthermore it can be used to set up more complex graphite environments with metric aggregation, clustering and so on.
 
-Configure conf files as you need:
-  
-Only if you want to use carbon-link clusters or ldap you should edit:  
-templates/opt/graphite/webapp/graphite/local_settings.py.erb
+##Setup
 
-### Modules needed:
+**What graphite affects:**
+
+* packages/services/configuration files for Graphite
+* on default sets up webserver (can be disabled if manage by other module)
+
+###Beginning wiht Graphite
+
+To install Graphite with default parameters
+
+```puppet
+    class { 'graphite': }
+```
+
+The defaults are determined by your operating system e.g. Debian systems have one set of defaults, and RedHat systems have another). This defaults should work well on testing environments with graphite as a standalone service on the machine. For production use it is recommend to use a database like MySQL and cache data in memcached (not installed with this module) and configure it here. Furthermore you should check things like `gr_storage_schemas`.
+
+###Configure MySQL and Memcached
+
+```puppet
+  class { 'graphite':
+    gr_max_updates_per_second => 100,
+    gr_timezone               => 'Europe/Berlin',
+    secret_key                => 'CHANGE_IT!',
+    gr_storage_schemas        => [
+      {
+        name       => 'carbon',
+        pattern    => '^carbon\.',
+        retentions => '1m:90d'
+      },
+      {
+        name       => 'special_server',
+        pattern    => '^longtermserver_',
+        retentions => '10s:7d,1m:365d,10m:5y'
+      },
+      {
+        name       => 'default',
+        pattern    => '.*',
+        retentions => '60:43200,900:350400'
+      }
+    ],
+    gr_django_db_engine       => 'django.db.backends.mysql',
+    gr_django_db_name         => 'graphite',
+    gr_django_db_user         => 'graphite',
+    gr_django_db_password     => 'MYsEcReT!',
+    gr_django_db_host         => 'mysql.my.domain',
+    gr_django_db_port         => '3306',
+    gr_memcache_hosts         => ['127.0.0.1:11211']
+  }
+```
+
+##Usage
+
+####Class: `graphite`
+
+This is the primary class. And the only one which should be used.
+
+**Parameters within `graphite`:**
+
+####`gr_user`
+
+Default is empty. The user who runs graphite. If this is empty carbon runs as the user that invokes it.
+
+####`gr_max_cache_size`
+
+Default is 'inf'. Limits the size of the cache to avoid swapping or becoming CPU bound. Use the value "inf" (infinity) for an unlimited cache size.
+
+####`gr_max_updates_per_second`
+
+Default is 500. Limits the number of whisper update_many() calls per second, which effectively means the number of write requests sent to the disk.
+
+####`gr_max_creates_per_minute`
+
+Default is 50. Softly limits the number of whisper files that get created each minute.
+
+####`gr_carbon_metric_interval`
+
+Default is 60. Set the interval between sending internal performance metrics; affects all carbon daemons.
+
+####`gr_line_receiver_interface`
+
+Default is '0.0.0.0' (string). Interface the line receiver listens.
+
+####`gr_line_receiver_port`
+
+Default is 2003. Port of line receiver.
+
+####`gr_enable_udp_listener`
+
+Default is 'False' (string). Set this to True to enable the UDP listener.
+
+####`gr_udp_receiver_interface`
+
+Default is '0.0.0.0' (string). Its clear, isnt it?
+
+####`gr_udp_receiver_port`
+
+Default is 2003. Self explaining.
+
+
+####`gr_pickle_receiver_interface`
+
+Default is '0.0.0.0' (string). Pickle is a special receiver who handle tuples of data.
+
+####`gr_pickle_receiver_port`
+
+Default is 2004. Self explaining
+
+####`gr_use_insecure_unpickler`
+
+Default is 'False' (string). Set this to 'True' to revert to the old-fashioned insecure unpickler.
+
+####`gr_cache_query_interface`
+
+Default is '0.0.0.0'. Interface to send cache queries to.
+
+####`gr_cache_query_port`
+
+Default is 7002. Self explaining.
+
+####`gr_timezone`
+
+Default is 'GMT' (string). Timezone for graphite to be used.
+
+####`gr_storage_schemas`
+
+Default is
+```[
+    {
+      name       => 'carbon',
+      pattern    => '^carbon\.',
+      retentions => '1m:90d'
+    },
+    {
+      name       => 'default',
+      pattern    => '.*',
+      retentions => '1s:30m,1m:1d,5m:2y'
+    }
+  ]
+```
+The storage schemas, which describes how long matching graphs are to be stored in detail.
+
+####`gr_storage_aggregation_rules`
+
+Default is the Hashmap:
+```{
+     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+     '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+   }
+```
+The storage aggregation rules.
+
+####`gr_web_server`
+
+Default is 'apache'. The web server to use. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 'nginx' is only supported on Debian-like systems. And 'none' means that you will manage the webserver yourself. 
+
+####`gr_web_servername`
+
+Default is `$::fqdn` (string). Virtualhostname of Graphite webgui.
+
+####`gr_web_cors_allow_from_all`
+
+Default is false (boolean). Include CORS Headers for all hosts (*) in web server config.
+
+####`gr_apache_port`
+
+Default is 80. The HTTP port apache will use.
+
+####`gr_apache_port_https`
+
+Default is 443. The HTTPS port apache will use.
+
+####`gr_django_1_4_or_less`
+
+Default is false (boolean). Django settings style.
+
+####`gr_django_db_engine`
+
+Default is 'django.db.backends.sqlite3' (string). Can be set to
+
+- django.db.backends.postgresql  <- Removed in Django 1.4
+- django.db.backends.postgresql_psycopg2
+- django.db.backends.mysql
+- django.db.backends.sqlite3
+- django.db.backends.oracle
+
+####`gr_django_db_name`
+
+Default is '/opt/graphite/storage/graphite.db' (string). Name of database to be used by django.
+
+####`gr_django_db_user`
+
+Default is '' (string). Name of database user.
+
+####`gr_django_db_password`
+
+Default is '' (string). Password of database user.
+
+####`gr_django_db_host`
+
+Default is '' (string). Hostname/IP of database server.
+
+####`gr_django_db_port`
+
+Default is '' (string). Port of database.
+
+####`gr_enable_carbon_aggregator`
+
+Default is false (boolean) Enable the carbon aggregator daemon.
+
+####`gr_aggregator_line_interface`
+
+Default is '0.0.0.0' (string). Address for line interface to listen on.
+
+####`gr_aggregator_line_port`
+
+Default is 2023. TCP port for line interface to listen on.
+
+####`gr_aggregator_pickle_interface`
+
+Default is '0.0.0.0' (string). IP address for pickle interface.
+
+####`gr_aggregator_pickle_port`
+
+Default is 2024. Pickle port.
+
+####`gr_aggregator_forward_all`
+
+Default is 'True' (string). Forward all metrics to the destination(s) defined in  `gr_aggregator_destinations`.
+
+####`gr_aggregator_destinations`
+
+Default is [ '127.0.0.1:2004' ] (array). Array of backend carbons.
+
+####`gr_aggregator_max_queue_size`
+
+Default is 10000. Maximum queue size.
+
+####`gr_aggregator_use_flow_control`
+
+Default is 'True' (string). Enable flow control Can be True or False.
+
+####`gr_aggregator_max_intervals`
+
+Default is 5. Maximum number intervals to keep around.
+
+####`gr_aggregator_rules`
+
+Default is
+```{
+    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+    }
+```
+Hashmap of carbon aggregation rules.
+
+####`gr_memcache_hosts`
+
+Default is undef (array). List of memcache hosts to use. eg ['127.0.0.1:11211','10.10.10.1:11211']
+
+####`secret_key`
+
+Default is 'UNSAFE_DEFAULT' (string). CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.
+
+####`nginx_htpasswd`
+
+Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'
+
+####`manage_ca_certificate`
+
+Default is true (boolean). Used to determine if the module should install ca-certificate on Debian machines during the initial installation.
+
+####`gr_use_ldap`
+
+Default is false (boolean). Turn ldap authentication on/off.
+
+####`gr_ldap_uri`
+
+Default is '' (string). Set ldap uri.
+
+####`gr_ldap_search_base`
+
+Default is '' (string). Set the ldap search base.
+
+####`gr_ldap_base_user`
+
+Default is '' (string).Set ldap base user.
+
+####`gr_ldap_base_pass`
+
+Default is '' (string). Set ldap password.
+
+####`gr_ldap_user_query`
+
+Default is '(username=%s)' (string). Set ldap user query.
+
+##Requirements
+
+###Modules needed:
 
 stdlib by puppetlabs
 
-### Software versions needed:
+###Software versions needed:
+
 facter > 1.6.2
 puppet > 2.6.2
 
 On Redhat distributions you need the EPEL or RPMforge repository, because Graphite needs packages, which are not part of the default repos.
 
-# Parameters
+##Limitations
 
-The descriptions are short and their are more variables to tweak your graphite if needed.
-For further information take a look at the file templates/opt/graphite/conf/carbon.conf.erb
+This module is tested on CentOS 6.5 and should also run without problems on
 
-<table>
-  <tr>
-  	<th>Parameter</th><th>Default</th><th>Description</th>
-  </tr>
-  <tr>
-    <td>gr_user</td><td> its empty </td><td>The user who runs graphite. If this is empty carbon runs as the user that invokes it.</td>
-  </tr>
-  <tr>
-    <td>gr_max_cache_size</td><td>inf</td><td>Limit the size of the cache to avoid swapping or becoming CPU bound. Use the value "inf" (infinity) for an unlimited cache size.</td>
-  </tr>
-  <tr>
-    <td>gr_max_updates_per_second</td><td>500</td><td>Limits the number of whisper update_many() calls per second, which effectively means the number of write requests sent to the disk.</td>
-  </tr>
-  <tr>
-    <td>gr_max_creates_per_minute</td><td>50</td><td>Softly limits the number of whisper files that get created each minute.</td>
-  </tr><td>gr_carbon_metric_interval</td><td>60</td><td>Set the interval between sending internal performance metrics; affects all carbon daemons.</td>
-  </tr>
-  <tr>
-    <td>gr_line_receiver_interface</td><td>0.0.0.0</td><td>Interface the line receiver listens</td>
-  </tr>
-  <tr>
-    <td>gr_line_receiver_port</td><td>2003</td><td>Port of line receiver</td>
-  </tr>
-  <tr>
-    <td>gr_enable_udp_listener</td><td>False</td><td>Set this to True to enable the UDP listener.</td>
-  </tr>
-  <tr>
-    <td>gr_udp_receiver_interface</td><td>0.0.0.0</td><td>Its clear, isnt it?</td>
-  </tr>
-  <tr>
-    <td>gr_udp_receiver_port</td><td>2003</td><td>Self explaining</td>
-  </tr>
-  <tr>
-    <td>gr_pickle_receiver_interface</td><td>0.0.0.0</td><td>Pickle is a special receiver who handle tuples of data.</td>
-  </tr>
-  <tr>
-    <td>gr_pickle_receiver_port</td><td>2004</td><td>Self explaining</td>
-  </tr>
-  <tr>
-    <td>gr_use_insecure_unpickler</td><td>False</td><td>Set this to True to revert to the old-fashioned insecure unpickler.</td>
-  </tr>
-  <tr>
-    <td>gr_cache_query_interface</td><td>0.0.0.0</td><td>Interface to send cache queries to.</td>
-  </tr>
-  <tr>
-    <td>gr_cache_query_port</td><td>7002</td><td>Self explaining.</td>
-  </tr>
-  <tr>
-    <td>gr_timezone</td><td>GMT</td><td>Timezone for graphite to be used.</td>
-  </tr>
-  <tr>
-    <td>gr_storage_schemas</td><td><pre>[
-  {
-    name       => "default",
-    pattern    => ".*",
-    retentions => "1s:30m,1m:1d,5m:2y"
-  }
-]</pre></td><td>The storage schemas.</td>
-  </tr>
-  <tr><td>gr_storage_aggregation_rules</td><td><pre>{
-     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
-     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
-     '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
-     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
-   }</pre></td><td>The storage aggregation rules</td>
-  </tr>
-  <tr>
-    <td>gr_web_server</td><td>apache</td><td>The web server to use. Valid values are 'apache' and 'nginx'. 'nginx' is only supported on Debian-like systems.</td>
-  </tr>
-  <tr>
-    <td>gr_web_servername</td><td>FQDN</td><td>Virtualhostname of Graphite webgui.</td>
-  </tr>
-  <tr>
-    <td>gr_web_cors_allow_from_all</td><td>false</td><td>Include CORS Headers for all hosts (*) in web server config.</td>
-  </tr>
-  <tr>
-    <td>gr_apache_port</td><td>80</td><td>The HTTP port apache will use.</td>
-  </tr>
-  <tr>
-    <td>gr_apache_port_https</td><td>443</td><td>The HTTPS port apache will use.</td>
-  </tr>
-  <tr>
-    <td>gr_django_1_4_or_less</td><td>false</td><td>Django settings style.</td>
-  </tr>
-  <tr>
-    <td>gr_django_db_xxx</td><td>sqlite3 settings</td><td>Django database settings. (engine|name|user|password|host|port)</td>
-  </tr>
-  <tr>
-  <td>gr_enable_carbon_aggregator</td><td>false</td><td>Enable the carbon aggregator daemon</td>
-</tr>
-<tr>
-  <td>gr_aggregator_line_interface</td><td>'0.0.0.0'</td><td>address for line interface to listen on </td>
-</tr>
-<tr>
-  <td>gr_aggregator_line_port</td><td>2023</td><td>TCP port for line interface to listen on</td>
-</tr>
-<tr>
-  <td>gr_aggregator_pickle_interface</td><td>'0.0.0.0'</td><td>address for pickle interface</td>
-</tr>
-<tr>
-  <td>gr_aggregator_pickle_port</td><td>2024</td><td>pickle port</td>
-</tr>
-<tr>
-  <td>gr_aggregator_forward_all</td><td>'True'</td><td>Forward all metrics to the destination(s)</td>
-</tr>
-  <tr><td>gr_aggregator_destinations</td><td><pre>[ '127.0.0.1:2004' ]</pre></td><td>array of backend carbons</td>
-</tr>
-<tr>
-  <td>gr_aggregator_max_queue_size</td><td>10000</td><td>maximum queue size</td>
-</tr>
-<tr>
-  <td>gr_aggregator_use_flow_control</td><td>'True"</td><td>Enable flow control</td>
-</tr>
-<tr>
-  <td>gr_aggregator_max_intervals</td><td>5</td><td>maximum # intervals to keep around</td></tr>
-<tr>
-  <td>gr_aggregator_rules</td><td><pre>{
-    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
-    }</pre></td><td>array of carbon aggregation rules</td>
-</tr>
-<tr><td>gr_memcache_enable</td><td>false</td><td>Enable / Disable memcache usage</td>
-  </tr>
-  <tr><td>gr_memcache_hosts</td><td><pre>"['127.0.0.1:11211']"</pre></td><td>List of memcache hosts to use.</td>
-  </tr>
-  <tr>
-    <td>secret_key</td><td>UNSAFE_DEFAULT</td><td>CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.</td>
-  </tr>
-  <tr>
-    <td>nginx_htpasswd</td><td>undef</td><td>The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password.</td>
-  </tr>
-  <tr>
-    <td>manage_ca_certificate</td><td>true</td><td>Used to determine if the module should install ca-certificate on debian machines during the initial installation.</td>
-  </tr>
-    <tr>
-    <td>gr_use_ldap</td><td>false</td><td>Turn ldap authentication on/off.</td>
-  </tr>
-    <tr>
-    <td>gr_ldap_uri</td><td>''</td><td>Set ldap uri.</td>
-  </tr>
-    <tr>
-    <td>gr_ldap_search_base</td><td>''</td><td>Set the ldap search base.</td>
-  </tr>
-    <tr>
-    <td>gr_ldap_base_user</td><td>''</td><td>Set ldap base user.</td>
-  </tr>
-    <tr>
-    <td>gr_ldap_base_pass</td><td>''</td><td>Set ldap password.</td>
-  </tr>
-    <tr>
-    <td>gr_ldap_user_query</td><td>(username=%s)</td><td>Set ldap user query.</td>
-  </tr>
-</table>
+* RHEL/CentOS/Scientific 6+
+* Debian 6+
+* Ubunutu 10.04 and newer
 
-# Sample usage:
+Most settings of Graphite can be set by parameters. So their can be special configurations for you. In this case you should edit
+the file `templates/opt/graphite/webapp/graphite/local_settings.py.erb`.
 
-### Out of the box graphite installation
-<pre>
-node "graphite.my.domain" {
-	include graphite
-}
-</pre>
+The nginx configs are only supported on Debian based systems at the moment.
 
-### Tuned graphite installation
+##Contributing
 
-<pre>
-
-# This carbon cache will accept TCP and UDP datas and
-# the cachesize is limited to 256mb
-node "graphite.my.domain" {
-	class {'graphite':
-		gr_max_cache_size => 256,
-		gr_enable_udp_listener => True
-	}
-}
-</pre>
-
-### Using MySQL Backend and Aggregator
-
-<pre>
-
-node "graphite.my.domain" {
-  class { 'graphite':
-    gr_django_db_engine   => 'django.db.backends.mysql',
-    gr_django_db_name     => 'graphite',
-    gr_django_db_user     => 'graphite',
-    gr_django_db_password => 'SECRET123',
-    gr_django_db_host     => 'mysql.my.domain',
-    gr_django_db_port     => 3306,
-    gr_enable_carbon_aggregator => true,
-    secret_key => 'ABCD1234',
-  }
-}
-</pre>
-
-## Optional
-
-### Move Apache to alternative ports:
-
-The default puppet set up won't work if you have an existing web server in
-place. In my case this was Nginx. For me moving apache off to another port was
-good enough. To allow this you do
-
-<pre>
-
-  # Move apache to alternate HTTP/HTTPS ports:
-node "graphite.my.domain" {
-    class {'graphite':
-        gr_apache_port => 2080,
-        gr_apache_port_https => 2443,
-    }
-}
-
-</pre>
+Echocat modules are open projects. So if you want to make this module even better, you can contribute to this module on [Github](https://github.com/echocat/puppet-graphite).
