@@ -147,7 +147,8 @@ Default is 'GMT' (string). Timezone for graphite to be used.
 ####`gr_storage_schemas`
 
 Default is
-```[
+```
+  [
     {
       name       => 'carbon',
       pattern    => '^carbon\.',
