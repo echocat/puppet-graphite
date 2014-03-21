@@ -119,7 +119,6 @@ Default is '0.0.0.0' (string). Its clear, isnt it?
 
 Default is 2003. Self explaining.
 
-
 ####`gr_pickle_receiver_interface`
 
 Default is '0.0.0.0' (string). Pickle is a special receiver who handle tuples of data.
@@ -148,30 +147,31 @@ Default is 'GMT' (string). Timezone for graphite to be used.
 
 Default is
 ```
-  [
-    {
-      name       => 'carbon',
-      pattern    => '^carbon\.',
-      retentions => '1m:90d'
-    },
-    {
-      name       => 'default',
-      pattern    => '.*',
-      retentions => '1s:30m,1m:1d,5m:2y'
-    }
-  ]
+[
+  {
+    name       => 'carbon',
+    pattern    => '^carbon\.',
+    retentions => '1m:90d'
+  },
+  {
+    name       => 'default',
+    pattern    => '.*',
+    retentions => '1s:30m,1m:1d,5m:2y'
+  }
+]
 ```
 The storage schemas, which describes how long matching graphs are to be stored in detail.
 
 ####`gr_storage_aggregation_rules`
 
 Default is the Hashmap:
-```{
-     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
-     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
-     '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
-     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
-   }
+```
+{
+  '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
+  '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
+  '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
+  '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+}
 ```
 The storage aggregation rules.
 
@@ -272,10 +272,11 @@ Default is 5. Maximum number intervals to keep around.
 ####`gr_aggregator_rules`
 
 Default is
-```{
-    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
-    }
+```
+{
+  'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+  'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+}
 ```
 Hashmap of carbon aggregation rules.
 
