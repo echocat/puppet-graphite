@@ -3,7 +3,7 @@
 #### Features:
 
 - add support for LDAP config with `gr_use_ldap` and `gr_ldap_*` parameters
-- `gr_web_server` can be set to 'apache', 'nginx', 'wgionly' or 'none'
+- `gr_web_server` can be set to 'apache', 'nginx', 'wsgionly' or 'none'
 
 #### Behavior changes:
 
