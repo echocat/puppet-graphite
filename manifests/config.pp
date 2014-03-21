@@ -34,6 +34,7 @@ class graphite::config inherits graphite::params {
       # Configure gunicorn only without nginx.
       include graphite::config_gunicorn
       $web_server_package_require = []
+    }
     'none': {
       # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       $web_server_package_require = []
