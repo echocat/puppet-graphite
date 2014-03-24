@@ -1,19 +1,19 @@
 {
   "operatingsystem_support": [
       {
-        "operatingsystem": "RedHat",
+        "operatingsystem": "RedHat"
       },
       {
-        "operatingsystem": "CentOS",
+        "operatingsystem": "CentOS"
       },
       {
-        "operatingsystem": "Scientific",
+        "operatingsystem": "Scientific"
       },
       {
-        "operatingsystem": "Debian",
+        "operatingsystem": "Debian"
       },
       {
-        "operatingsystem": "Ubuntu",
+        "operatingsystem": "Ubuntu"
       }
   ],
   "name": "dwerder-graphite",
