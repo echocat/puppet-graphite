@@ -7,7 +7,7 @@
 3. [Setup - The basics of getting started with apache](#setup)
     * [Beginning with graphite - Installation](#beginning-with-graphite)
     * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
-    * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-2-4-and-cors)
+    * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-24-and-cors)
 4. [Usage - The class and available configurations](#usage)
 7. [Requirements](#requirements)
 5. [Limitations - OS compatibility, etc.](#limitations)
