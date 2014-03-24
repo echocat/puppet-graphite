@@ -5,8 +5,9 @@
 1. [Overview - What is the graphite module?](#overview)
 2. [Module Description - What does this module do?](#module-description)
 3. [Setup - The basics of getting started with apache](#setup)
-    * [Beginning with apache - Installation](#beginning-with-graphite)
-    * [Configure a virtual host - Basic options for getting started](#configure-mysql-and-memcached)
+    * [Beginning with graphite - Installation](#beginning-with-graphite)
+    * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
+    * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-2.4-and-cors)
 4. [Usage - The class and available configurations](#usage)
 7. [Requirements](#requirements)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -27,7 +28,7 @@ This module installs and makes basic configs for graphite, with carbon and whisp
 * packages/services/configuration files for Graphite
 * on default sets up webserver (can be disabled if manage by other module)
 
-###Beginning wiht Graphite
+###Beginning with Graphite
 
 To install Graphite with default parameters
 
@@ -68,6 +69,20 @@ The defaults are determined by your operating system e.g. Debian systems have on
     gr_django_db_host         => 'mysql.my.domain',
     gr_django_db_port         => '3306',
     gr_memcache_hosts         => ['127.0.0.1:11211']
+  }
+```
+
+###Configuration with Apache 2.4 and CORS
+
+If you use a system which ships Apache 2.4, then you will need a slightly different vhost config.
+Here is an example with Apache 2.4 and [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) enabled.
+If you do not know what CORS, then do not use it. Its disabled by default.
+
+```puppet
+  class { 'graphite':
+    gr_apache_24               => true,
+    gr_web_cors_allow_from_all => true,
+    secret_key                 => 'CHANGE_IT!'
   }
 ```
 
@@ -194,6 +209,10 @@ Default is 80. The HTTP port apache will use.
 #####`gr_apache_port_https`
 
 Default is 443. The HTTPS port apache will use.
+
+#####`gr_apache_24`
+
+Default is false (boolean). If you set this to 'true' and use 'apache' in `gr_web_server`, then the configuration for Apache 2.4 is used, else it will be Apache 2.2 compatible configuration.
 
 #####`gr_django_1_4_or_less`
 

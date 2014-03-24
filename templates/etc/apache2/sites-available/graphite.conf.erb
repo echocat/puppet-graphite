@@ -33,6 +33,11 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	Alias /content/ /opt/graphite/webapp/content/
 	<Location "/content/">
 			SetHandler None
+<% if scope.lookupvar('graphite::gr_apache_24') %>
+			Options All
+			AllowOverride All
+			Require all granted
+<% end %>
 	</Location>
 
 	# XXX In order for the django admin site media to work you
@@ -42,13 +47,24 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	Alias /media/ "@DJANGO_ROOT@/contrib/admin/media/"
 	<Location "/media/">
 			SetHandler None
+<% if scope.lookupvar('graphite::gr_apache_24') %>
+			Options All
+			AllowOverride All
+			Require all granted
+<% end %>
 	</Location>
 
 	# The graphite.wsgi file has to be accessible by apache. It won't
 	# be visible to clients because of the DocumentRoot though.
 	<Directory /opt/graphite/conf/>
+<% if scope.lookupvar('graphite::gr_apache_24') %>
+			Options All
+			AllowOverride All
+			Require all granted
+<% else %>
 			Order deny,allow
 			Allow from all
+<% end %>
 	</Directory>
 	
 <% if scope.lookupvar('graphite::gr_web_cors_allow_from_all') %>
