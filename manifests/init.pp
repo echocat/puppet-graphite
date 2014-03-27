@@ -43,6 +43,9 @@
 # [*gr_use_insecure_unpickler*]
 #   Set this to True to revert to the old-fashioned insecure unpickler.
 #   Default is False.
+#[*gr_use_whitelist*]
+#   Set this to True to allow for using whitelists and blacklists.
+#   Default is False.
 # [*gr_cache_query_interface*]
 #   Interface to send cache queries to.
 #   Default is 0.0.0.0
@@ -124,7 +127,7 @@
 #   Default is 'True'
 # [*gr_relay_rules*]
 #   Relay rule set.
-#   Default is 
+#   Default is
 #   {
 #   all       => { pattern      => '.*',
 #                  destinations => [ '127.0.0.1:2004' ] },
@@ -165,7 +168,7 @@
 #   Set this to 'True' to enable the AMQP.
 #   Default is 'False'.
 # [*gr_amqp_verbose*]
-#   Set this to 'True' to enable. Verbose means a line will be logged for every 
+#   Set this to 'True' to enable. Verbose means a line will be logged for every
 #   metric received useful for testing
 #   Default is 'False'.
 # [*gr_amqp_host*]
@@ -250,6 +253,7 @@ class graphite (
   $gr_pickle_receiver_interface = '0.0.0.0',
   $gr_pickle_receiver_port      = 2004,
   $gr_use_insecure_unpickler    = 'False',
+  $gr_use_whitelist             = 'False',
   $gr_cache_query_interface     = '0.0.0.0',
   $gr_cache_query_port          = 7002,
   $gr_timezone                  = 'GMT',

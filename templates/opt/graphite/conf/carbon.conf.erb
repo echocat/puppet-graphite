@@ -160,7 +160,7 @@ WHISPER_FALLOCATE_CREATE = True
 # Set this to True to enable whitelisting and blacklisting of metrics in
 # CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
 # empty, all metrics will pass through
-# USE_WHITELIST = False
+USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
@@ -284,7 +284,7 @@ USE_FLOW_CONTROL = <%= scope.lookupvar('graphite::gr_relay_use_flow_control') %>
 # Set this to True to enable whitelisting and blacklisting of metrics in
 # CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
 # empty, all metrics will pass through
-# USE_WHITELIST = False
+USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
@@ -365,7 +365,7 @@ MAX_AGGREGATION_INTERVALS = <%= scope.lookupvar('graphite::gr_aggregator_max_int
 # Set this to True to enable whitelisting and blacklisting of metrics in
 # CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
 # empty, all metrics will pass through
-# USE_WHITELIST = False
+USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
