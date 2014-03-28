@@ -346,13 +346,15 @@ class graphite (
   $gr_ldap_user_query           = '(username=%s)'
 ) {
 
-  class { 'graphite::install': notify => Class['graphite::config'], }
+  # The anchor resources allow the end user to establish relationships 
+  # to the "main" class and preserve the relationship to the
+  # implementation classes through a transitive relationship to 
+  # the composite class.
+  # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
+  anchor { 'graphite::begin':}->
+  class { 'graphite::install':}~>
+  class { 'graphite::config':}->
+  anchor { 'graphite::end':}
 
-  class { 'graphite::config':  require => Class['graphite::install'], }
-
-  # Allow the end user to establish relationships to the "main" class
-  # and preserve the relationship to the implementation classes through
-  # a transitive relationship to the composite class.
-  anchor { 'graphite::begin': before => Class['graphite::install'] }
-  anchor { 'graphite::end':  require => Class['graphite::config'] }
+  
 }
