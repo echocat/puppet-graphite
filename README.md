@@ -146,6 +146,10 @@ Default is 2004. Self explaining
 
 Default is 'False' (string). Set this to 'True' to revert to the old-fashioned insecure unpickler.
 
+#####`gr_use_whitelist`
+
+Default is 'False' (string). Set this to 'True' to enable whitelists and blacklists.
+
 #####`gr_cache_query_interface`
 
 Default is '0.0.0.0'. Interface to send cache queries to.
