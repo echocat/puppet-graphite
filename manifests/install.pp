@@ -6,7 +6,9 @@
 #
 # None.
 #
-class graphite::install inherits graphite::params {
+class graphite::install inherits graphite::params(
+  manage_git = true,
+) {
 
   anchor { 'graphite::install::begin': }
   anchor { 'graphite::install::end': }
@@ -14,8 +16,9 @@ class graphite::install inherits graphite::params {
   case $::osfamily {
     redhat: {
       class { 'graphite::install::redhat':
-        require => Anchor['graphite::install::begin'],
-        before  => Anchor['graphite::install::end'],
+        manage_git => $manage_git,
+        require    => Anchor['graphite::install::begin'],
+        before     => Anchor['graphite::install::end'],
       }
     }
         debian: {

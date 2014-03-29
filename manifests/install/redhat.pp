@@ -6,9 +6,18 @@
 #
 # None.
 #
-class graphite::install::redhat {
+class graphite::install::redhat(
+  $manage_git = true,
+) {
 
   include graphite::params
+
+  if $manage_git {
+    package { $::graphite::params::git_pkg:
+      ensure => installed,
+      require => Anchor['graphitepkg::begin'],
+      before  => Anchor['graphitepkg::end']
+  }
 
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 

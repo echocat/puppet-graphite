@@ -343,7 +343,8 @@ class graphite (
   $gr_ldap_search_base          = '',
   $gr_ldap_base_user            = '',
   $gr_ldap_base_pass            = '',
-  $gr_ldap_user_query           = '(username=%s)'
+  $gr_ldap_user_query           = '(username=%s)',
+  $manage_git                   = true,
 ) {
 
   # The anchor resources allow the end user to establish relationships 
@@ -352,7 +353,9 @@ class graphite (
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   anchor { 'graphite::begin':}->
-  class { 'graphite::install':}~>
+  class { 'graphite::install':
+    manage_git => $manage_git,
+  }~>
   class { 'graphite::config':}->
   anchor { 'graphite::end':}
 
