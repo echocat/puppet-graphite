@@ -23,31 +23,19 @@ class graphite::install::redhat {
   # madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
-  anchor { 'graphitepkg::begin': }
-  anchor { 'graphitepkg::end': }
-
-  package { $::graphite::params::graphitepkgs :
-    require => Anchor['graphitepkg::begin'],
-    before  => Anchor['graphitepkg::end']
-  }
+  package { $::graphite::params::graphitepkgs :}
 
   # Install required python env special for redhat and derivatives
 
-  package { 'python-setuptools':
-    require => Anchor['graphitepkg::begin'],
-    before  => Anchor['graphitepkg::end']
-  }
+  package { 'python-setuptools':}
 
   exec {
     'Install django-tagging':
       command => 'easy_install django-tagging==0.3.1',
-      require => Anchor['graphitepkg::end'];
     'Install twisted':
       command => 'easy_install twisted==11.1.0',
-      require => Anchor['graphitepkg::end'];
     'Install txamqp':
       command => 'easy_install txamqp==0.4',
-      require => Anchor['graphitepkg::end'];
   }
 
   # Download graphite sources
