@@ -27,6 +27,7 @@ class graphite::params {
   $enable_carbon_relay = false
   $nginxconf_dir = '/etc/nginx/sites-available'
 
+
   case $::osfamily {
     'debian': {
       $apache_pkg = 'apache2'
@@ -38,6 +39,13 @@ class graphite::params {
       $apache_dir = '/etc/apache2'
       $web_user = 'www-data'
       $python_dev_pkg = 'python-dev'
+
+      # see https://github.com/graphite-project/carbon/issues/86
+      $carbin_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbonVersion}-py2.7.egg-info"
+      $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
+      $gweb_pip_hack_source = "/usr/lib/python2.7/dist-packages/graphite_web-${carbonVersion}-py2.7.egg-info"
+      $gweb_pip_hack_source = "/opt/graphite/webapp/graphite_web-${carbonVersion}-py2.7.egg-info "
+
       $graphitepkgs = [
         'python-cairo',
         'python-twisted',
@@ -59,6 +67,24 @@ class graphite::params {
       $apache_dir = '/etc/httpd'
       $web_user = 'apache'
       $python_dev_pkg = 'python-devel'
+
+      # see https://github.com/graphite-project/carbon/issues/86
+      case $::lsbmajdistrelease {
+        '6': {
+          $carbin_pip_hack_source = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
+          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
+          $gweb_pip_hack_source = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info "
+          $gweb_pip_hack_target = "/opt/graphite/webapp/carbon-${graphiteVersion}-py2.6.egg-info"
+        }
+        '7': {
+          $carbin_pip_hack_source = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
+          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
+          $gweb_pip_hack_source = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info "
+          $gweb_pip_hack_target = "/opt/graphite/webapp/carbon-${graphiteVersion}-py2.7.egg-info"
+        }
+        default: {fail('Unsupported Redhat release')}
+      }
+
       $graphitepkgs = [
         'pycairo',
         'Django14',
