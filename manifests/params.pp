@@ -27,14 +27,6 @@ class graphite::params {
   $enable_carbon_relay = false
   $nginxconf_dir = '/etc/nginx/sites-available'
 
-  $web_server_pkg = $graphite::gr_web_server ? {
-    apache   => $apache_pkg,
-    nginx    => 'nginx',
-    wsgionly => 'dont-install-webserver-package',
-    none     => 'dont-install-webserver-package',
-    default  => fail('The only supported web servers are \'apache\', \'nginx\',  \'wsgionly\' and \'none\''),
-  }
-
   case $::osfamily {
     'debian': {
       $apache_pkg = 'apache2'
@@ -89,6 +81,14 @@ class graphite::params {
       ]
     }
     default: {fail('unsupported os.')}
+  }
+
+  $web_server_pkg = $graphite::gr_web_server ? {
+    apache   => $apache_pkg,
+    nginx    => 'nginx',
+    wsgionly => 'dont-install-webserver-package',
+    none     => 'dont-install-webserver-package',
+    default  => fail('The only supported web servers are \'apache\', \'nginx\',  \'wsgionly\' and \'none\''),
   }
 
 }
