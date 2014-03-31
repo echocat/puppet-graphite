@@ -10,7 +10,14 @@ class graphite::install::redhat {
 
   include graphite::params
 
-  Exec { path => '/bin:/usr/bin:/usr/sbin' }
+  Exec {
+    cwd  => $::graphite::params::webapp_dl_loc,
+    path => '/bin:/usr/bin:/usr/sbin',
+  }
+
+  Package {
+    ensure  => installed,
+  }
 
   # for full functionality we need this packages:
   # madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
@@ -20,7 +27,6 @@ class graphite::install::redhat {
   anchor { 'graphitepkg::end': }
 
   package { $::graphite::params::graphitepkgs :
-    ensure  => installed,
     require => Anchor['graphitepkg::begin'],
     before  => Anchor['graphitepkg::end']
   }
@@ -28,7 +34,6 @@ class graphite::install::redhat {
   # Install required python env special for redhat and derivatives
 
   package { 'python-setuptools':
-    ensure  => installed,
     require => Anchor['graphitepkg::begin'],
     before  => Anchor['graphitepkg::end']
   }
@@ -36,15 +41,12 @@ class graphite::install::redhat {
   exec {
     'Install django-tagging':
       command => 'easy_install django-tagging==0.3.1',
-      cwd     => "${::graphite::params::build_dir}",
       require => Anchor['graphitepkg::end'];
     'Install twisted':
       command => 'easy_install twisted==11.1.0',
-      cwd     => "${::graphite::params::build_dir}",
       require => Anchor['graphitepkg::end'];
     'Install txamqp':
       command => 'easy_install txamqp==0.4',
-      cwd     => "${::graphite::params::build_dir}",
       require => Anchor['graphitepkg::end'];
   }
 
@@ -58,11 +60,9 @@ class graphite::install::redhat {
     "Download and untar carbon ${::graphite::params::carbonVersion}":
       command => "curl -s -L ${::graphite::params::carbon_dl_url} | tar xz",
       creates => "${::graphite::params::carbon_dl_loc}",
-      cwd     => "${::graphite::params::build_dir}";
     "Download and untar whisper ${::graphite::params::whisperVersion}":
       command => "curl -s -L ${::graphite::params::whisper_dl_url} | tar xz",
       creates => "${::graphite::params::whisper_dl_loc}",
-      cwd     => "${::graphite::params::build_dir}";
   }
 
   # Install graphite from source
@@ -70,7 +70,7 @@ class graphite::install::redhat {
   exec {
     "Install webapp ${::graphite::params::graphiteVersion}":
       command     => 'python setup.py install',
-      cwd         => "${::graphite::params::webapp_dl_loc}",
+      cwd         => $::graphite::params::webapp_dl_loc,
       subscribe   => Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
       refreshonly => true,
       require     => [
@@ -79,7 +79,7 @@ class graphite::install::redhat {
       ];
     "Install carbon ${::graphite::params::carbonVersion}":
       command     => 'python setup.py install',
-      cwd         => "${::graphite::params::carbon_dl_loc}",
+      cwd         => $::graphite::params::carbon_dl_loc,
       subscribe   => Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
       refreshonly => true,
       require     => [
@@ -88,7 +88,7 @@ class graphite::install::redhat {
       ];
     "Install whisper ${::graphite::params::whisperVersion}":
       command     => 'python setup.py install',
-      cwd         => "${::graphite::params::whisper_dl_loc}",
+      cwd         => $::graphite::params::whisper_dl_loc,
       subscribe   => Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
       refreshonly => true,
       require     => [
