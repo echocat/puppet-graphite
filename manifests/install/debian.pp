@@ -13,16 +13,12 @@ class graphite::install::debian {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   # for full functionality we need this packages:
-  # madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
+  # madatory: python-cairo, python-django, python-twisted,
+  #           python-django-tagging, python-simplejson
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
-
-  anchor { 'graphitepkg::begin': }
-  anchor { 'graphitepkg::end': }
 
   package { $::graphite::params::graphitepkgs :
       ensure  => installed,
-      require => Anchor['graphitepkg::begin'],
-      before  => Anchor['graphitepkg::end']
   }
 
   # Debian 7.4 does not provide package python-txamqp anymore
@@ -30,18 +26,14 @@ class graphite::install::debian {
   if ( $::graphite::gr_amqp_enable == 'True' ) {
 
     if !defined(Package['python-pip']) {
-      package { 'python-pip': 
+      package { 'python-pip':
         ensure => installed,
-        require => Anchor['graphitepkg::begin'],
-        before  => Anchor['graphitepkg::end']
       }
     }
 
     if !defined(Package['python-dev']) {
-      package { 'python-dev': 
+      package { 'python-dev':
         ensure => installed,
-        require => Anchor['graphitepkg::begin'],
-        before  => Anchor['graphitepkg::end']
       }
     }
 
@@ -89,7 +81,6 @@ class graphite::install::debian {
       refreshonly => true,
       require     => [
         Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
-        Anchor['graphitepkg::end']
       ];
     "Install carbon ${::graphite::params::carbonVersion}":
       command     => 'python setup.py install',
@@ -98,7 +89,6 @@ class graphite::install::debian {
       refreshonly => true,
       require     => [
         Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
-        Anchor['graphitepkg::end']
       ];
     "Install whisper ${::graphite::params::whisperVersion}":
       command     => 'python setup.py install',
@@ -107,7 +97,6 @@ class graphite::install::debian {
       refreshonly => true,
       require     => [
         Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
-        Anchor["graphitepkg::end"]
       ];
   }
 }
