@@ -131,7 +131,11 @@ LDAP_USER_QUERY = "<%= scope.lookupvar('graphite::gr_ldap_user_query') %>"
 # See http://www.python-ldap.org/ for further details on these options.
 
 ## REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
-#USE_REMOTE_USER_AUTHENTICATION = True
+<%- if scope.lookupvar('graphite::gr_use_remote_user_auth') -%>
+USE_REMOTE_USER_AUTHENTICATION = True
+<%- else -%>
+USE_REMOTE_USER_AUTHENTICATION = False
+<%- end -%>
 
 # Override the URL for the login link (e.g. for django_openid_auth)
 #LOGIN_URL = '/account/login'

@@ -230,6 +230,8 @@
 #   Set ldap password.  Default = ''
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
+# [*gr_use_remote_user_auth*]
+#   Allow use of REMOTE_USER env variable within Django/Graphite. Default = false
 
 # === Examples
 #
@@ -343,7 +345,8 @@ class graphite (
   $gr_ldap_search_base          = '',
   $gr_ldap_base_user            = '',
   $gr_ldap_base_pass            = '',
-  $gr_ldap_user_query           = '(username=%s)'
+  $gr_ldap_user_query           = '(username=%s)',
+  $gr_use_remote_user_auth      = false
 ) {
 
   # The anchor resources allow the end user to establish relationships 
