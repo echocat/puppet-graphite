@@ -25,17 +25,28 @@ class graphite::install::redhat {
 
   package { $::graphite::params::graphitepkgs :}
 
-  # Install required python env special for redhat and derivatives
+  # using the pip package provider requires python-pip on redhat
+  if ! declared(Package['python-pip']) {
+    package { 'python-pip':
+      before => [
+        Package['django-tagging'],
+        Package['twisted'],
+        Package['txamqp'],
+      ]
+    }
+  }
 
-  package { 'python-setuptools':}
-
-  exec {
-    'Install django-tagging':
-      command => 'easy_install django-tagging==0.3.1',
-    'Install twisted':
-      command => 'easy_install twisted==11.1.0',
-    'Install txamqp':
-      command => 'easy_install txamqp==0.4',
+  package{'django-tagging':
+    ensure   => '0.3.1',
+    provider => 'pip',
+  }->
+  package{'twisted':
+    ensure   => '11.1.0',
+    provider => 'pip',
+  }->
+  package{'txamqp':
+    ensure   => '0.4',
+    provider => 'pip',
   }
 
   # Download graphite sources
@@ -63,7 +74,7 @@ class graphite::install::redhat {
       refreshonly => true,
       require     => [
         Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
-        Exec["Install django-tagging"]
+        Package['django-tagging']
       ];
     "Install carbon ${::graphite::params::carbonVersion}":
       command     => 'python setup.py install',
@@ -72,7 +83,7 @@ class graphite::install::redhat {
       refreshonly => true,
       require     => [
         Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
-        Exec["Install twisted"]
+        Package['twisted']
       ];
     "Install whisper ${::graphite::params::whisperVersion}":
       command     => 'python setup.py install',
@@ -81,7 +92,7 @@ class graphite::install::redhat {
       refreshonly => true,
       require     => [
         Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
-        Exec["Install twisted"]
+        Package['twisted']
       ];
   }
 }
