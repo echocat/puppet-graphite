@@ -26,7 +26,7 @@ class graphite::install::redhat {
   package { $::graphite::params::graphitepkgs :}
 
   # using the pip package provider requires python-pip on redhat
-  if ! declared(Package['python-pip']) {
+  if ! defined(Package['python-pip']) {
     package { 'python-pip':
       before => [
         Package['django-tagging'],
