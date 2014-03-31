@@ -47,7 +47,7 @@ class graphite::install::redhat {
       cwd     => "${::graphite::params::build_dir}";
     "Download and untar carbon ${::graphite::params::carbonVersion}":
       command => "curl -s -L ${::graphite::params::carbon_dl_url} | tar xz",
-      creates => "${::graphite::params::carbon_dl_loc}",
+      creates => "${::graphite::params::carbon_dl_loc}",;
     "Download and untar whisper ${::graphite::params::whisperVersion}":
       command => "curl -s -L ${::graphite::params::whisper_dl_url} | tar xz",
       creates => "${::graphite::params::whisper_dl_loc}",
