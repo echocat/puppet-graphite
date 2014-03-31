@@ -30,11 +30,11 @@ class graphite::config inherits graphite::params {
     'wsgionly': {
       # Configure gunicorn only without nginx.
       include graphite::config_gunicorn
-      $web_server_package_require = []
+      $web_server_package_require = undef
     }
     'none': {
       # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
-      $web_server_package_require = []
+      $web_server_package_require = undef
     }
     default: {
       fail('The only supported web servers are \'apache\', \'nginx\', \'wsgionly\' and \'none\'')
@@ -57,9 +57,7 @@ class graphite::config inherits graphite::params {
     command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_user} /opt/graphite/storage/",
     cwd         => '/opt/graphite/',
     refreshonly => true,
-    require     => [
-      $web_server_package_require
-    ]
+    require     => $web_server_package_require,
   }
 
   # change access permissions for carbon-cache to align with gr_user (if different from web_user)
