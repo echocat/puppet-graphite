@@ -16,11 +16,12 @@ class graphite::install::redhat {
   }
 
   Package {
-    ensure  => installed,
+    provider => 'pip',
   }
 
-  # for full functionality we need this packages:
-  # madatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
+  # for full functionality we need these packages:
+  # madatory: python-cairo, python-django, python-twisted,
+  #           python-django-tagging, python-simplejson
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
   package { $::graphite::params::graphitepkgs :}
@@ -28,7 +29,8 @@ class graphite::install::redhat {
   # using the pip package provider requires python-pip on redhat
   if ! defined(Package['python-pip']) {
     package { 'python-pip':
-      before => [
+      provider => undef, # default to package provider auto-discovery
+      before   => [
         Package['django-tagging'],
         Package['twisted'],
         Package['txamqp'],
@@ -38,62 +40,22 @@ class graphite::install::redhat {
 
   package{'django-tagging':
     ensure   => '0.3.1',
-    provider => 'pip',
   }->
   package{'twisted':
     ensure   => '11.1.0',
-    provider => 'pip',
   }->
   package{'txamqp':
     ensure   => '0.4',
-    provider => 'pip',
+  }->
+  package{'graphite-web':
+    ensure   => $::graphite::params::graphiteVersion,
+  }->
+  package{'carbon':
+    ensure   => $::graphite::params::carbonVersion,
+  }->
+  package{'whisper':
+    ensure   => $::graphite::params::whisperVersion,
   }
 
-  # Download graphite sources
-
-  exec {
-    "Download and untar webapp ${::graphite::params::graphiteVersion}":
-      command => "curl -s -L ${::graphite::params::webapp_dl_url} | tar xz",
-      creates => "${::graphite::params::webapp_dl_loc}",
-      cwd     => "${::graphite::params::build_dir}";
-    "Download and untar carbon ${::graphite::params::carbonVersion}":
-      command => "curl -s -L ${::graphite::params::carbon_dl_url} | tar xz",
-      creates => "${::graphite::params::carbon_dl_loc}",;
-    "Download and untar whisper ${::graphite::params::whisperVersion}":
-      command => "curl -s -L ${::graphite::params::whisper_dl_url} | tar xz",
-      creates => "${::graphite::params::whisper_dl_loc}",
-  }
-
-  # Install graphite from source
-
-  exec {
-    "Install webapp ${::graphite::params::graphiteVersion}":
-      command     => 'python setup.py install',
-      cwd         => $::graphite::params::webapp_dl_loc,
-      subscribe   => Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
-      refreshonly => true,
-      require     => [
-        Exec["Download and untar webapp ${::graphite::params::graphiteVersion}"],
-        Package['django-tagging']
-      ];
-    "Install carbon ${::graphite::params::carbonVersion}":
-      command     => 'python setup.py install',
-      cwd         => $::graphite::params::carbon_dl_loc,
-      subscribe   => Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
-      refreshonly => true,
-      require     => [
-        Exec["Download and untar carbon ${::graphite::params::carbonVersion}"],
-        Package['twisted']
-      ];
-    "Install whisper ${::graphite::params::whisperVersion}":
-      command     => 'python setup.py install',
-      cwd         => $::graphite::params::whisper_dl_loc,
-      subscribe   => Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
-      refreshonly => true,
-      require     => [
-        Exec["Download and untar whisper ${::graphite::params::whisperVersion}"],
-        Package['twisted']
-      ];
-  }
 }
 
