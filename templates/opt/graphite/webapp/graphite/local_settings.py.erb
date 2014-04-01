@@ -131,11 +131,32 @@ LDAP_USER_QUERY = "<%= scope.lookupvar('graphite::gr_ldap_user_query') %>"
 # See http://www.python-ldap.org/ for further details on these options.
 
 ## REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
-<%- if scope.lookupvar('graphite::gr_use_remote_user_auth') -%>
-USE_REMOTE_USER_AUTHENTICATION = True
-<%- else -%>
+<%-
+if scope.lookupvar('graphite::gr_use_remote_user_auth') == 'True'
+	if scope.lookupvar('graphite::gr_remote_user_header_name') != :undef
+-%>
+# NOTE - This puppet module handles this slightly differently to the default Django approach
+# with local_settings.py / settings.py
+# Primarily when a custom HTTP header is used instead of REMOTE_USER.
+MIDDLEWARE_CLASSES += (
+	'django.contrib.auth.middleware.RemoteUserMiddleware',
+	'graphite.custom_auth.CustomHeaderMiddleware'
+)
+AUTHENTICATION_BACKENDS.insert(0,'django.contrib.auth.backends.RemoteUserBackend')
+# Disable the logic in settings.py that does this in a non-custom way.
 USE_REMOTE_USER_AUTHENTICATION = False
-<%- end -%>
+<%-
+	else
+-%>
+USE_REMOTE_USER_AUTHENTICATION = True
+<%-
+	end
+else
+-%>
+USE_REMOTE_USER_AUTHENTICATION = False
+<%-
+end
+-%>
 
 # Override the URL for the login link (e.g. for django_openid_auth)
 #LOGIN_URL = '/account/login'

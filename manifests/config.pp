@@ -106,6 +106,18 @@ class graphite::config inherits graphite::params {
       require => $web_server_package_require;
   }
 
+  if $::graphite::gr_remote_user_header_name != undef {
+    file {
+      '/opt/graphite/webapp/graphite/custom_auth.py':
+        ensure  => file,
+        owner   => $::graphite::params::web_user,
+        group   => $::graphite::params::web_user,
+        mode    => '0644',
+        content => template("graphite/opt/graphite/webapp/graphite/custom_auth.py.erb"),
+        require => $web_server_package_require;
+    }
+  }
+
   # configure carbon engines
   if $::graphite::gr_enable_carbon_relay and $::graphite::gr_enable_carbon_aggregator {
     $notify_services = [ Service['carbon-aggregator'], Service['carbon-relay'], Service['carbon-cache'] ]
