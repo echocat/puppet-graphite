@@ -385,6 +385,7 @@ The specific use case for this is OpenID right now, but could be expanded to any
 One example is something like http://antoineroygobeil.com/blog/2014/2/6/nginx-ruby-auth/
 combined with the option gr_web_server = 'wsgionly' and http://forge.puppetlabs.com/jfryman/nginx
 with some custom vhosts.
+The sample external auth app is available from [here](https://github.com/antoinerg/nginx_auth_backend)
 
 ##Contributing
 
