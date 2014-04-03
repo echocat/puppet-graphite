@@ -351,7 +351,7 @@ Default is 'False' (string). Allow use of REMOTE_USER env variable within Django
 
 Default is undef. Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable (mainly for nginx use) to tell Graphite a user is authenticated. Useful when using an external auth handler with X-Accel-Redirect etc.
 Example value - HTTP_X_REMOTE_USER
-See (#using-nginx-external-authentication) for details.
+See [this snippet](#using-nginx-external-authentication) for details.
 
 ##Requirements
 
