@@ -231,11 +231,12 @@
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
 # [*gr_use_remote_user_auth*]
-#   Allow use of REMOTE_USER env variable within Django/Graphite. Default = false
+#   Allow use of REMOTE_USER env variable within Django/Graphite. Default = 'False' (String)
 # [*gr_remote_user_header_name*]
 #   Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable
 #   (mainly for nginx use) to tell Graphite a user is authenticated.
 #   Useful when using an external auth handler with X-Accel-Redirect etc.
+#   Example value - HTTP_X_REMOTE_USER
 
 # === Examples
 #

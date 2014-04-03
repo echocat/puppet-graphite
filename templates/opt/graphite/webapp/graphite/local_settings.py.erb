@@ -131,32 +131,7 @@ LDAP_USER_QUERY = "<%= scope.lookupvar('graphite::gr_ldap_user_query') %>"
 # See http://www.python-ldap.org/ for further details on these options.
 
 ## REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
-<%-
-if scope.lookupvar('graphite::gr_use_remote_user_auth') == 'True'
-	if scope.lookupvar('graphite::gr_remote_user_header_name') != :undef
--%>
-# NOTE - This puppet module handles this slightly differently to the default Django approach
-# with local_settings.py / settings.py
-# Primarily when a custom HTTP header is used instead of REMOTE_USER.
-MIDDLEWARE_CLASSES += (
-	'django.contrib.auth.middleware.RemoteUserMiddleware',
-	'graphite.custom_auth.CustomHeaderMiddleware'
-)
-AUTHENTICATION_BACKENDS.insert(0,'django.contrib.auth.backends.RemoteUserBackend')
-# Disable the logic in settings.py that does this in a non-custom way.
-USE_REMOTE_USER_AUTHENTICATION = False
-<%-
-	else
--%>
-USE_REMOTE_USER_AUTHENTICATION = True
-<%-
-	end
-else
--%>
-USE_REMOTE_USER_AUTHENTICATION = False
-<%-
-end
--%>
+# NOTE - this has been moved to the bottom to gain access to app_settings.
 
 # Override the URL for the login link (e.g. for django_openid_auth)
 #LOGIN_URL = '/account/login'
@@ -254,6 +229,36 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 # Uncomment the following line for direct access to Django settings such as
 # MIDDLEWARE_CLASSES or APPS
 #from graphite.app_settings import *
+
+## REMOTE_USER authentication. See: https://docs.djangoproject.com/en/dev/howto/auth-remote-user/
+# NOTE - this has been moved to the bottom to gain access to app_settings.
+<%-
+if scope.lookupvar('graphite::gr_use_remote_user_auth') == 'True'
+	if scope.lookupvar('graphite::gr_remote_user_header_name') != :undef
+-%>
+# NOTE - This puppet module handles this slightly differently to the default Django approach
+# with local_settings.py / settings.py
+from graphite.app_settings import *
+# Primarily when a custom HTTP header is used instead of REMOTE_USER.
+MIDDLEWARE_CLASSES += (
+	'django.contrib.auth.middleware.RemoteUserMiddleware',
+	'graphite.custom_auth.CustomHeaderMiddleware'
+)
+AUTHENTICATION_BACKENDS.insert(0,'django.contrib.auth.backends.RemoteUserBackend')
+# Disable the logic in settings.py that does this in a non-custom way.
+USE_REMOTE_USER_AUTHENTICATION = False
+<%-
+	else
+-%>
+USE_REMOTE_USER_AUTHENTICATION = True
+<%-
+	end
+else
+-%>
+USE_REMOTE_USER_AUTHENTICATION = False
+<%-
+end
+-%>
 
 <% unless scope.lookupvar('graphite::gr_django_1_4_or_less') %>
 # Configure static URL prefix for Django admin pages
