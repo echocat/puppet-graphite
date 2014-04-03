@@ -230,6 +230,13 @@
 #   Set ldap password.  Default = ''
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
+# [*gr_use_remote_user_auth*]
+#   Allow use of REMOTE_USER env variable within Django/Graphite. Default = 'False' (String)
+# [*gr_remote_user_header_name*]
+#   Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable
+#   (mainly for nginx use) to tell Graphite a user is authenticated.
+#   Useful when using an external auth handler with X-Accel-Redirect etc.
+#   Example value - HTTP_X_REMOTE_USER
 
 # === Examples
 #
@@ -343,8 +350,13 @@ class graphite (
   $gr_ldap_search_base          = '',
   $gr_ldap_base_user            = '',
   $gr_ldap_base_pass            = '',
-  $gr_ldap_user_query           = '(username=%s)'
+  $gr_ldap_user_query           = '(username=%s)',
+  $gr_use_remote_user_auth      = 'False',
+  $gr_remote_user_header_name   = undef
 ) {
+  # Validation of input variables.
+  # TODO - validate all the things
+  validate_string($gr_use_remote_user_auth)
 
   # The anchor resources allow the end user to establish relationships 
   # to the "main" class and preserve the relationship to the
