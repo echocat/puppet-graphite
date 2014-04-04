@@ -368,7 +368,7 @@ On Redhat distributions you need the EPEL or RPMforge repository, because Graphi
 
 ##Limitations
 
-This module is tested on CentOS 6.5 and should also run without problems on
+This module is tested on CentOS 6.5 and Debian 7 (Wheezy) and should also run without problems on
 
 * RHEL/CentOS/Scientific 6+
 * Debian 6+
