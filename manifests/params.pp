@@ -94,7 +94,6 @@ class graphite::params {
         'python-sqlite2',
         'bitmap',
         'bitmap-fonts-compat',
-        'python-devel',
         'python-crypto',
         'pyOpenSSL',
         'gcc',
