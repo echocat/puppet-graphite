@@ -54,7 +54,7 @@ class graphite::params {
         'python-ldap',
         'python-memcache',
         'python-sqlite',
-        'python-simplejson'
+        'python-simplejson',
         'python-mysqldb'
       ]
     }
