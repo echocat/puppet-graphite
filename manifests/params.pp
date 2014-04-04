@@ -99,9 +99,6 @@ class graphite::params {
         'gcc',
         'python-zope-filesystem',
         'python-zope-interface',
-        'git',
-        'gcc-c++',
-        'zlib-static',
         'MySQL-python'
       ]
     }
