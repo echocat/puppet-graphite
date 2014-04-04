@@ -9,6 +9,7 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
+  $python_pip_pkg = 'python-pip'
   $graphiteVersion = '0.9.12'
   $carbonVersion   = '0.9.12'
   $whisperVersion  = '0.9.12'
@@ -23,45 +24,90 @@ class graphite::params {
   $carbon_dl_loc = "${build_dir}/carbon-${::graphite::params::carbonVersion}"
 
   $install_prefix = '/opt/'
-
   $enable_carbon_relay = false
-
-  $apache_pkg = $::osfamily ? {
-    debian => 'apache2',
-    redhat => 'httpd',
-  }
-
-  $apache_wsgi_pkg = $::osfamily ? {
-    debian => 'libapache2-mod-wsgi',
-    redhat => 'mod_wsgi',
-  }
-
-  $apache_wsgi_socket_prefix = $::osfamily ? {
-    debian => '/var/run/apache2/wsgi',
-    redhat => 'run/wsgi',
-  }
-
-  $apache_service_name = $::osfamily ? {
-    debian => 'apache2',
-    redhat => 'httpd',
-  }
-
-  $apacheconf_dir = $::osfamily ? {
-    debian => '/etc/apache2/sites-available',
-    redhat => '/etc/httpd/conf.d',
-  }
-
-  $apacheports_file = $::osfamily ? {
-    debian => 'ports.conf',
-    redhat => 'graphite_ports.conf',
-  }
-
-  $apache_dir = $::osfamily ? {
-    debian => '/etc/apache2',
-    redhat => '/etc/httpd',
-  }
-
   $nginxconf_dir = '/etc/nginx/sites-available'
+
+
+  case $::osfamily {
+    'debian': {
+      $apache_pkg = 'apache2'
+      $apache_wsgi_pkg = 'libapache2-mod-wsgi'
+      $apache_wsgi_socket_prefix = '/var/run/apache2/wsgi'
+      $apache_service_name = 'apache2'
+      $apacheconf_dir = '/etc/apache2/sites-available'
+      $apacheports_file = 'ports.conf'
+      $apache_dir = '/etc/apache2'
+      $web_user = 'www-data'
+      $python_dev_pkg = 'python-dev'
+
+      # see https://github.com/graphite-project/carbon/issues/86
+      $carbin_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbonVersion}-py2.7.egg-info"
+      $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
+      $gweb_pip_hack_source = "/usr/lib/python2.7/dist-packages/graphite_web-${carbonVersion}-py2.7.egg-info"
+      $gweb_pip_hack_source = "/opt/graphite/webapp/graphite_web-${carbonVersion}-py2.7.egg-info"
+
+      $graphitepkgs = [
+        'python-cairo',
+        'python-twisted',
+        'python-django',
+        'python-django-tagging',
+        'python-ldap',
+        'python-memcache',
+        'python-sqlite',
+        'python-simplejson'
+      ]
+    }
+    'redhat': {
+      $apache_pkg = 'httpd'
+      $apache_wsgi_pkg = 'mod_wsgi'
+      $apache_wsgi_socket_prefix = 'run/wsgi'
+      $apache_service_name = 'httpd'
+      $apacheconf_dir = '/etc/httpd/conf.d'
+      $apacheports_file = 'graphite_ports.conf'
+      $apache_dir = '/etc/httpd'
+      $web_user = 'apache'
+      $python_dev_pkg = 'python-devel'
+
+      # see https://github.com/graphite-project/carbon/issues/86
+      case $::lsbmajdistrelease {
+        '6': {
+          $carbin_pip_hack_source = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
+          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
+          $gweb_pip_hack_source = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
+          $gweb_pip_hack_target = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
+        }
+        '7': {
+          $carbin_pip_hack_source = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
+          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
+          $gweb_pip_hack_source = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
+          $gweb_pip_hack_target = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
+        }
+        default: {fail('Unsupported Redhat release')}
+      }
+
+      $graphitepkgs = [
+        'pycairo',
+        'Django14',
+        'python-ldap',
+        'python-memcached',
+        'python-sqlite2',
+        'bitmap',
+        'bitmap-fonts-compat',
+        'python-devel',
+        'python-crypto',
+        'pyOpenSSL',
+        'gcc',
+        'python-zope-filesystem',
+        'python-zope-interface',
+        'git',
+        'gcc-c++',
+        'zlib-static',
+        'MySQL-python',
+        'python-txamqp'
+      ]
+    }
+    default: {fail('unsupported os.')}
+  }
 
   $web_server_pkg = $graphite::gr_web_server ? {
     apache   => $apache_pkg,
@@ -69,16 +115,6 @@ class graphite::params {
     wsgionly => 'dont-install-webserver-package',
     none     => 'dont-install-webserver-package',
     default  => fail('The only supported web servers are \'apache\', \'nginx\',  \'wsgionly\' and \'none\''),
-  }
-
-  $web_user = $::osfamily ? {
-    debian => 'www-data',
-    redhat => 'apache',
-  }
-
-  $graphitepkgs = $::osfamily ? {
-    debian => ["python-cairo","python-twisted","python-django","python-django-tagging","python-ldap","python-memcache","python-sqlite","python-simplejson"],
-    redhat => ["pycairo", "Django14", "python-ldap", "python-memcached", "python-sqlite2",  "bitmap", "bitmap-fonts-compat", "python-devel", "python-crypto", "pyOpenSSL", "gcc", "python-zope-filesystem", "python-zope-interface", "git", "gcc-c++", "zlib-static", "MySQL-python","python-txamqp"],
   }
 
 }
