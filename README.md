@@ -351,7 +351,11 @@ Default is 'False' (string). Allow use of REMOTE_USER env variable within Django
 
 Default is undef. Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable (mainly for nginx use) to tell Graphite a user is authenticated. Useful when using an external auth handler with X-Accel-Redirect etc.
 Example value - HTTP_X_REMOTE_USER
-See [this snippet](#using-nginx-external-authentication) for details.
+The specific use case for this is OpenID right now, but could be expanded to anything. 
+One example is something like http://antoineroygobeil.com/blog/2014/2/6/nginx-ruby-auth/
+combined with the option `gr_web_server` = 'wsgionly' and http://forge.puppetlabs.com/jfryman/nginx
+with some custom vhosts.
+The sample external auth app is available from [here](https://github.com/antoinerg/nginx_auth_backend)
 
 ##Requirements
 
@@ -378,14 +382,6 @@ Most settings of Graphite can be set by parameters. So their can be special conf
 the file `templates/opt/graphite/webapp/graphite/local_settings.py.erb`.
 
 The nginx configs are only supported on Debian based systems at the moment.
-
-##Using nginx external authentication
-
-The specific use case for this is OpenID right now, but could be expanded to anything. 
-One example is something like http://antoineroygobeil.com/blog/2014/2/6/nginx-ruby-auth/
-combined with the option gr_web_server = 'wsgionly' and http://forge.puppetlabs.com/jfryman/nginx
-with some custom vhosts.
-The sample external auth app is available from [here](https://github.com/antoinerg/nginx_auth_backend)
 
 ##Contributing
 
