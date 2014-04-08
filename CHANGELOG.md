@@ -9,7 +9,7 @@
 
 #### Behavior changes:
 
-- complete refactoring of install process, to solve dependency hell on redhat
+- complete refactoring of install process, to solve dependency hell on redhat.
   Update process tested on CentOS 6.5 and Debian 7 Wheezy
 - package `git` is not required anymore
 - whisper, graphite-web, carbon are installed via pip now
