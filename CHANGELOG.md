@@ -1,4 +1,4 @@
-## 2014-04-08 - 5.3.1 (Bugfix release)
+## 2014-04-08 - 5.3.2 (Bugfix release)
 
 #### Bugfixes:
 
