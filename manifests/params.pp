@@ -71,7 +71,7 @@ class graphite::params {
       $python_dev_pkg = 'python-devel'
 
       # see https://github.com/graphite-project/carbon/issues/86
-      case $::operatingsystemelease {
+      case $::operatingsystemrelease {
         /^6\.\d+$/: {
           $carbin_pip_hack_source = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
           $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
