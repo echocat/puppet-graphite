@@ -1,20 +1,20 @@
 {
   "operatingsystem_support": [
-      {
-        "operatingsystem": "RedHat"
-      },
-      {
-        "operatingsystem": "CentOS"
-      },
-      {
-        "operatingsystem": "Scientific"
-      },
-      {
-        "operatingsystem": "Debian"
-      },
-      {
-        "operatingsystem": "Ubuntu"
-      }
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "Scientific"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    }
   ],
   "requirements": [
     {
@@ -27,7 +27,7 @@
     }
   ],
   "name": "dwerder-graphite",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "source": "git clone https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Mozilla Public License Version 2.0",
@@ -44,9 +44,9 @@
 
   ],
   "checksums": {
-    "CHANGELOG.md": "5a64bc89283e88c661c96f1960a39f94",
+    "CHANGELOG.md": "104330eac3b7546371c66234ac022718",
     "LICENSE": "b8f0e5c64f1455cd12bd227a9d9d43a0",
-    "Modulefile": "41889a5fa154c102407cff55e8a49a64",
+    "Modulefile": "482e2e7218dd0ae3e4767a8258171d09",
     "README.md": "00e13356411bbd732d6dbdc2a7e256c1",
     "manifests/config.pp": "3f359e2be9edbc5be60fa071c88a68bf",
     "manifests/config_apache.pp": "2bd2acc5c8daac19ed02c86ebee453ec",

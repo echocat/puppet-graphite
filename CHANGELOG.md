@@ -1,3 +1,9 @@
+## 2014-04-08 - 5.3.1 (Bugfix release)
+
+#### Bugfixes:
+
+- fix variablename for redhat releases in params.pp
+
 ## 2014-04-08 - 5.3.0 (Feature release)
 
 #### Features:
