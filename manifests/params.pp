@@ -1,6 +1,7 @@
 # == Class: graphite::params
 #
-# This class specifies default parameters for the graphite module and SHOULD NOT be called directly.
+# This class specifies default parameters for the graphite module and
+# SHOULD NOT be called directly.
 #
 # === Parameters
 #
@@ -70,14 +71,14 @@ class graphite::params {
       $python_dev_pkg = 'python-devel'
 
       # see https://github.com/graphite-project/carbon/issues/86
-      case $::operatingsystemmajrelease {
-        '6': {
+      case $::operatingsystemelease {
+        /^6\.\d+$/: {
           $carbin_pip_hack_source = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
           $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
           $gweb_pip_hack_source = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $gweb_pip_hack_target = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
         }
-        '7': {
+        /^7\.\d+$/: {
           $carbin_pip_hack_source = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
           $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
           $gweb_pip_hack_source = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
