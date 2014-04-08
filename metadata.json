@@ -16,8 +16,18 @@
         "operatingsystem": "Ubuntu"
       }
   ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">=2.7.20 <4.0.0"
+    }
+  ],
   "name": "dwerder-graphite",
-  "version": "5.2.1",
+  "version": "5.3.0",
   "source": "git clone https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Mozilla Public License Version 2.0",
@@ -27,40 +37,39 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 2.2.1"
+      "version_requirement": ">= 3.2.0"
     }
   ],
   "types": [
 
   ],
   "checksums": {
-    "CHANGELOG.md": "8054728984ce929fbd2bb6420767454e",
+    "CHANGELOG.md": "5a64bc89283e88c661c96f1960a39f94",
     "LICENSE": "b8f0e5c64f1455cd12bd227a9d9d43a0",
-    "Modulefile": "df424a2e3511c7d6169389417c46f1f1",
-    "README.md": "2faabee5367e78c59443fc3a0c69bb21",
-    "manifests/config.pp": "2b18c43433f61878b3ff42a39e0c19fe",
-    "manifests/config_apache.pp": "f29e18096263352b30e44a47e83c9e78",
-    "manifests/config_gunicorn.pp": "a7cefb124f9edd221ce3f28d686c8397",
-    "manifests/config_nginx.pp": "93759c40c3c5b28e15066be8d4204292",
-    "manifests/init.pp": "07ad4733aa671ab66f995d843ed73858",
-    "manifests/install/debian.pp": "a4d7a8041ae2f87efc795a1e465bae11",
-    "manifests/install/redhat.pp": "ec107ea6cb74da0418a019d0fcd6d218",
-    "manifests/install.pp": "07ca461462e78fef00ac12d3cf1ec68d",
-    "manifests/params.pp": "2755db83412250f80eec3b0f1faa5497",
+    "Modulefile": "41889a5fa154c102407cff55e8a49a64",
+    "README.md": "00e13356411bbd732d6dbdc2a7e256c1",
+    "manifests/config.pp": "3f359e2be9edbc5be60fa071c88a68bf",
+    "manifests/config_apache.pp": "2bd2acc5c8daac19ed02c86ebee453ec",
+    "manifests/config_gunicorn.pp": "bccc31bd7eab10a063565ec25e03322a",
+    "manifests/config_nginx.pp": "e9f8d65d704ba083edff399210d0a5ed",
+    "manifests/init.pp": "28007feb31e3a4dd2a70a6f1fe0e298f",
+    "manifests/install.pp": "ee0ca8c1ff1bc0dd46fc036683b6512c",
+    "manifests/params.pp": "af605e56b3f63ca26be2041d9458c3fa",
     "templates/etc/apache2/ports.conf.erb": "022825fb1efdad933d6e39cc25a943e5",
-    "templates/etc/apache2/sites-available/graphite.conf.erb": "0695a18710bd2fdc1d5b2172eb713873",
+    "templates/etc/apache2/sites-available/graphite.conf.erb": "ae7bd95a47efce8734030f0d490a4f26",
     "templates/etc/gunicorn.d/graphite.erb": "c3e43b8d42f11fc793de35ce4417c659",
     "templates/etc/init.d/carbon-aggregator.erb": "e5b275da4eb6f79ca5e54026b697c3ef",
     "templates/etc/init.d/carbon-cache.erb": "90dcc40af47f8a5a9d08e8b5ff0ad1e4",
     "templates/etc/init.d/carbon-relay.erb": "d962df2237d8517946f3fff0fdcc03e4",
     "templates/etc/nginx/sites-available/graphite.erb": "25287ef6ddf6451a8b43446289c84fe6",
     "templates/opt/graphite/bin/carbon-logrotate.sh.erb": "7c13f336dd820daada4d1dd2b1b8fb9c",
-    "templates/opt/graphite/conf/aggregation-rules.conf.erb": "7ce39aa922f42c59309d369849d4aedf",
+    "templates/opt/graphite/conf/aggregation-rules.conf.erb": "5ea8c38cfa3424d6b797e172e1e3a0cd",
     "templates/opt/graphite/conf/carbon.conf.erb": "ab0781748b6d6cd2116fb7d966e3f4f8",
     "templates/opt/graphite/conf/graphite.wsgi.erb": "4714e01760eaec667ccab3bb747397af",
-    "templates/opt/graphite/conf/relay-rules.conf.erb": "f273a80128864af32f2b6d0eb97f3c07",
-    "templates/opt/graphite/conf/storage-aggregation.conf.erb": "e121e5f14d4c062382e5114a22a5fa1f",
+    "templates/opt/graphite/conf/relay-rules.conf.erb": "d94571a9573b802dd452ebdf95721ae0",
+    "templates/opt/graphite/conf/storage-aggregation.conf.erb": "d5ca301322b38a2092f9ac564bfdc554",
     "templates/opt/graphite/conf/storage-schemas.conf.erb": "4bc00354a10ce3285fa3b6d87c3a1a25",
-    "templates/opt/graphite/webapp/graphite/local_settings.py.erb": "2057d71e9b33a2f99da18fe3938051fc"
+    "templates/opt/graphite/webapp/graphite/custom_auth.py.erb": "9075a769a8bdfc2e841cfb7e5167b668",
+    "templates/opt/graphite/webapp/graphite/local_settings.py.erb": "b3b2c9edee2c8b58c792c45dd3cacc3e"
   }
 }
