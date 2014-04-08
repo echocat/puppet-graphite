@@ -1,3 +1,19 @@
+## 2014-04-08 - 5.3.0 (Feature release)
+
+#### Features:
+
+- add support for Apache 2.4. See parameter `gr_apache_24`
+- add `gr_use_whitelist` to set flag in carbon.conf. Default is False.
+- add support for custom authentication using HTTP header
+  See `gr_use_remote_user_auth` and `gr_remote_user_header_name`
+
+#### Behavior changes:
+
+- complete refactoring of install process, to solve dependency hell on redhat
+  Update process tested on CentOS 6.5 and Debian 7 Wheezy
+- package `git` is not required anymore
+- whisper, graphite-web, carbon are installed via pip now
+
 ## 2014-03-20 - 5.2.0 (Feature release)
 
 #### Features:

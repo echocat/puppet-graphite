@@ -1,6 +1,7 @@
 # == Class: graphite::config_gunicorn
 #
-# This class configures graphite/carbon/whisper and SHOULD NOT be called directly.
+# This class configures graphite/carbon/whisper and SHOULD NOT be
+# called directly.
 #
 # === Parameters
 #

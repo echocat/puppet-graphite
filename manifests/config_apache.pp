@@ -14,39 +14,40 @@ class graphite::config_apache inherits graphite::params {
   # we need an apache with python support
 
   package {
-    "${::graphite::params::apache_pkg}":
+    $::graphite::params::apache_pkg:
       ensure => installed,
       before => Exec['Chown graphite for web user'],
       notify => Exec['Chown graphite for web user'];
   }
 
   package {
-    "${::graphite::params::apache_wsgi_pkg}":
+    $::graphite::params::apache_wsgi_pkg:
       ensure  => installed,
-      require => Package["${::graphite::params::apache_pkg}"]
+      require => Package[$::graphite::params::apache_pkg]
   }
 
   case $::osfamily {
     debian: {
-      # mod_header is disabled on Ubuntu by default, but we need it for CORS headers
-      if ( $::graphite::gr_web_cors_allow_from_all != 'false' ) {
+      # mod_header is disabled on Ubuntu by default,
+      # but we need it for CORS headers
+      if $::graphite::gr_web_cors_allow_from_all {
         exec { 'enable mod_headers':
           command => 'a2enmod headers',
-          require => Package["${::graphite::params::apache_wsgi_pkg}"]
+          require => Package[$::graphite::params::apache_wsgi_pkg]
         }
       }
       exec { 'Disable default apache site':
         command => 'a2dissite default',
         onlyif  => 'test -f /etc/apache2/sites-enabled/000-default',
-        require => Package["${::graphite::params::apache_wsgi_pkg}"],
-        notify  => Service["${::graphite::params::apache_service_name}"];
+        require => Package[$::graphite::params::apache_wsgi_pkg],
+        notify  => Service[$::graphite::params::apache_service_name];
       }
     }
     redhat: {
       file { "${::graphite::params::apacheconf_dir}/welcome.conf":
         ensure  => absent,
-        require => Package["${::graphite::params::apache_wsgi_pkg}"],
-        notify  => Service["${::graphite::params::apache_service_name}"];
+        require => Package[$::graphite::params::apache_wsgi_pkg],
+        notify  => Service[$::graphite::params::apache_service_name];
       }
     }
     default: {
@@ -54,7 +55,7 @@ class graphite::config_apache inherits graphite::params {
     }
   }
 
-  service { "${::graphite::params::apache_service_name}":
+  service { $::graphite::params::apache_service_name:
     ensure     => running,
     enable     => true,
     hasrestart => true,
@@ -71,7 +72,7 @@ class graphite::config_apache inherits graphite::params {
       mode    => '0644',
       content => template('graphite/etc/apache2/ports.conf.erb'),
       require => [
-        Package["${::graphite::params::apache_wsgi_pkg}"],
+        Package[$::graphite::params::apache_wsgi_pkg],
         Exec['Initial django db creation'],
         Exec['Chown graphite for web user']
       ];
@@ -92,16 +93,16 @@ class graphite::config_apache inherits graphite::params {
         ensure  => link,
         target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
         require => File['/etc/apache2/sites-available/graphite.conf'],
-        notify  => Service["${::graphite::params::apache_service_name}"];
+        notify  => Service[$::graphite::params::apache_service_name];
       }
     }
     redhat: {
-      if "${::graphite::gr_apache_port}" != "80" {
+      if $::graphite::gr_apache_port != '80' {
         file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
           ensure  => link,
           target  => "${::graphite::params::apache_dir}/ports.conf",
           require => File["${::graphite::params::apache_dir}/ports.conf"],
-          notify  => Service["${::graphite::params::apache_service_name}"];
+          notify  => Service[$::graphite::params::apache_service_name];
         }
       }
     }

@@ -1,6 +1,7 @@
 # == Class: graphite::config
 #
-# This class configures graphite/carbon/whisper and SHOULD NOT be called directly.
+# This class configures graphite/carbon/whisper and SHOULD NOT
+# be called directly.
 #
 # === Parameters
 #
@@ -11,8 +12,9 @@ class graphite::config inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   # for full functionality we need this packages:
-  # mandatory: python-cairo, python-django, python-twisted, python-django-tagging, python-simplejson
-  # optional: python-ldap, python-memcache, memcached, python-sqlite
+  # mandatory: python-cairo, python-django, python-twisted,
+  #            python-django-tagging, python-simplejson
+  # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
   # we need an web server with python support
   # apache with mod_wsgi or nginx with gunicorn
@@ -60,7 +62,8 @@ class graphite::config inherits graphite::params {
     require     => $web_server_package_require,
   }
 
-  # change access permissions for carbon-cache to align with gr_user (if different from web_user)
+  # change access permissions for carbon-cache to align with gr_user
+  # (if different from web_user)
 
   if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::params::web_user {
     file {
@@ -87,14 +90,14 @@ class graphite::config inherits graphite::params {
       owner   => $::graphite::params::web_user,
       group   => $::graphite::params::web_user,
       mode    => '0644',
-      content => template("graphite/opt/graphite/webapp/graphite/local_settings.py.erb"),
+      content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
       require => $web_server_package_require;
     '/opt/graphite/conf/graphite.wsgi':
       ensure  => file,
       owner   => $::graphite::params::web_user,
       group   => $::graphite::params::web_user,
       mode    => '0644',
-      content => template("graphite/opt/graphite/conf/graphite.wsgi.erb"),
+      content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
       require => $web_server_package_require;
   }
 
@@ -105,33 +108,43 @@ class graphite::config inherits graphite::params {
         owner   => $::graphite::params::web_user,
         group   => $::graphite::params::web_user,
         mode    => '0644',
-        content => template("graphite/opt/graphite/webapp/graphite/custom_auth.py.erb"),
+        content => template('graphite/opt/graphite/webapp/graphite/custom_auth.py.erb'),
         require => $web_server_package_require;
     }
   }
 
   # configure carbon engines
   if $::graphite::gr_enable_carbon_relay and $::graphite::gr_enable_carbon_aggregator {
-    $notify_services = [ Service['carbon-aggregator'], Service['carbon-relay'], Service['carbon-cache'] ]
-     }
-     elsif $::graphite::gr_enable_carbon_relay {
-       $notify_services = [ Service['carbon-relay'], Service['carbon-cache'] ]
-     }
-     elsif $::graphite::gr_enable_carbon_aggregator {
-       $notify_services = [ Service['carbon-aggregator'], Service['carbon-cache'] ]
-     }
-     else {
-      $notify_services = [ Service['carbon-cache'] ]
-     }
+    $notify_services = [
+      Service['carbon-aggregator'],
+      Service['carbon-relay'],
+      Service['carbon-cache']
+    ]
+  }
+  elsif $::graphite::gr_enable_carbon_relay {
+    $notify_services = [
+      Service['carbon-relay'],
+      Service['carbon-cache']
+    ]
+  }
+  elsif $::graphite::gr_enable_carbon_aggregator {
+    $notify_services = [
+      Service['carbon-aggregator'],
+      Service['carbon-cache']
+    ]
+  }
+  else {
+    $notify_services = [ Service['carbon-cache'] ]
+  }
 
-    if $::graphite::gr_enable_carbon_relay {
+  if $::graphite::gr_enable_carbon_relay {
 
-      file {
-          '/opt/graphite/conf/relay-rules.conf':
-          mode    => '0644',
-          content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
-          notify  => $notify_services;
-      }
+    file {
+      '/opt/graphite/conf/relay-rules.conf':
+        mode    => '0644',
+        content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
+        notify  => $notify_services;
+    }
   }
 
   if $::graphite::gr_enable_carbon_aggregator {

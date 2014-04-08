@@ -196,7 +196,7 @@ The storage aggregation rules.
 
 #####`gr_web_server`
 
-Default is 'apache'. The web server to use. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 'nginx' is only supported on Debian-like systems. And 'none' means that you will manage the webserver yourself. 
+Default is 'apache'. The web server to use. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 'nginx' is only supported on Debian-like systems. And 'none' means that you will manage the webserver yourself.
 
 #####`gr_web_servername`
 
@@ -351,7 +351,7 @@ Default is 'False' (string). Allow use of REMOTE_USER env variable within Django
 
 Default is undef. Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable (mainly for nginx use) to tell Graphite a user is authenticated. Useful when using an external auth handler with X-Accel-Redirect etc.
 Example value - HTTP_X_REMOTE_USER
-The specific use case for this is OpenID right now, but could be expanded to anything. 
+The specific use case for this is OpenID right now, but could be expanded to anything.
 One example is something like http://antoineroygobeil.com/blog/2014/2/6/nginx-ruby-auth/
 combined with the option `gr_web_server` = 'wsgionly' and http://forge.puppetlabs.com/jfryman/nginx
 with some custom vhosts.

@@ -5,13 +5,16 @@
 # === Parameters
 #
 # [*gr_user*]
-#   The user who runs graphite. If this is empty carbon runs as the user that invokes it.
+#   The user who runs graphite. If this is empty carbon runs as the user that
+#   invokes it.
 #   Default is empty.
 # [*gr_max_cache_size*]
-#   Limit the size of the cache to avoid swapping or becoming CPU bound. Use the value "inf" (infinity) for an unlimited cache size.
+#   Limit the size of the cache to avoid swapping or becoming CPU bound. Use
+#   the value "inf" (infinity) for an unlimited cache size.
 #   Default is inf.
 # [*gr_max_updates_per_second*]
-#   Limits the number of whisper update_many() calls per second, which effectively means the number of write requests sent to the disk.
+#   Limits the number of whisper update_many() calls per second, which
+#   effectively means the number of write requests sent to the disk.
 #   Default is 500.
 # [*gr_max_creates_per_minute*]
 #   Softly limits the number of whisper files that get created each minute.
@@ -57,7 +60,8 @@
 #   Default is GMT.
 # [*gr_storage_schemas*]
 #  The storage schemas.
-#  Default is [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
+#  Default is
+#  [{name => "default", pattern => ".*", retentions => "1s:30m,1m:1d,5m:2y"}]
 # [*gr_storage_aggregation_rules*]
 #   rule set for storage aggregation ... items get sorted, first match wins
 #   pattern = <regex>
@@ -65,20 +69,37 @@
 #   method = <average|sum|last|max|min>
 #   Default is :
 #   {
-#     '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
-#     '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
-#     '01_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
-#     '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+#     '00_min' => {
+#       pattern => '\.min$',
+#       factor => '0.1',
+#       method => 'min'
+#     },
+#     '01_max' => {
+#       pattern => '\.max$',
+#       factor => '0.1',
+#       method => 'max' },
+#     '01_sum' => {
+#       pattern => '\.count$',
+#       factor => '0.1',
+#       method => 'sum'
+#     },
+#     '99_default_avg' => {
+#       pattern => '.*',
+#       factor => '0.5',
+#       method => 'average'
+#     }
 #   }
 #   (matches the exammple configuration from graphite 0.9.12)
 # [*gr_web_server*]
 #   The web server to use.
-#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'. 'nginx' is only supported on
-#   Debian-like systems.
-#   'wsgionly' will omit apache and nginx, allowing you to run your own webserver and communicate
-#   via wsgi to the unix socket. Handy for servers with multiple vhosts/purposes etc.
-#   'none' will do the same as wsgionly but skips gunicorn also, omitting apache and gunicorn/nginx.
-#   All other webserver settings below are irrelevant if this is 'wsgionly' or 'none'.
+#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'. 'nginx' is only
+#   supported on Debian-like systems.
+#   'wsgionly' will omit apache and nginx, allowing you to run your own
+#   webserver and communicate via wsgi to the unix socket. Handy for servers
+#   with multiple vhosts/purposes etc.
+#   'none' will do the same as wsgionly but skips gunicorn also, omitting
+#   apache and gunicorn/nginx. All other webserver settings below are
+#   irrelevant if this is 'wsgionly' or 'none'.
 #   Default is 'apache'.
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
@@ -87,12 +108,11 @@
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
 # [*gr_apache_port*]
-#   The port to run web server on if you have an existing web server on the default
-#   port 80.
+#   The port to run graphite web server on.
 #   Default is 80.
 # [*gr_apache_port_https*]
-#   The port to run SSL web server on if you have an existing web server on the
-#   default port 443.
+#   The port to run SSL web server on if you have an existing web server on
+#   the default port 443.
 #   Default is 443.
 # [*gr_apache_24*]
 #   Boolean to enable configuration parts for Apache 2.4 instead of 2.2
@@ -117,7 +137,8 @@
 # [*gr_relay_method*]
 #   Default is 'rules'
 # [*gr_relay_replication_factor*]
-#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
+#   add redundancy by replicating every datapoint to more than one machine.
+#   Default is 1.
 # [*gr_relay_destinations*]
 #   Array of backend carbons for relay.
 #   Default  is [ '127.0.0.1:2004' ]
@@ -151,7 +172,8 @@
 #   Array of backend carbons
 #   Default is [ '127.0.0.1:2004' ]
 # [*gr_aggregator_replication_factor*]
-#   add redundancy by replicating every datapoint to more than one machine.  Default = 1
+#   add redundancy by replicating every datapoint to more than one machine.
+#   Default is 1.
 # [*gr_aggregator_max_queue_size*]
 #   Default is 10000
 # [*gr_aggregator_use_flow_control*]
@@ -161,15 +183,17 @@
 # [*gr_aggregator_rules*]
 #   Array of aggregation rules, as configuration file lines
 #   Default is {
-#    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-#    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+#    'carbon-class-mem' =>
+#       carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+#    'carbon-all-mem' =>
+#       'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
 #    }
 # [*gr_amqp_enable*]
 #   Set this to 'True' to enable the AMQP.
 #   Default is 'False'.
 # [*gr_amqp_verbose*]
-#   Set this to 'True' to enable. Verbose means a line will be logged for every
-#   metric received useful for testing
+#   Set this to 'True' to enable. Verbose means a line will be logged for
+#   every metric received useful for testing.
 #   Default is 'False'.
 # [*gr_amqp_host*]
 #   Self explaining.
@@ -231,10 +255,11 @@
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
 # [*gr_use_remote_user_auth*]
-#   Allow use of REMOTE_USER env variable within Django/Graphite. Default = 'False' (String)
+#   Allow use of REMOTE_USER env variable within Django/Graphite.
+#   Default is 'False' (String)
 # [*gr_remote_user_header_name*]
-#   Allows the use of a custom HTTP header, instead of the REMOTE_USER env variable
-#   (mainly for nginx use) to tell Graphite a user is authenticated.
+#   Allows the use of a custom HTTP header, instead of the REMOTE_USER env
+#   variable (mainly for nginx use) to tell Graphite a user is authenticated.
 #   Useful when using an external auth handler with X-Accel-Redirect etc.
 #   Example value - HTTP_X_REMOTE_USER
 
@@ -277,10 +302,26 @@ class graphite (
     }
   ],
   $gr_storage_aggregation_rules  = {
-    '00_min'         => { pattern => '\.min$',   factor => '0.1', method => 'min' },
-    '01_max'         => { pattern => '\.max$',   factor => '0.1', method => 'max' },
-    '02_sum'         => { pattern => '\.count$', factor => '0.1', method => 'sum' },
-    '99_default_avg' => { pattern => '.*',       factor => '0.5', method => 'average'}
+    '00_min' => {
+      pattern => '\.min$',
+      factor => '0.1',
+      method => 'min'
+    },
+    '01_max' => {
+      pattern => '\.max$',
+      factor => '0.1',
+      method => 'max'
+    },
+    '02_sum' => {
+      pattern => '\.count$',
+      factor => '0.1',
+      method => 'sum'
+    },
+    '99_default_avg' => {
+      pattern => '.*',
+      factor => '0.5',
+      method => 'average'
+    }
   },
   $gr_web_server                = 'apache',
   $gr_web_servername            = $::fqdn,
@@ -306,10 +347,14 @@ class graphite (
   $gr_relay_max_queue_size      = 10000,
   $gr_relay_use_flow_control    = 'True',
   $gr_relay_rules               = {
-    all       => { pattern      => '.*',
-                   destinations => [ '127.0.0.1:2004' ] },
-    'default' => { 'default'    => true,
-                   destinations => [ '127.0.0.1:2004:a' ] },
+    all => {
+      pattern      => '.*',
+      destinations => [ '127.0.0.1:2004' ]
+    },
+    'default' => {
+      'default'    => true,
+      destinations => [ '127.0.0.1:2004:a' ]
+    },
   },
   $gr_enable_carbon_aggregator  = false,
   $gr_aggregator_line_interface = '0.0.0.0',
@@ -323,8 +368,8 @@ class graphite (
   $gr_aggregator_use_flow_control = 'True',
   $gr_aggregator_max_intervals  = 5,
   $gr_aggregator_rules          = {
-    'carbon-class-mem'  => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-    'carbon-all-mem'    => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+    'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
+    'carbon-all-mem'   => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
     },
   $gr_amqp_enable               = 'False',
   $gr_amqp_verbose              = 'False',
@@ -338,7 +383,7 @@ class graphite (
   $gr_memcache_hosts            = undef,
   $secret_key                   = 'UNSAFE_DEFAULT',
   $gr_cluster_enable            = false,
-  $gr_cluster_servers           = "[]",
+  $gr_cluster_servers           = '[]',
   $gr_cluster_fetch_timeout     = 6,
   $gr_cluster_find_timeout      = 2.5,
   $gr_cluster_retry_delay       = 60,
@@ -358,9 +403,9 @@ class graphite (
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
 
-  # The anchor resources allow the end user to establish relationships 
+  # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
-  # implementation classes through a transitive relationship to 
+  # implementation classes through a transitive relationship to
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   anchor { 'graphite::begin':}->
@@ -368,5 +413,4 @@ class graphite (
   class { 'graphite::config':}->
   anchor { 'graphite::end':}
 
-  
 }

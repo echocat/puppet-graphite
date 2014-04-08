@@ -1,6 +1,7 @@
 # == Class: graphite::config_nginx
 #
-# This class configures nginx to talk to graphite/carbon/whisper and SHOULD NOT be called directly.
+# This class configures nginx to talk to graphite/carbon/whisper and SHOULD
+# NOT be called directly.
 #
 # === Parameters
 #
@@ -24,7 +25,7 @@ class graphite::config_nginx inherits graphite::params {
   }
 
   file { '/etc/nginx/sites-enabled/default':
-    ensure => absent,
+    ensure  => absent,
     require => Package['nginx'],
     notify  => Service['nginx'];
   }
@@ -38,8 +39,9 @@ class graphite::config_nginx inherits graphite::params {
       require    => Exec['Chown graphite for web user'];
   }
 
-  # Ensure that some directories exist first. This is normally handled by the package, but if we uninstall and reinstall nginx
-  # and delete /etc/nginx - by default the package manager won't replace the directory.
+  # Ensure that some directories exist first. This is normally handled by the
+  # package, but if we uninstall and reinstall nginx and delete /etc/nginx.
+  # By default the package manager won't replace the directory.
 
   file {
     '/etc/nginx':
@@ -79,7 +81,7 @@ class graphite::config_nginx inherits graphite::params {
   }
 
   # HTTP basic authentication
-  $nginx_htpasswd_file_presence = $graphite::nginx_htpasswd ? {
+  $nginx_htpasswd_file_presence = $::graphite::nginx_htpasswd ? {
     undef   => absent,
     default => file,
   }
@@ -87,8 +89,8 @@ class graphite::config_nginx inherits graphite::params {
     '/etc/nginx/graphite-htpasswd':
       ensure  => $nginx_htpasswd_file_presence,
       mode    => '0400',
-      owner   => "${::graphite::params::web_user}",
-      content => $graphite::nginx_htpasswd,
+      owner   => $::graphite::params::web_user,
+      content => $::graphite::nginx_htpasswd,
       require => Package['nginx'],
       notify  => Service['nginx'];
   }
