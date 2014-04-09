@@ -4,7 +4,7 @@
 
 1. [Overview - What is the graphite module?](#overview)
 2. [Module Description - What does this module do?](#module-description)
-3. [Setup - The basics of getting started with apache](#setup)
+3. [Setup - The basics of getting started with graphite](#setup)
     * [Beginning with graphite - Installation](#beginning-with-graphite)
     * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
     * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-24-and-cors)
