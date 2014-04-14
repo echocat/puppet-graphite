@@ -206,10 +206,10 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 # BIND_PATTERNS = #
 
 # To configure special settings for the carbon-cache instance 'b', uncomment this:
-#[cache:b]
-#LINE_RECEIVER_PORT = 2103
-#PICKLE_RECEIVER_PORT = 2104
-#CACHE_QUERY_PORT = 7102
+[cache:b]
+LINE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_line_receiver_port_b') %>
+PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_pickle_receiver_port_b') %>
+CACHE_QUERY_PORT = <%= scope.lookupvar('graphite::gr_cache_query_port_b') %>
 # and any other settings you want to customize, defaults are inherited
 # from [carbon] section.
 # You can then specify the --instance=b option to manage this instance

@@ -397,7 +397,10 @@ class graphite (
   $gr_ldap_base_pass            = '',
   $gr_ldap_user_query           = '(username=%s)',
   $gr_use_remote_user_auth      = 'False',
-  $gr_remote_user_header_name   = undef
+  $gr_remote_user_header_name   = undef,
+  $gr_line_receiver_port_b      = '2103',
+  $gr_pickle_receiver_port_b    = '2104',
+  $gr_cache_query_port_b        = '7102'
 ) {
   # Validation of input variables.
   # TODO - validate all the things
