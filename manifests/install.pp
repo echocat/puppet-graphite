@@ -25,11 +25,6 @@ class graphite::install(
   #           python-django-tagging, python-simplejson
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
-  package { $::graphite::params::graphitepkgs :
-    ensure   => 'installed',
-    provider => undef, # default to package provider auto-discovery
-  }
-
   # using the pip package provider requires python-pip
   if ! defined(Package[$::graphite::params::python_dev_pkg]) {
     package { $::graphite::params::python_pip_pkg :
@@ -54,6 +49,10 @@ class graphite::install(
     }
   }
 
+  package { $::graphite::params::graphitepkgs :
+    ensure   => 'installed',
+    provider => undef, # default to package provider auto-discovery
+  }->
   package{'django-tagging':
     ensure   => $django_tagging_ver,
   }->
