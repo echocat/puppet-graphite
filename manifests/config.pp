@@ -69,6 +69,7 @@ class graphite::config inherits graphite::params {
     file {
       '/opt/graphite/storage/whisper':
         ensure  => directory,
+        path    => $::graphite::gr_local_data_dir,
         owner   => $::graphite::gr_user,
         group   => $::graphite::gr_user,
         mode    => '0755',

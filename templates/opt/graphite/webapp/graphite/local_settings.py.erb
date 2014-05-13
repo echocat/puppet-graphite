@@ -74,7 +74,7 @@ MEMCACHE_HOSTS = [<% scope.lookupvar('graphite::gr_memcache_hosts').each do |mem
 
 ## Data directories
 # NOTE: If any directory is unreadable in DATA_DIRS it will break metric browsing
-#WHISPER_DIR = '/opt/graphite/storage/whisper'
+WHISPER_DIR = '<%= scope.lookupvar('graphite::gr_local_data_dir') %>'
 #RRD_DIR = '/opt/graphite/storage/rrd'
 #DATA_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
 #LOG_DIR = '/opt/graphite/storage/log/webapp'

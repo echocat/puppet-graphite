@@ -397,7 +397,8 @@ class graphite (
   $gr_ldap_base_pass            = '',
   $gr_ldap_user_query           = '(username=%s)',
   $gr_use_remote_user_auth      = 'False',
-  $gr_remote_user_header_name   = undef
+  $gr_remote_user_header_name   = undef,
+  $gr_local_data_dir            = '/opt/graphite/storage/whisper'
 ) {
   # Validation of input variables.
   # TODO - validate all the things
