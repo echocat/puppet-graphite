@@ -98,7 +98,6 @@ class graphite::params {
         'python-crypto',
         'pyOpenSSL',
         'gcc',
-        'python-zope-filesystem',
         'python-zope-interface',
         'MySQL-python'
       ]
