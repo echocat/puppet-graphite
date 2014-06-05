@@ -56,7 +56,8 @@ class graphite::params {
         'python-memcache',
         'python-sqlite',
         'python-simplejson',
-        'python-mysqldb'
+        'python-mysqldb',
+        'python-psycopg2'
       ]
     }
     'redhat': {
@@ -99,7 +100,8 @@ class graphite::params {
         'pyOpenSSL',
         'gcc',
         'python-zope-interface',
-        'MySQL-python'
+        'MySQL-python',
+        'python-psycopg2'
       ]
     }
     default: {fail('unsupported os.')}
