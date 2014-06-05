@@ -1,3 +1,11 @@
+## 2014-06-05 - 5.3.3 (Bugfix release)
+
+#### Bugfixes:
+
+- add libs for PostgreSQL support
+- fix dependency problem with missing gcc on first puppet run
+- remove package dependeny problem with python-zope on RedHat
+
 ## 2014-04-08 - 5.3.2 (Bugfix release)
 
 #### Bugfixes:
