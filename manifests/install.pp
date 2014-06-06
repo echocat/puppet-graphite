@@ -27,18 +27,6 @@ class graphite::install(
 
   # using the pip package provider requires python-pip
   if ! defined(Package[$::graphite::params::python_dev_pkg]) {
-    package { $::graphite::params::python_pip_pkg :
-      provider => undef, # default to package provider auto-discovery
-      before   => [
-        Package['django-tagging'],
-        Package['twisted'],
-        Package['txamqp'],
-      ]
-    }
-  }
-
-  # using the pip package provider requires python-pip
-  if ! defined(Package[$::graphite::params::python_dev_pkg]) {
     package { $::graphite::params::python_dev_pkg :
       provider => undef, # default to package provider auto-discovery
       before   => [
