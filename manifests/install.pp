@@ -45,9 +45,11 @@ class graphite::install(
     ensure   => $django_tagging_ver,
   }->
   package{'twisted':
+    name     => 'Twisted',
     ensure   => $twisted_ver,
   }->
   package{'txamqp':
+    name     => 'txAMQP',
     ensure   => $txamqp_ver,
   }->
   package{'graphite-web':
