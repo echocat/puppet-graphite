@@ -5,7 +5,12 @@
 # in this file to your chosen install location.
 
 <IfModule !wsgi_module.c>
+  <%- if @osfamily == "Debian" -%>
+    LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so
+  <%- end -%>
+  <%- if @osfamily == "RedHat" -%>
     LoadModule wsgi_module modules/mod_wsgi.so
+  <%- end -%>
 </IfModule>
 
 # XXX You need to set this up!
