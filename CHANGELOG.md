@@ -1,6 +1,6 @@
 ## 2014-06-17 - 5.3.4 (Bugfix release)
 
-### Bugfixes:
+#### Bugfixes:
 
 - pip allways reinstalled twisted and txamqo, which triggered service restarts
 - remove duplicate function
