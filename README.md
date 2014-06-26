@@ -162,6 +162,10 @@ Default is 7002. Self explaining.
 
 Default is 'GMT' (string). Timezone for graphite to be used.
 
+#####`gr_local_data_dir`
+
+Default is '/opt/graphite/storage/whisper'. Set location of whisper files.
+
 #####`gr_storage_schemas`
 
 Default is
