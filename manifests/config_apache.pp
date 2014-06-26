@@ -33,6 +33,7 @@ class graphite::config_apache inherits graphite::params {
       if $::graphite::gr_web_cors_allow_from_all {
         exec { 'enable mod_headers':
           command => 'a2enmod headers',
+          creates => '/etc/apache2/mods-enabled/headers.load',
           require => Package[$::graphite::params::apache_wsgi_pkg]
         }
       }
