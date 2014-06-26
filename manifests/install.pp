@@ -8,8 +8,8 @@
 #
 class graphite::install(
   $django_tagging_ver = '0.3.1',
-  $twisted_ver = '11.1.0',
-  $txamqp_ver = '0.4',
+  $twisted_ver        = '11.1.0',
+  $txamqp_ver         = '0.4',
 ) inherits graphite::params {
 
   if $caller_module_name != $module_name {
@@ -26,6 +26,20 @@ class graphite::install(
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
   # using the pip package provider requires python-pip
+  
+  if ! defined(Package[$::graphite::params::python_pip_pkg]) {
+    package { $::graphite::params::python_pip_pkg :
+      provider => undef, # default to package provider auto-discovery
+      before   => [
+        Package['django-tagging'],
+        Package['twisted'],
+        Package['txamqp'],
+      ]
+    }
+  }
+
+  # install python headers and libs for pip
+  
   if ! defined(Package[$::graphite::params::python_dev_pkg]) {
     package { $::graphite::params::python_dev_pkg :
       provider => undef, # default to package provider auto-discovery
