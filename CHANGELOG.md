@@ -1,3 +1,16 @@
+## 2014-06-26 - 5.4.0 (Feature/Bugfix release)
+
+#### Features:
+
+- you can set location for whisper files `gr_local_data_dir`
+
+#### Bugfixes:
+
+- missing package pip is installed
+- Debian apache mod_headers is not reconfigure every run
+- Debian apache sets absolute path to wsgi_module
+- Debian package python-django-tagging is installed via pip
+
 ## 2014-06-17 - 5.3.4 (Bugfix release)
 
 #### Bugfixes:
