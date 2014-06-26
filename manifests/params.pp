@@ -51,7 +51,6 @@ class graphite::params {
         'python-cairo',
         'python-twisted',
         'python-django',
-        'python-django-tagging',
         'python-ldap',
         'python-memcache',
         'python-sqlite',
