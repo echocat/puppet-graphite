@@ -38,8 +38,8 @@ class graphite::config_apache inherits graphite::params {
         }
       }
       exec { 'Disable default apache site':
-        command => 'a2dissite default',
-        onlyif  => 'test -f /etc/apache2/sites-enabled/000-default',
+        command => 'a2dissite 000-default',
+        onlyif  => 'test -f /etc/apache2/sites-enabled/000-default.conf',
         require => Package[$::graphite::params::apache_wsgi_pkg],
         notify  => Service[$::graphite::params::apache_service_name];
       }
