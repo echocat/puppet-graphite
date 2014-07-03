@@ -76,7 +76,7 @@ The defaults are determined by your operating system e.g. Debian systems have on
 
 If you use a system which ships Apache 2.4, then you will need a slightly different vhost config.
 Here is an example with Apache 2.4 and [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) enabled.
-If you do not know what CORS, then do not use it. Its disabled by default.
+If you do not know what CORS, then do not use it. Its disabled by default. You will need CORS for Webguis like Grafana.
 
 ```puppet
   class { 'graphite':
@@ -209,6 +209,7 @@ Default is `$::fqdn` (string). Virtualhostname of Graphite webgui.
 #####`gr_web_cors_allow_from_all`
 
 Default is false (boolean). Include CORS Headers for all hosts (*) in web server config.
+This is needed for tools like Grafana.
 
 #####`gr_apache_port`
 
