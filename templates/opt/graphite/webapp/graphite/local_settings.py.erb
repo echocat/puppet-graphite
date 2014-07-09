@@ -45,7 +45,7 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 #MEMCACHE_HOSTS = ['10.10.10.10:11211', '10.10.10.11:11211', '10.10.10.12:11211']
 
 <% unless scope.lookupvar('graphite::gr_memcache_hosts') == :undef -%>
-MEMCACHE_HOSTS = [<% scope.lookupvar('graphite::gr_memcache_hosts').each do |memcached| %>'<%= memcached -%>',<% end -%>]
+MEMCACHE_HOSTS = ['<%= scope.lookupvar('graphite::gr_memcache_hosts').join("','") %>']
 <% end -%>
 
 #DEFAULT_CACHE_DURATION = 60 # Cache images and data for 1 minute
