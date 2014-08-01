@@ -104,6 +104,8 @@
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
 #   Default is FQDN.
+# [*gr_web_user*]
+#   Username of files to be served by webserver.  Use only with gr_web_server => 'none'.
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
@@ -325,6 +327,7 @@ class graphite (
   },
   $gr_web_server                = 'apache',
   $gr_web_servername            = $::fqdn,
+  $gr_web_user                  = undef,
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
