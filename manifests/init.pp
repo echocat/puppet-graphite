@@ -28,24 +28,29 @@
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
-# [*gr_line_receiver_port*]
-#   Port of line receiver.
-#   Default is 2003
+# [*gr_enable_carbon_cache*]
+#   Enable carbon cache
+#   Default is true
+# [*gr_cache_instances*]
+#   Data structure describing port configuration for carbon-cache instances
+#   Defaults to:
+#   [
+#     {
+#       'line_receiver_port'   => 2003,
+#       'pickle_receiver_port' => 2004,
+#       'cache_query_port'     => 7002,
+#       'udp_receiver_port'    => 2003,
+#     },
+#  ],
 # [*gr_enable_udp_listener*]
 #   Set this to True to enable the UDP listener.
 #   Default is False.
 # [*gr_udp_receiver_interface*]
 #   Its clear, isnt it?
 #   Default is 0.0.0.0
-# [*gr_udp_receiver_port*]
-#   Self explaining.
-#   Default is 2003
 # [*gr_pickle_receiver_interface*]
 #   Pickle is a special receiver who handle tuples of data.
 #   Default is 0.0.0.0
-# [*gr_pickle_receiver_port*]
-#   Self explaining.
-#   Default is 2004
 # [*gr_use_insecure_unpickler*]
 #   Set this to True to revert to the old-fashioned insecure unpickler.
 #   Default is False.
@@ -55,9 +60,6 @@
 # [*gr_cache_query_interface*]
 #   Interface to send cache queries to.
 #   Default is 0.0.0.0
-# [*gr_cache_query_port*]
-#   Self explaining.
-#   Default is 7002.
 # [*gr_timezone*]
 #   Timezone for graphite to be used.
 #   Default is GMT.
@@ -285,16 +287,21 @@ class graphite (
   $gr_max_creates_per_minute    = 50,
   $gr_carbon_metric_interval    = 60,
   $gr_line_receiver_interface   = '0.0.0.0',
-  $gr_line_receiver_port        = 2003,
   $gr_enable_udp_listener       = 'False',
   $gr_udp_receiver_interface    = '0.0.0.0',
-  $gr_udp_receiver_port         = 2003,
   $gr_pickle_receiver_interface = '0.0.0.0',
-  $gr_pickle_receiver_port      = 2004,
   $gr_use_insecure_unpickler    = 'False',
   $gr_use_whitelist             = 'False',
+  $gr_enable_carbon_cache       = true,
   $gr_cache_query_interface     = '0.0.0.0',
-  $gr_cache_query_port          = 7002,
+  $gr_cache_instances           = [
+     {
+       'line_receiver_port'   => 2003,
+       'pickle_receiver_port' => 2004,
+       'cache_query_port'     => 7002,
+       'udp_receiver_port'    => 2003,
+     },
+  ],
   $gr_timezone                  = 'GMT',
   $gr_storage_schemas           = [
     {

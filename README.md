@@ -122,10 +122,6 @@ Default is 60. Set the interval between sending internal performance metrics; af
 
 Default is '0.0.0.0' (string). Interface the line receiver listens.
 
-#####`gr_line_receiver_port`
-
-Default is 2003. Port of line receiver.
-
 #####`gr_enable_udp_listener`
 
 Default is 'False' (string). Set this to True to enable the UDP listener.
@@ -134,17 +130,9 @@ Default is 'False' (string). Set this to True to enable the UDP listener.
 
 Default is '0.0.0.0' (string). Its clear, isnt it?
 
-#####`gr_udp_receiver_port`
-
-Default is 2003. Self explaining.
-
 #####`gr_pickle_receiver_interface`
 
 Default is '0.0.0.0' (string). Pickle is a special receiver who handle tuples of data.
-
-#####`gr_pickle_receiver_port`
-
-Default is 2004. Self explaining
 
 #####`gr_use_insecure_unpickler`
 
@@ -158,9 +146,17 @@ Default is 'False' (string). Set this to 'True' to enable whitelists and blackli
 
 Default is '0.0.0.0'. Interface to send cache queries to.
 
-#####`gr_cache_query_port`
-
-Default is 7002. Self explaining.
+#####`gr_cache_instances`
+Data structure describing port configuration for carbon-cache instances
+Defaults to:
+[
+  {
+    'line_receiver_port'   => 2003,
+    'pickle_receiver_port' => 2004,
+    'cache_query_port'     => 7002,
+    'udp_receiver_port'    => 2003,
+  },
+]
 
 #####`gr_timezone`
 
