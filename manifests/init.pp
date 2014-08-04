@@ -4,6 +4,9 @@
 #
 # === Parameters
 #
+# [*gr_group*]
+#   The group of the user (see gr_user) who runs graphite.
+#   Default is empty.
 # [*gr_user*]
 #   The user who runs graphite. If this is empty carbon runs as the user that
 #   invokes it.
@@ -104,8 +107,10 @@
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
 #   Default is FQDN.
+# [*gr_web_group*]
+#   Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 # [*gr_web_user*]
-#   Username of files to be served by webserver.  Use only with gr_web_server => 'none'.
+#   Username to chown the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
@@ -274,6 +279,7 @@
 # }
 #
 class graphite (
+  $gr_group                     = '',
   $gr_user                      = '',
   $gr_max_cache_size            = inf,
   $gr_max_updates_per_second    = 500,
@@ -327,6 +333,7 @@ class graphite (
   },
   $gr_web_server                = 'apache',
   $gr_web_servername            = $::fqdn,
+  $gr_web_group                 = undef,
   $gr_web_user                  = undef,
   $gr_web_cors_allow_from_all   = false,
   $gr_apache_port               = 80,

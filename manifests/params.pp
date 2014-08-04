@@ -38,6 +38,14 @@ class graphite::params {
       $apacheconf_dir = '/etc/apache2/sites-available'
       $apacheports_file = 'ports.conf'
       $apache_dir = '/etc/apache2'
+      if "$graphite::gr_web_group" != ""
+      {
+        $web_group = $graphite::gr_web_group
+      }
+      else
+      {
+        $web_group = 'www-data'
+      }
       if "$graphite::gr_web_user" != ""
       {
         $web_user = $graphite::gr_web_user
@@ -74,6 +82,14 @@ class graphite::params {
       $apacheconf_dir = '/etc/httpd/conf.d'
       $apacheports_file = 'graphite_ports.conf'
       $apache_dir = '/etc/httpd'
+      if "$graphite::gr_web_group" != ""
+      {
+        $web_group = $graphite::gr_web_group
+      }
+      else
+      {
+        $web_group = 'www-data'
+      }
       if "$graphite::gr_web_user" != ""
       {
         $web_user = $graphite::gr_web_user

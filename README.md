@@ -94,6 +94,10 @@ This is the primary class. And the only one which should be used.
 
 **Parameters within `graphite`:**
 
+#####`gr_group`
+
+Default is empty. The group of the user (see gr_user) who runs graphite.
+
 #####`gr_user`
 
 Default is empty. The user who runs graphite. If this is empty carbon runs as the user that invokes it.
@@ -210,6 +214,13 @@ Default is `$::fqdn` (string). Virtualhostname of Graphite webgui.
 
 Default is false (boolean). Include CORS Headers for all hosts (*) in web server config.
 This is needed for tools like Grafana.
+
+#####`gr_web_group`
+
+Default is undef. Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
+
+#####`gr_web_user`
+Default is undef. Username to chown the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 
 #####`gr_apache_port`
 
