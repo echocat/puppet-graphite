@@ -56,7 +56,7 @@ class graphite::config inherits graphite::params {
   # change access permissions for web server
 
   exec { 'Chown graphite for web user':
-    command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_user} /opt/graphite/storage/",
+    command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_group} /opt/graphite/storage/",
     cwd         => '/opt/graphite/',
     refreshonly => true,
     require     => $web_server_package_require,
@@ -71,13 +71,13 @@ class graphite::config inherits graphite::params {
         ensure  => directory,
         path    => $::graphite::gr_local_data_dir,
         owner   => $::graphite::gr_user,
-        group   => $::graphite::gr_user,
+        group   => $::graphite::gr_group,
         mode    => '0755',
         require => Exec['Chown graphite for web user'];
       '/opt/graphite/storage/log/carbon-cache':
         ensure  => directory,
         owner   => $::graphite::gr_user,
-        group   => $::graphite::gr_user,
+        group   => $::graphite::gr_group,
         mode    => '0755',
         require => Exec['Chown graphite for web user'];
     }
@@ -89,14 +89,14 @@ class graphite::config inherits graphite::params {
     '/opt/graphite/webapp/graphite/local_settings.py':
       ensure  => file,
       owner   => $::graphite::params::web_user,
-      group   => $::graphite::params::web_user,
+      group   => $::graphite::params::web_group,
       mode    => '0644',
       content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
       require => $web_server_package_require;
     '/opt/graphite/conf/graphite.wsgi':
       ensure  => file,
       owner   => $::graphite::params::web_user,
-      group   => $::graphite::params::web_user,
+      group   => $::graphite::params::web_group,
       mode    => '0644',
       content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
       require => $web_server_package_require;
@@ -107,7 +107,7 @@ class graphite::config inherits graphite::params {
       '/opt/graphite/webapp/graphite/custom_auth.py':
         ensure  => file,
         owner   => $::graphite::params::web_user,
-        group   => $::graphite::params::web_user,
+        group   => $::graphite::params::web_group,
         mode    => '0644',
         content => template('graphite/opt/graphite/webapp/graphite/custom_auth.py.erb'),
         require => $web_server_package_require;
