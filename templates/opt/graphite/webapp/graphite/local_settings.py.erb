@@ -221,12 +221,14 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 #
 # You *should* use 127.0.0.1 here in most cases
 <%
-carbonlink_hosts = Array.new
-scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i|
-  carbonlink_hosts.push("'127.0.0.1:" + instance['cache_query_port'].to_s + ":" + i.to_s + "'")
-end
+  if scope.lookupvar('graphite::gr_enable_carbon_cache')
+    carbonlink_hosts = Array.new
+    scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i|
+      carbonlink_hosts.push("'127.0.0.1:" + instance['cache_query_port'].to_s + ":" + i.to_s + "'")
+    end
 -%>
 CARBONLINK_HOSTS = [ <%= carbonlink_hosts.join(', ') %> ]
+<% end -%>
 #CARBONLINK_TIMEOUT = 1.0
 
 #####################################
