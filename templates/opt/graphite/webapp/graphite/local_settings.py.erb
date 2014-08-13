@@ -132,7 +132,7 @@ LDAP_USER_QUERY = "<%= scope.lookupvar('graphite::gr_ldap_user_query') %>"
 
 <% if scope.lookupvar('graphite::gr_use_ldap') and scope.lookupvar('graphite::gr_ldap_options') -%>
 import ldap
-<% scope.lookupvar('graphite::gr_ldap_options').each do |k, v| -%>
+<% scope.lookupvar('graphite::gr_ldap_options').sort.map do |k, v| -%>
 ldap.set_option(<%= k %>, <%= v %>)
 <% end -%>
 <% end -%>
