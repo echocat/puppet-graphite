@@ -169,8 +169,13 @@ class graphite::config inherits graphite::params {
       notify  => $notify_services;
     '/opt/graphite/conf/storage-aggregation.conf':
       mode    => '0644',
-      content => template('graphite/opt/graphite/conf/storage-aggregation.conf.erb'),
-      #notify  => $notify_services;
+      content => template('graphite/opt/graphite/conf/storage-aggregation.conf.erb');
+    '/opt/graphite/conf/whitelist.conf':
+      mode    => '0644',
+      content => template('graphite/opt/graphite/conf/whitelist.conf.erb');
+    '/opt/graphite/conf/blacklist.conf':
+      mode    => '0644',
+      content => template('graphite/opt/graphite/conf/blacklist.conf.erb');
   }
 
 
