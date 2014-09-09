@@ -225,15 +225,14 @@
 #   Default is 'False'.
 # [*gr_memcache_hosts*]
 #   Array of memcache hosts. e.g.: ['127.0.0.1:11211', '10.10.10.1:11211']
-#   Defalut is undef
+#   Defalut is undef.
 # [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
-# [*gr_cluster_enable*]
-#   en/dis-able cluster configuration.   Default: false
 # [*gr_cluster_servers*]
-#   list of IP:port tuples for the servers in the cluster.  Default: "[]"
+#   Array of webbapp hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
+#   Default is undef.
 # [*gr_cluster_fetch_timeout*]
 #    Timeout to fetch series data.   Default = 6
 # [*gr_cluster_find_timeout*]
@@ -392,8 +391,7 @@ class graphite (
   $gr_amqp_metric_name_in_body  = 'False',
   $gr_memcache_hosts            = undef,
   $secret_key                   = 'UNSAFE_DEFAULT',
-  $gr_cluster_enable            = false,
-  $gr_cluster_servers           = '[]',
+  $gr_cluster_servers           = undef,
   $gr_cluster_fetch_timeout     = 6,
   $gr_cluster_find_timeout      = 2.5,
   $gr_cluster_retry_delay       = 60,
