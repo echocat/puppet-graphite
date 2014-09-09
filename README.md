@@ -327,6 +327,26 @@ Default is undef (array). List of memcache hosts to use. eg ['127.0.0.1:11211','
 
 Default is 'UNSAFE_DEFAULT' (string). CHANGE IT! Secret used as salt for things like hashes, cookies, sessions etc. Has to be the same on all nodes of a graphite cluster.
 
+#####`gr_cluster_servers`
+
+Default is undef (array). Array of webbapp hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
+
+#####`gr_cluster_fetch_timeout`
+
+Default is 6. Timeout to fetch series data.
+
+#####`gr_cluster_find_timeout`
+
+Default is 2.5 . Timeout for metric find requests.   
+
+#####`gr_cluster_retry_delay`
+
+Default is 10.  Time before retrying a failed remote webapp.
+
+#####`gr_cluster_cache_duration`
+
+Default is 300. Time to cache remote metric find results.
+
 #####`nginx_htpasswd`
 
 Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'
