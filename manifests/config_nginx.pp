@@ -69,7 +69,8 @@ class graphite::config_nginx inherits graphite::params {
         File['/etc/nginx/sites-available'],
         Exec['Initial django db creation'],
         Exec['Chown graphite for web user']
-      ];
+      ],
+      notify  => Service['nginx'];
     '/etc/nginx/sites-enabled/graphite':
       ensure  => link,
       target  => '/etc/nginx/sites-available/graphite',
