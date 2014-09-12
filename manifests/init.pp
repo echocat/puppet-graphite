@@ -247,6 +247,9 @@
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
 #   given user & password.
 #   Default is undefined
+# [*nginx_proxy_read_timeout*]
+#   Value to use for nginx's proxy_read_timeout setting
+#   Default is 10s
 # [*manage_ca_certificate*]
 #   Used to determine to install ca-certificate or not. default = true
 # [*gr_use_ldap*]
@@ -399,6 +402,7 @@ class graphite (
   $gr_cluster_retry_delay       = 60,
   $gr_cluster_cache_duration    = 300,
   $nginx_htpasswd               = undef,
+  $nginx_proxy_read_timeout     = 10,
   $manage_ca_certificate        = true,
   $gr_use_ldap                  = false,
   $gr_ldap_uri                  = '',
