@@ -146,6 +146,10 @@ Default is 'False' (string). Set this to 'True' to enable whitelists and blackli
 
 Default is '0.0.0.0'. Interface to send cache queries to.
 
+#####`gr_enable_carbon_cache`
+
+Enable carbon-cache. Default is true.
+
 #####`gr_cache_instances`
 Data structure describing port configuration for carbon-cache instances
 Defaults to:
