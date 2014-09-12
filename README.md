@@ -150,6 +150,14 @@ Default is 'False' (string). Set this to 'True' to revert to the old-fashioned i
 
 Default is 'False' (string). Set this to 'True' to enable whitelists and blacklists.
 
+#####`gr_whitelist`
+
+List of patterns to be included in whitelist.conf. Default is [ '.*' ].
+
+#####`gr_blacklist`
+
+List of patterns to be included in blacklist.conf. Default is [ ].
+
 #####`gr_cache_query_interface`
 
 Default is '0.0.0.0'. Interface to send cache queries to.
