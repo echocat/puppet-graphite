@@ -269,6 +269,9 @@
 #   variable (mainly for nginx use) to tell Graphite a user is authenticated.
 #   Useful when using an external auth handler with X-Accel-Redirect etc.
 #   Example value - HTTP_X_REMOTE_USER
+# [*gunicorn_arg_timeout*]
+#   value to pass to gunicorns --timeout arg.
+#   Default is 30
 
 # === Examples
 #
@@ -408,7 +411,8 @@ class graphite (
   $gr_ldap_user_query           = '(username=%s)',
   $gr_use_remote_user_auth      = 'False',
   $gr_remote_user_header_name   = undef,
-  $gr_local_data_dir            = '/opt/graphite/storage/whisper'
+  $gr_local_data_dir            = '/opt/graphite/storage/whisper',
+  $gunicorn_arg_timeout         = 30
 ) {
   # Validation of input variables.
   # TODO - validate all the things

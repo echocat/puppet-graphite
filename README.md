@@ -373,6 +373,10 @@ combined with the option `gr_web_server` = 'wsgionly' and http://forge.puppetlab
 with some custom vhosts.
 The sample external auth app is available from [here](https://github.com/antoinerg/nginx_auth_backend)
 
+#####`gunicorn_arg_timeout`
+
+Default is 30.  value to pass to gunicorns --timeout arg.
+
 ##Requirements
 
 ###Modules needed:
