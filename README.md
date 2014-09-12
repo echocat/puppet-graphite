@@ -215,6 +215,22 @@ Default is `$::fqdn` (string). Virtualhostname of Graphite webgui.
 Default is false (boolean). Include CORS Headers for all hosts (*) in web server config.
 This is needed for tools like Grafana.
 
+#####`gr_use_ssl`
+
+If true, alter web server config to enable SSL. Default is false (boolean).
+
+#####`gr_ssl_cert`
+
+Path to SSL cert file. Default is undef.
+
+#####`gr_ssl_key`
+
+Path to SSL key file. Default is undef.
+
+#####`gr_ssl_dir`
+
+Path to SSL dir containing keys and certs. Default is undef.
+
 #####`gr_web_group`
 
 Default is undef. Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
