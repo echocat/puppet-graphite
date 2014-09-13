@@ -52,6 +52,12 @@
 #[*gr_use_whitelist*]
 #   Set this to True to allow for using whitelists and blacklists.
 #   Default is False.
+#[*gr_whitelist*]
+#   List of patterns to be included in whitelist.conf.
+#   Default is [ '.*' ]
+#[*gr_blacklist*]
+#   List of patterns to be included in blacklist.conf.
+#   Default is [ ]
 # [*gr_cache_query_interface*]
 #   Interface to send cache queries to.
 #   Default is 0.0.0.0
@@ -293,6 +299,8 @@ class graphite (
   $gr_pickle_receiver_port      = 2004,
   $gr_use_insecure_unpickler    = 'False',
   $gr_use_whitelist             = 'False',
+  $gr_whitelist                 = [ '.*' ],
+  $gr_blacklist                 = [ ],
   $gr_cache_query_interface     = '0.0.0.0',
   $gr_cache_query_port          = 7002,
   $gr_timezone                  = 'GMT',
