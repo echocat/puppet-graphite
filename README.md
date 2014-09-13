@@ -114,6 +114,10 @@ Default is 500. Limits the number of whisper update_many() calls per second, whi
 
 Default is 50. Softly limits the number of whisper files that get created each minute.
 
+#####`gr_carbon_metric_prefix`
+
+The prefix to be applied to internal performance metrics. Defaults to 'carbon'.
+
 #####`gr_carbon_metric_interval`
 
 Default is 60. Set the interval between sending internal performance metrics; affects all carbon daemons.
