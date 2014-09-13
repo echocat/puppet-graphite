@@ -254,6 +254,10 @@ Default is 80. The HTTP port apache will use.
 
 Default is 443. The HTTPS port apache will use.
 
+#####`gr_apache_conf_template`
+
+Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-available/graphite.conf.erb'.
+
 #####`gr_apache_24`
 
 Default is false (boolean). If you set this to 'true' and use 'apache' in `gr_web_server`, then the configuration for Apache 2.4 is used, else it will be Apache 2.2 compatible configuration.
