@@ -120,6 +120,18 @@
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
+# [*gr_use_ssl*]
+#   If true, alter web server config to enable SSL.
+#   Default is false.
+# [*gr_ssl_cert*]
+#   Path to SSL cert file.
+#   Default is undef.
+# [*gr_ssl_key*]
+#   Path to SSL key file.
+#   Default is undef.
+# [*gr_ssl_dir]
+#   Path to SSL dir containing keys and certs.
+#   Default is undef
 # [*gr_apache_port*]
 #   The port to run graphite web server on.
 #   Default is 80.
@@ -343,6 +355,10 @@ class graphite (
   $gr_web_group                 = undef,
   $gr_web_user                  = undef,
   $gr_web_cors_allow_from_all   = false,
+  $gr_use_ssl                   = false,
+  $gr_ssl_cert                  = undef,
+  $gr_ssl_key                   = undef,
+  $gr_ssl_dir                   = undef,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
   $gr_apache_24                 = false,
