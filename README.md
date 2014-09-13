@@ -375,6 +375,10 @@ Default is 300. Time to cache remote metric find results.
 
 Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'
 
+#####`nginx_proxy_read_timeout`
+
+Default is 10. Value to use for nginx's proxy_read_timeout setting
+
 #####`manage_ca_certificate`
 
 Default is true (boolean). Used to determine if the module should install ca-certificate on Debian machines during the initial installation.
