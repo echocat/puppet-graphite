@@ -407,6 +407,10 @@ Default is '' (string). Set ldap password.
 
 Default is '(username=%s)' (string). Set ldap user query.
 
+#####`gr_ldap_options`
+
+Hash of additional LDAP options to be enabled. For example, `{ 'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW' }`. Default is `{ }`.
+
 #####`gr_use_remote_user_auth`
 
 Default is 'False' (string). Allow use of REMOTE_USER env variable within Django/Graphite.

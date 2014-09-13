@@ -281,6 +281,10 @@
 #   Set ldap password.  Default = ''
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
+# [*gr_ldap_options*]
+#   Hash of additional LDAP options to be enabled. 
+#   For example, { 'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW' }
+#   Default = { }
 # [*gr_use_remote_user_auth*]
 #   Allow use of REMOTE_USER env variable within Django/Graphite.
 #   Default is 'False' (String)
@@ -435,6 +439,7 @@ class graphite (
   $gr_ldap_base_user            = '',
   $gr_ldap_base_pass            = '',
   $gr_ldap_user_query           = '(username=%s)',
+  $gr_ldap_options              = {},
   $gr_use_remote_user_auth      = 'False',
   $gr_remote_user_header_name   = undef,
   $gr_local_data_dir            = '/opt/graphite/storage/whisper',
