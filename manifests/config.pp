@@ -185,7 +185,6 @@ class graphite::config inherits graphite::params {
     copytruncate  => true,
     missingok     => false,
     ifempty       => false,
-    postrotate    => 'service carbon-cache restart',
   }
 
   # startup carbon engine
