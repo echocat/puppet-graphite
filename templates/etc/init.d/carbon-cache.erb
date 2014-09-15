@@ -14,13 +14,19 @@
 
 case "$1" in
 	start)
-		python /opt/graphite/bin/carbon-cache.py start
+    <% scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i| -%>
+    python /opt/graphite/bin/carbon-cache.py --instance <%= i %> start
+    <% end -%>
 		;;
 	stop)
-		python /opt/graphite/bin/carbon-cache.py stop
+    <% scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i| -%>
+    python /opt/graphite/bin/carbon-cache.py --instance <%= i %> stop
+    <% end -%>
 		;;
 	status)
-		python /opt/graphite/bin/carbon-cache.py status
+    <% scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i| -%>
+    python /opt/graphite/bin/carbon-cache.py --instance <%= i %> status
+    <% end -%>
 		;;
 	restart)
 		$0 stop ; sleep 3 ; $0 start

@@ -71,17 +71,14 @@ MAX_UPDATES_PER_SECOND = <%= scope.lookupvar('graphite::gr_max_updates_per_secon
 MAX_CREATES_PER_MINUTE = <%= scope.lookupvar('graphite::gr_max_creates_per_minute') %>
 
 LINE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_line_receiver_interface') %>
-LINE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_line_receiver_port') %>
 
 # Set this to True to enable the UDP listener. By default this is off
 # because it is very common to run multiple carbon daemons and managing
 # another (rarely used) port for every carbon instance is not fun.
 ENABLE_UDP_LISTENER = <%= scope.lookupvar('graphite::gr_enable_udp_listener') %>
 UDP_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_udp_receiver_interface') %>
-UDP_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_udp_receiver_port') %>
 
 PICKLE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_pickle_receiver_interface') %>
-PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_pickle_receiver_port') %>
 
 # Set to false to disable logging of successful connections
 LOG_LISTENER_CONNECTIONS = True
@@ -92,7 +89,6 @@ LOG_LISTENER_CONNECTIONS = True
 USE_INSECURE_UNPICKLER = <%= scope.lookupvar('graphite::gr_use_insecure_unpickler') %>
 
 CACHE_QUERY_INTERFACE = <%= scope.lookupvar('graphite::gr_cache_query_interface') %>
-CACHE_QUERY_PORT = <%= scope.lookupvar('graphite::gr_cache_query_port') %>
 
 # Set this to False to drop datapoints received after the cache
 # reaches MAX_CACHE_SIZE. If this is True (the default) then sockets
@@ -205,15 +201,16 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 # Example: store everything
 # BIND_PATTERNS = #
 
-# To configure special settings for the carbon-cache instance 'b', uncomment this:
-#[cache:b]
-#LINE_RECEIVER_PORT = 2103
-#PICKLE_RECEIVER_PORT = 2104
-#CACHE_QUERY_PORT = 7102
-# and any other settings you want to customize, defaults are inherited
-# from [carbon] section.
-# You can then specify the --instance=b option to manage this instance
+<% scope.lookupvar('graphite::gr_cache_instances').each_with_index do |instance, i| -%>
+[cache:<%= i %>]
+LINE_RECEIVER_PORT = <%= instance['line_receiver_port'] %>
+PICKLE_RECEIVER_PORT = <%= instance['pickle_receiver_port'] %>
+CACHE_QUERY_PORT = <%= instance['cache_query_port'] %>
+<% if scope.lookupvar('graphite::gr_enable_udp_listener') -%>
+UDP_RECEIVER_PORT = <%= instance['udp_receiver_port'] %>
+<% end -%>
 
+<% end -%>
 
 [relay]
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
