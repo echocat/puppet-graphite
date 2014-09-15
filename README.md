@@ -114,6 +114,10 @@ Default is 500. Limits the number of whisper update_many() calls per second, whi
 
 Default is 50. Softly limits the number of whisper files that get created each minute.
 
+#####`gr_carbon_metric_prefix`
+
+The prefix to be applied to internal performance metrics. Defaults to 'carbon'.
+
 #####`gr_carbon_metric_interval`
 
 Default is 60. Set the interval between sending internal performance metrics; affects all carbon daemons.
@@ -141,6 +145,14 @@ Default is 'False' (string). Set this to 'True' to revert to the old-fashioned i
 #####`gr_use_whitelist`
 
 Default is 'False' (string). Set this to 'True' to enable whitelists and blacklists.
+
+#####`gr_whitelist`
+
+List of patterns to be included in whitelist.conf. Default is [ '.*' ].
+
+#####`gr_blacklist`
+
+List of patterns to be included in blacklist.conf. Default is [ ].
 
 #####`gr_cache_query_interface`
 
@@ -215,6 +227,22 @@ Default is `$::fqdn` (string). Virtualhostname of Graphite webgui.
 Default is false (boolean). Include CORS Headers for all hosts (*) in web server config.
 This is needed for tools like Grafana.
 
+#####`gr_use_ssl`
+
+If true, alter web server config to enable SSL. Default is false (boolean).
+
+#####`gr_ssl_cert`
+
+Path to SSL cert file. Default is undef.
+
+#####`gr_ssl_key`
+
+Path to SSL key file. Default is undef.
+
+#####`gr_ssl_dir`
+
+Path to SSL dir containing keys and certs. Default is undef.
+
 #####`gr_web_group`
 
 Default is undef. Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
@@ -229,6 +257,10 @@ Default is 80. The HTTP port apache will use.
 #####`gr_apache_port_https`
 
 Default is 443. The HTTPS port apache will use.
+
+#####`gr_apache_conf_template`
+
+Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-available/graphite.conf.erb'.
 
 #####`gr_apache_24`
 
@@ -351,6 +383,10 @@ Default is 300. Time to cache remote metric find results.
 
 Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'
 
+#####`nginx_proxy_read_timeout`
+
+Default is 10. Value to use for nginx's proxy_read_timeout setting
+
 #####`manage_ca_certificate`
 
 Default is true (boolean). Used to determine if the module should install ca-certificate on Debian machines during the initial installation.
@@ -379,6 +415,10 @@ Default is '' (string). Set ldap password.
 
 Default is '(username=%s)' (string). Set ldap user query.
 
+#####`gr_ldap_options`
+
+Hash of additional LDAP options to be enabled. For example, `{ 'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW' }`. Default is `{ }`.
+
 #####`gr_use_remote_user_auth`
 
 Default is 'False' (string). Allow use of REMOTE_USER env variable within Django/Graphite.
@@ -392,6 +432,10 @@ One example is something like http://antoineroygobeil.com/blog/2014/2/6/nginx-ru
 combined with the option `gr_web_server` = 'wsgionly' and http://forge.puppetlabs.com/jfryman/nginx
 with some custom vhosts.
 The sample external auth app is available from [here](https://github.com/antoinerg/nginx_auth_backend)
+
+#####`gunicorn_arg_timeout`
+
+Default is 30.  value to pass to gunicorns --timeout arg.
 
 ##Requirements
 

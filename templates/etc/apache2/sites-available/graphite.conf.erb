@@ -78,4 +78,11 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	Header set Access-Control-Allow-Headers "origin, authorization, accept"
 <% end %>
 
+<% if scope.lookupvar('graphite::gr_use_ssl') %>
+  SSLEngine on
+  SSLCertificateFile      <%= scope.lookupvar('graphite::gr_ssl_cert') %>
+  SSLCertificateKeyFile   <%= scope.lookupvar('graphite::gr_ssl_key') %>
+  SSLCACertificatePath    <%= scope.lookupvar('graphite::gr_ssl_dir') %>
+<% end %>
+
 </VirtualHost>

@@ -82,7 +82,7 @@ class graphite::config_apache inherits graphite::params {
       owner   => $::graphite::params::web_user,
       group   => $::graphite::params::web_group,
       mode    => '0644',
-      content => template('graphite/etc/apache2/sites-available/graphite.conf.erb'),
+      content => template($::graphite::gr_apache_conf_template),
       require => [
         File["${::graphite::params::apache_dir}/ports.conf"],
       ];

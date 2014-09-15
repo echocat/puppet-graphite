@@ -22,6 +22,9 @@
 # [*gr_max_creates_per_minute*]
 #   Softly limits the number of whisper files that get created each minute.
 #   Default is 50.
+# [*gr_carbon_metric_prefix*]
+#   The prefix to be applied to internal performance metrics.
+#   Defaults to 'carbon'.
 # [*gr_carbon_metric_interval*]
 #   The interval (in seconds) between sending internal performance metrics.
 #   Default is 60; 0 to disable instrumentation
@@ -57,6 +60,12 @@
 #[*gr_use_whitelist*]
 #   Set this to True to allow for using whitelists and blacklists.
 #   Default is False.
+#[*gr_whitelist*]
+#   List of patterns to be included in whitelist.conf.
+#   Default is [ '.*' ]
+#[*gr_blacklist*]
+#   List of patterns to be included in blacklist.conf.
+#   Default is [ ]
 # [*gr_cache_query_interface*]
 #   Interface to send cache queries to.
 #   Default is 0.0.0.0
@@ -116,6 +125,18 @@
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
+# [*gr_use_ssl*]
+#   If true, alter web server config to enable SSL.
+#   Default is false.
+# [*gr_ssl_cert*]
+#   Path to SSL cert file.
+#   Default is undef.
+# [*gr_ssl_key*]
+#   Path to SSL key file.
+#   Default is undef.
+# [*gr_ssl_dir]
+#   Path to SSL dir containing keys and certs.
+#   Default is undef
 # [*gr_apache_port*]
 #   The port to run graphite web server on.
 #   Default is 80.
@@ -123,6 +144,9 @@
 #   The port to run SSL web server on if you have an existing web server on
 #   the default port 443.
 #   Default is 443.
+# [*gr_apache_conf_template*]
+#   Template to use for Apache vhost config.
+#   Default is graphite/etc/apache2/sites-available/graphite.conf.erb
 # [*gr_apache_24*]
 #   Boolean to enable configuration parts for Apache 2.4 instead of 2.2
 #   Default is false. (use Apache 2.2 config)
@@ -248,6 +272,9 @@
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
 #   given user & password.
 #   Default is undefined
+# [*nginx_proxy_read_timeout*]
+#   Value to use for nginx's proxy_read_timeout setting
+#   Default is 10s
 # [*manage_ca_certificate*]
 #   Used to determine to install ca-certificate or not. default = true
 # [*gr_use_ldap*]
@@ -262,6 +289,10 @@
 #   Set ldap password.  Default = ''
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
+# [*gr_ldap_options*]
+#   Hash of additional LDAP options to be enabled. 
+#   For example, { 'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW' }
+#   Default = { }
 # [*gr_use_remote_user_auth*]
 #   Allow use of REMOTE_USER env variable within Django/Graphite.
 #   Default is 'False' (String)
@@ -270,6 +301,9 @@
 #   variable (mainly for nginx use) to tell Graphite a user is authenticated.
 #   Useful when using an external auth handler with X-Accel-Redirect etc.
 #   Example value - HTTP_X_REMOTE_USER
+# [*gunicorn_arg_timeout*]
+#   value to pass to gunicorns --timeout arg.
+#   Default is 30
 
 # === Examples
 #
@@ -285,6 +319,7 @@ class graphite (
   $gr_max_cache_size            = inf,
   $gr_max_updates_per_second    = 500,
   $gr_max_creates_per_minute    = 50,
+  $gr_carbon_metric_prefix      = 'carbon',
   $gr_carbon_metric_interval    = 60,
   $gr_line_receiver_interface   = '0.0.0.0',
   $gr_enable_udp_listener       = 'False',
@@ -293,6 +328,8 @@ class graphite (
   $gr_use_insecure_unpickler    = 'False',
   $gr_use_whitelist             = 'False',
   $gr_enable_carbon_cache       = true,
+  $gr_whitelist                 = [ '.*' ],
+  $gr_blacklist                 = [ ],
   $gr_cache_query_interface     = '0.0.0.0',
   $gr_cache_instances           = [
      {
@@ -342,8 +379,13 @@ class graphite (
   $gr_web_group                 = undef,
   $gr_web_user                  = undef,
   $gr_web_cors_allow_from_all   = false,
+  $gr_use_ssl                   = false,
+  $gr_ssl_cert                  = undef,
+  $gr_ssl_key                   = undef,
+  $gr_ssl_dir                   = undef,
   $gr_apache_port               = 80,
   $gr_apache_port_https         = 443,
+  $gr_apache_conf_template      = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
   $gr_apache_24                 = false,
   $gr_django_1_4_or_less        = false,
   $gr_django_db_engine          = 'django.db.backends.sqlite3',
@@ -404,6 +446,7 @@ class graphite (
   $gr_cluster_retry_delay       = 60,
   $gr_cluster_cache_duration    = 300,
   $nginx_htpasswd               = undef,
+  $nginx_proxy_read_timeout     = 10,
   $manage_ca_certificate        = true,
   $gr_use_ldap                  = false,
   $gr_ldap_uri                  = '',
@@ -411,9 +454,11 @@ class graphite (
   $gr_ldap_base_user            = '',
   $gr_ldap_base_pass            = '',
   $gr_ldap_user_query           = '(username=%s)',
+  $gr_ldap_options              = {},
   $gr_use_remote_user_auth      = 'False',
   $gr_remote_user_header_name   = undef,
-  $gr_local_data_dir            = '/opt/graphite/storage/whisper'
+  $gr_local_data_dir            = '/opt/graphite/storage/whisper',
+  $gunicorn_arg_timeout         = 30
 ) {
   # Validation of input variables.
   # TODO - validate all the things

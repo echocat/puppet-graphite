@@ -4,6 +4,7 @@ CONFIG = {
     'user': 'www-data',
     'group': 'www-data',
     'args': (
+	'--timeout=<%= scope.lookupvar('graphite::gunicorn_arg_timeout') %>',
         '--bind=unix:/var/run/graphite.sock',
         '--workers=2',
     ),

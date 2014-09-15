@@ -161,7 +161,7 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
-# CARBON_METRIC_PREFIX = carbon
+CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
 
 # Enable AMQP if you want to receve metrics using an amqp broker
@@ -286,7 +286,7 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
-# CARBON_METRIC_PREFIX = carbon
+CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
 
 [aggregator]
@@ -367,5 +367,5 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # By default, carbon itself will log statistics (such as a count,
 # metricsReceived) with the top level prefix of 'carbon' at an interval of 60
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
-# CARBON_METRIC_PREFIX = carbon
+CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
