@@ -300,6 +300,59 @@ Default is '' (string). Hostname/IP of database server.
 
 Default is '' (string). Port of database.
 
+#####`gr_enable_carbon_relay`
+
+Default is false. Enable carbon relay.
+
+#####`gr_relay_line_interface`
+
+Default is '0.0.0.0' (string)
+
+#####`gr_relay_line_port`
+
+Default is 2013 (integer)
+
+#####`gr_relay_pickle_interface`
+
+Default is '0.0.0.0' (string)
+
+#####`gr_relay_pickle_port`
+
+Default is 2014 (integer)
+
+#####`gr_relay_method`
+
+Default is 'rules'
+
+#####`gr_relay_replication_factor`
+
+Default is 1 (integer). Add redundancy by replicating every datapoint to more than one machine.
+
+#####`gr_relay_destinations`
+
+Default  is [ '127.0.0.1:2004' ] (array). Array of backend carbons for relay.
+
+#####`gr_relay_max_queue_size`
+
+Default is 10000 (integer)
+
+#####`gr_relay_use_flow_control`
+
+Default is 'True' (string).
+
+#####`gr_relay_rules`
+
+Relay rule set.
+Default is
+```
+{
+   all       => { pattern      => '.*',
+                  destinations => [ '127.0.0.1:2004' ] },
+   'default' => { 'default'    => true,
+                  destinations => [ '127.0.0.1:2004:a' ] },
+}
+```
+
 #####`gr_enable_carbon_aggregator`
 
 Default is false (boolean) Enable the carbon aggregator daemon.
