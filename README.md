@@ -8,6 +8,7 @@
     * [Beginning with graphite - Installation](#beginning-with-graphite)
     * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
     * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-24-and-cors)
+    * [Configuration with Additional LDAP Options](#configuration-with-additional-ldap-options)
 4. [Usage - The class and available configurations](#usage)
 7. [Requirements](#requirements)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -85,6 +86,36 @@ If you do not know what CORS, then do not use it. Its disabled by default. You w
     secret_key                 => 'CHANGE_IT!'
   }
 ```
+
+###Configuration with Additional LDAP Options
+
+If additional LDAP parameters are needed for your Graphite installation, you can specify them using the `gr_ldap_options`
+parameter. For example, this is useful if you're using SSL and need to configure LDAP to use your SSL cert and key files.
+
+This Puppet configuration...
+
+```puppet
+  class { 'graphite':
+    gr_ldap_options => {
+      'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW',
+      'ldap.OPT_X_TLS_CACERTDIR'    => '"/etc/ssl/ca"',
+      'ldap.OPT_X_TLS_CERTFILE'     => '"/etc/ssl/mycert.crt"',
+      'ldap.OPT_X_TLS_KEYFILE'      => '"/etc/ssl/mykey.pem"',
+    },
+  }
+```
+
+... adds these lines to the local_settings.py configuration file for Graphite web.
+
+```python
+import ldap
+ldap.set_option(ldap.OPT_X_TLS_CACERTDIR, "/etc/ssl/ca")
+ldap.set_option(ldap.OPT_X_TLS_CERTFILE, "/etc/ssl/mycert.crt")
+ldap.set_option(ldap.OPT_X_TLS_KEYFILE, "/etc/ssl/mykey.pem")
+ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_ALLOW)
+```
+
+See http://www.python-ldap.org/ for more details about these options.
 
 ##Usage
 
