@@ -88,7 +88,7 @@ class graphite::params {
       }
       else
       {
-        $web_group = 'www-data'
+        $web_group = 'apache'
       }
       if "$graphite::gr_web_user" != ""
       {
@@ -96,7 +96,7 @@ class graphite::params {
       }
       else
       {
-        $web_user = 'www-data'
+        $web_user = 'apache'
       }
       $python_dev_pkg = 'python-devel'
 
