@@ -1,3 +1,21 @@
+## 2014-09-17 - 5.5.0 (Feature/Bugfix release)
+
+#### Features:
+
+- add possibility to set web server user and group: `gr_web_user` and  `gr_web_group`
+- add basic spec files for testing
+- add blacklist and whitelist settings
+- add parameters to set nginx read timeout `proxy_read_timeout`
+- allows default metric prefix ('carbon') to be changed. `gr_carbon_metric_prefix`
+- add parameters for cluster servers
+- add parameters for ldap
+
+#### Bugfixes:
+
+- Debian: Disabling apache default vhost
+- remove trailing comma in memcached hostlist
+- Redhat: fix regex to recognize version 7
+
 ## 2014-06-26 - 5.4.0 (Feature/Bugfix release)
 
 #### Features:
@@ -7,15 +25,15 @@
 #### Bugfixes:
 
 - missing package pip is installed
-- Debian apache mod_headers is not reconfigure every run
-- Debian apache sets absolute path to wsgi_module
-- Debian package python-django-tagging is installed via pip
+- Debian: apache mod_headers is not reconfigure every run
+- Debian: apache sets absolute path to wsgi_module
+- Debian: package python-django-tagging is installed via pip
 
 ## 2014-06-17 - 5.3.4 (Bugfix release)
 
 #### Bugfixes:
 
-- pip allways reinstalled twisted and txamqo, which triggered service restarts
+- pip allways reinstalled twisted and txamqp, which triggered service restarts
 - remove duplicate function
 
 ## 2014-06-05 - 5.3.3 (Bugfix release)
