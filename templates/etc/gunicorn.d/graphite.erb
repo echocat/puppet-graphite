@@ -6,6 +6,6 @@ CONFIG = {
     'args': (
 	'--timeout=<%= scope.lookupvar('graphite::gunicorn_arg_timeout') %>',
         '--bind=unix:/var/run/graphite.sock',
-        '--workers=2',
+	'--workers=<%= scope.lookupvar('graphite::gunicorn_workers') %>',
     ),
 }
