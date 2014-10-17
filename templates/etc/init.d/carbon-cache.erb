@@ -18,12 +18,16 @@ case "$1" in
 		;;
 	stop)
 		python /opt/graphite/bin/carbon-cache.py stop
+        while [ -f /opt/graphite/storage/carbon-cache-a.pid ]; do
+            echo "waiting for carbon-cache to stop"
+            sleep 5
+        done
 		;;
 	status)
 		python /opt/graphite/bin/carbon-cache.py status
 		;;
 	restart)
-		$0 stop ; sleep 3 ; $0 start
+		$0 stop ; $0 start
 		RC=$?
 		exit $RC
 		;;
