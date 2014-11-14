@@ -257,6 +257,9 @@
 # [*gr_cluster_servers*]
 #   Array of webbapp hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 #   Default is undef.
+# [*gr_carbonlink_hosts*]
+#   Array of carbonlink hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
+#   Default is undef.
 # [*gr_cluster_fetch_timeout*]
 #    Timeout to fetch series data.   Default = 6
 # [*gr_cluster_find_timeout*]
@@ -305,6 +308,36 @@
 # [*gunicorn_workers*]
 #   value to pass to gunicorn's --worker arg.
 #   Default is 2
+# [*gr_cache_instances*]    
+#   Allow multiple additional cache instances. (beside the default one)
+#   Default = []
+#   Example value:
+#   [
+#       'cache:b' => [
+#           [ 'LINE_RECEIVER_PORT' => 2103 ],
+#           [ 'PICKLE_RECEIVER_PORT' => 2104 ],
+#           [ 'CACHE_QUERY_PORT' => 7102 ],
+#       ],
+#       'cache:c' => [
+#           [ 'LINE_RECEIVER_PORT' => 2203 ],
+#           [ 'PICKLE_RECEIVER_PORT' => 2204 ],
+#           [ 'CACHE_QUERY_PORT' => 7202 ],
+#       ],
+#   ]
+# [*gr_relay_instances*]
+#   Allow multiple additional relay instances. (beside the default one)
+#   Default = []
+#   Example: see gr_cache_instances
+# [*gr_aggregator_instances*]
+#   Allow multiple additional aggregator instances. (beside the default one)
+#   Default = []
+#   Example: see gr_cache_instances
+# [*gr_whisper_lock_writes*]
+#   Set lock writes for whisper
+#   Default is false
+# [*gr_whisper_fallocate_create*]
+#   Set fallocate_create for whisper
+#   Default is false
 
 # === Examples
 #
@@ -437,6 +470,7 @@ class graphite (
   $gr_memcache_hosts            = undef,
   $secret_key                   = 'UNSAFE_DEFAULT',
   $gr_cluster_servers           = undef,
+  $gr_carbonlink_hosts          = undef,
   $gr_cluster_fetch_timeout     = 6,
   $gr_cluster_find_timeout      = 2.5,
   $gr_cluster_retry_delay       = 60,
@@ -456,6 +490,11 @@ class graphite (
   $gr_local_data_dir            = '/opt/graphite/storage/whisper',
   $gunicorn_arg_timeout         = 30,
   $gunicorn_workers             = 2,
+  $gr_cache_instances           = [],
+  $gr_relay_instances           = [],
+  $gr_aggregator_instances      = [],
+  $gr_whisper_lock_writes       = 'False',
+  $gr_whisper_fallocate_create  = 'False'
 ) {
   # Validation of input variables.
   # TODO - validate all the things

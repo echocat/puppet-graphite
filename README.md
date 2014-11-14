@@ -447,6 +447,10 @@ Default is 'UNSAFE_DEFAULT' (string). CHANGE IT! Secret used as salt for things 
 
 Default is undef (array). Array of webbapp hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 
+#####`gr_carbonlink_hosts`
+
+Default is undef (array). Array of carbonlink hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
+
 #####`gr_cluster_fetch_timeout`
 
 Default is 6. Timeout to fetch series data.
@@ -524,6 +528,39 @@ Default is 30.  value to pass to gunicorns --timeout arg.
 #####`gunicorn_workers`
   
 Default is 2. value to pass to gunicorn's --worker arg.
+
+#####`gr_cache_instances`    
+
+Default is empty array. Allow multiple additional cache instances. (beside the default one)
+Example value:
+[   'cache:b' => [
+        [ 'LINE_RECEIVER_PORT' => 2103 ],
+        [ 'PICKLE_RECEIVER_PORT' => 2104 ],
+        [ 'CACHE_QUERY_PORT' => 7102 ],
+    ],
+    'cache:c' => [
+        [ 'LINE_RECEIVER_PORT' => 2203 ],
+        [ 'PICKLE_RECEIVER_PORT' => 2204 ],
+        [ 'CACHE_QUERY_PORT' => 7202 ],
+    ] ]
+#####`gr_relay_instances`
+
+Default is empty array. Allow multiple additional relay instances. (beside the default one)
+
+Example: see gr_cache_instances
+
+#####`gr_aggregator_instances`
+
+Default is empty array. Allow multiple additional aggregator instances. (beside the default one)
+
+Example: see gr_cache_instances
+
+#####`gr_whisper_lock_writes`
+
+Default is false. Set lock writes for whisper
+#####`gr_whisper_fallocate_create`
+
+Default is false. Set fallocate_create for whisper
 
 ##Requirements
 

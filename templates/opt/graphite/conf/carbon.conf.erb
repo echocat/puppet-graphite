@@ -150,12 +150,12 @@ WHISPER_AUTOFLUSH = False
 # allocation and zero-ing. Enabling this option may allow a large increase of
 # MAX_CREATES_PER_MINUTE. If enabled on an OS or filesystem that is unsupported
 # this option will gracefully fallback to standard POSIX file access methods.
-WHISPER_FALLOCATE_CREATE = True
+WHISPER_FALLOCATE_CREATE = <%= scope.lookupvar('graphite::gr_whisper_fallocate_create') %>
 
 # Enabling this option will cause Whisper to lock each Whisper file it writes
 # to with an exclusive lock (LOCK_EX, see: man 2 flock). This is useful when
 # multiple carbon-cache daemons are writing to the same files
-# WHISPER_LOCK_WRITES = False
+WHISPER_LOCK_WRITES = <%= scope.lookupvar('graphite::gr_whisper_lock_writes') %>
 
 # Set this to True to enable whitelisting and blacklisting of metrics in
 # CONF_DIR/whitelist and CONF_DIR/blacklist. If the whitelist is missing or
@@ -213,8 +213,16 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 # and any other settings you want to customize, defaults are inherited
 # from [carbon] section.
 # You can then specify the --instance=b option to manage this instance
+<%
+  cache_instances = scope.lookupvar('graphite::gr_cache_instances')
+  if cache_instances != nil
+    cache_instances.sort.each do |name, params| -%>
+[<%= name %>]
+<% params.each do |param_name, param_value| -%>
+<%= param_name %> = <%= param_value %>
+<% end -%>
 
-
+<%end; end -%>
 [relay]
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
 ENABLE_LOGROTATION = True
@@ -291,6 +299,18 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
+
+# Relay Instances
+<%
+  relay_instances = scope.lookupvar('graphite::gr_relay_instances')
+  if relay_instances != nil
+    relay_instances.sort.each do |name, params| -%>
+[<%= name %>]
+<% params.each do |param_name, param_value| -%>
+<%= param_name %> = <%= param_value %>
+<% end -%>
+
+<%end; end -%>
 
 [aggregator]
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
@@ -372,3 +392,15 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
+
+# Aggregator Instances
+<%
+  aggregator_instances = scope.lookupvar('graphite::gr_aggregator_instances')
+  if aggregator_instances != nil
+    aggregator_instances.sort.each do |name, params| -%>
+[<%= name %>]
+<% params.each do |param_name, param_value| -%>
+<%= param_name %> = <%= param_value %>
+<% end -%>
+
+<%end; end -%>
