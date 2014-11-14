@@ -312,18 +312,19 @@
 #   Allow multiple additional cache instances. (beside the default one)
 #   Default = []
 #   Example value:
-#   [
-#       'cache:b' => [
-#           [ 'LINE_RECEIVER_PORT' => 2103 ],
-#           [ 'PICKLE_RECEIVER_PORT' => 2104 ],
-#           [ 'CACHE_QUERY_PORT' => 7102 ],
-#       ],
-#       'cache:c' => [
-#           [ 'LINE_RECEIVER_PORT' => 2203 ],
-#           [ 'PICKLE_RECEIVER_PORT' => 2204 ],
-#           [ 'CACHE_QUERY_PORT' => 7202 ],
-#       ],
-#   ]
+#   {
+#       'cache:b' => {
+#           'LINE_RECEIVER_PORT' => 2103,
+#           'PICKLE_RECEIVER_PORT' => 2104,
+#           'CACHE_QUERY_PORT' => 7102,
+#       },
+#       'cache:c' => {
+#           'LINE_RECEIVER_PORT' => 2203,
+#           'PICKLE_RECEIVER_PORT' => 2204,
+#           'CACHE_QUERY_PORT' => 7202,
+#       }
+#   }
+#
 # [*gr_relay_instances*]
 #   Allow multiple additional relay instances. (beside the default one)
 #   Default = []
