@@ -227,8 +227,12 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 # and a common scheme is to use 7102 for instance b, 7202 for instance c, etc.
 #
 # You *should* use 127.0.0.1 here in most cases
+<% if scope.lookupvar('graphite::gr_carbonlink_hosts') != :undef -%>
+CARBONLINK_HOSTS = ['<%= scope.lookupvar('graphite::gr_carbonlink_hosts').join("','") %>']
+<% else -%>
 #CARBONLINK_HOSTS = ["127.0.0.1:7002:a", "127.0.0.1:7102:b", "127.0.0.1:7202:c"]
 #CARBONLINK_TIMEOUT = 1.0
+<% end -%>
 
 #####################################
 # Additional Django Settings #

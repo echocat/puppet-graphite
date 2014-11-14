@@ -12,29 +12,42 @@
 # Description: Enables Graphites carbon-cache data collecting engine
 ### END INIT INFO
 
-case "$1" in
-	start)
-		python /opt/graphite/bin/carbon-cache.py start
-		;;
-	stop)
-		python /opt/graphite/bin/carbon-cache.py stop
-        while [ -f /opt/graphite/storage/carbon-cache-a.pid ]; do
-            echo "waiting for carbon-cache to stop"
-            sleep 5
+PYTHON_CMD='python -W ignore'
+CARBON_CONF='/opt/graphite/conf/carbon.conf'
+
+OPERATION="$1"
+if [ $# -gt 1 ]; then
+    shift
+    INSTANCES=$@
+else
+    INSTANCES=$(awk '$1 ~ /^\[cache/ { sub("\[cache:?","", $1); sub("]$","", $1); if ($1 == "") { print "a"} else { print $1} }' "${CARBON_CONF}")
+fi
+
+case "${OPERATION}" in
+    start)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-cache.py --instance=${instance} start
         done
-		;;
-	status)
-		python /opt/graphite/bin/carbon-cache.py status
-		;;
-	restart)
-		$0 stop ; $0 start
-		RC=$?
-		exit $RC
-		;;
-	*)
-		echo "Usage: $0 {start|stop|restart|status}"
-		exit 1
-		;;
+        ;;
+    stop)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-cache.py --instance=${instance} stop
+        done
+        ;;
+    status)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-cache.py --instance=${instance} status
+        done
+        ;;
+    restart)
+        $0 stop ; sleep 3 ; $0 start
+        RC=$?
+        exit $RC
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status} [instance instance ...]"
+        exit 1
+        ;;
 esac
 
 exit

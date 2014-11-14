@@ -12,25 +12,42 @@
 # Description: Enables Graphites carbon-aggregator data aggregation engine
 ### END INIT INFO
 
-case "$1" in
-	start)
-		python /opt/graphite/bin/carbon-aggregator.py start
-		;;
-	stop)
-		python /opt/graphite/bin/carbon-aggregator.py stop
-		;;
-	status)
-		python /opt/graphite/bin/carbon-aggregator.py status
-		;;
-	restart)
-		$0 stop ; sleep 3 ; $0 start
-		RC=$?
-		exit $RC
-		;;
-	*)
-		echo "Usage: $0 {start|stop|restart|status}"
-		exit 1
-		;;
+PYTHON_CMD='python -W ignore'
+CARBON_CONF='/opt/graphite/conf/carbon.conf'
+
+OPERATION="$1"
+if [ $# -gt 1 ]; then
+    shift
+    INSTANCES=$@
+else
+    INSTANCES=$(awk '$1 ~ /^\[aggregator/ { sub("\[aggregator:?","", $1); sub("]$","", $1); if ($1 == "") { print "a"} else { print $1} }' "${CARBON_CONF}")
+fi
+
+case "${OPERATION}" in
+    start)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-aggregator.py --instance=${instance} start
+        done
+        ;;
+    stop)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-aggregator.py --instance=${instance} stop
+        done
+        ;;
+    status)
+        for instance in ${INSTANCES}; do
+            ${PYTHON_CMD} /opt/graphite/bin/carbon-aggregator.py --instance=${instance} status
+        done
+        ;;
+    restart)
+        $0 stop ; sleep 3 ; $0 start
+        RC=$?
+        exit $RC
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status} [instance instance ...]"
+        exit 1
+        ;;
 esac
 
 exit

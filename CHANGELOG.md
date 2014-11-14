@@ -1,3 +1,13 @@
+## 2014-11-14 - 5.7.0 (Feature release)
+
+#### Features:
+
+- allow creation of multiple cache, relay and aggregator instances.
+- adapt init script for multiple instances.
+- add several settings for carbon.conf:
+    * WHISPER_LOCK_WRITES
+    * WHISPER_FALLOCATE_CREATE
+
 ## 2014-11-14 - 5.6.0 (Feature/Bugfix release)
 
 #### Features:
