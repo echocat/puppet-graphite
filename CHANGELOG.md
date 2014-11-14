@@ -1,3 +1,14 @@
+## 2014-11-14 - 5.6.0 (Feature/Bugfix release)
+
+#### Features:
+
+- add parameters `gunicorn_workers`
+- README examples for ldap
+
+#### Bugfixes:
+
+- init script restart waits until carbon-cache stop and start correctly
+
 ## 2014-09-17 - 5.5.0 (Feature/Bugfix release)
 
 #### Features:
