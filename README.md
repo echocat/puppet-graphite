@@ -9,6 +9,8 @@
     * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
     * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-24-and-cors)
     * [Configuration with Additional LDAP Options](#configuration-with-additional-ldap-options)
+    * [Configuration with multiple cache, relay and/or aggregator instances](#configuration-with-multiple-cache-relay-andor-aggregator-instances)
+
 4. [Usage - The class and available configurations](#usage)
 7. [Requirements](#requirements)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -116,6 +118,35 @@ ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_ALLOW)
 ```
 
 See http://www.python-ldap.org/ for more details about these options.
+
+###Configuration with multiple cache, relay and/or aggregator instances
+
+You could create more than one instance for cache, relay or aggregator using the `gr_cache_instances`,
+`gr_relay_instances` and `gr_aggregator_instances` parameters. These paremeters must be hashes, and the keys are the name of the instances (cache:b, cache:c, relay:b, relay:c, etc.). Every hash must have an array of parameters which will be written as is in the config file. The defaults settings for the additional instances will be the
+ones set for the principal instance.
+
+```puppet
+   class {'graphite':
+      gr_line_receiver_port => 2003,
+      gr_pickle_receiver_port => 2004, 
+      gr_cache_query_port => 7002,
+      
+      gr_cache_instances => {
+         'cache:b' => {
+            'LINE_RECEIVER_PORT' => 2103,
+            'PICKLE_RECEIVER_PORT' => 2104,
+            'CACHE_QUERY_PORT' => 7102,
+         },
+         'cache:c' => {
+            'LINE_RECEIVER_PORT' => 2203,
+            'PICKLE_RECEIVER_PORT' => 2204,
+            'CACHE_QUERY_PORT' => 7202,
+         }
+      }
+   }
+```
+
+So in this case you would have 3 cache instances, the first one is `cache` (you can refer to it as `cache:a` too), `cache:b` and `cache:c`. cache:a will listen on ports 2003, 2004 and 7002 for line, pickle and query respectively. But, cache:b will do it on ports 2103, 2104, and 7102, and cache:c on 2203, 2204 and 7202. All other parameters from cache:a will be inherited by cache:b and c.
 
 ##Usage
 
