@@ -44,7 +44,7 @@ TIME_ZONE = '<%= scope.lookupvar('graphite::gr_timezone') %>'
 # unneeded cache misses. Set to [] to disable caching of images and fetched data
 #MEMCACHE_HOSTS = ['10.10.10.10:11211', '10.10.10.11:11211', '10.10.10.12:11211']
 
-<% unless scope.lookupvar('graphite::gr_memcache_hosts') == :undef -%>
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_memcache_hosts') -%>
 MEMCACHE_HOSTS = ['<%= scope.lookupvar('graphite::gr_memcache_hosts').join("','") %>']
 <% end -%>
 
