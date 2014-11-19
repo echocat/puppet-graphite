@@ -195,14 +195,7 @@ DATABASES = {
 # remote server in the cluster. These servers must each have local access to
 # metric data. Note that the first server to return a match for a query will be
 # used.
-<% if scope.lookupvar('graphite::gr_cluster_servers') != :undef -%>
-CLUSTER_SERVERS = ['<%= scope.lookupvar('graphite::gr_cluster_servers').join("','") %>']
-
-REMOTE_STORE_FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
-REMOTE_STORE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
-REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
-REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
-<% else %>
+<% if [:undef, nil].include? scope.lookupvar('graphite::gr_cluster_servers') -%>
 #CLUSTER_SERVERS = ["10.0.2.2:80", "10.0.2.3:80"]
 
 ## These are timeout values (in seconds) for requests to remote webapps
@@ -210,6 +203,13 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 #REMOTE_STORE_FIND_TIMEOUT = 2.5  # Timeout for metric find requests
 #REMOTE_STORE_RETRY_DELAY = 60    # Time before retrying a failed remote webapp
 #REMOTE_FIND_CACHE_DURATION = 300 # Time to cache remote metric find results
+<% else %>
+CLUSTER_SERVERS = ['<%= scope.lookupvar('graphite::gr_cluster_servers').join("','") %>']
+
+REMOTE_STORE_FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
+REMOTE_STORE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
+REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
+REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
 <% end %>
 
 ## Remote rendering settings
@@ -227,11 +227,11 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 # and a common scheme is to use 7102 for instance b, 7202 for instance c, etc.
 #
 # You *should* use 127.0.0.1 here in most cases
-<% if scope.lookupvar('graphite::gr_carbonlink_hosts') != :undef -%>
-CARBONLINK_HOSTS = ['<%= scope.lookupvar('graphite::gr_carbonlink_hosts').join("','") %>']
-<% else -%>
+<% if [:undef, nil].include? scope.lookupvar('graphite::gr_carbonlink_hosts') -%>
 #CARBONLINK_HOSTS = ["127.0.0.1:7002:a", "127.0.0.1:7102:b", "127.0.0.1:7202:c"]
 #CARBONLINK_TIMEOUT = 1.0
+<% else -%>
+CARBONLINK_HOSTS = ['<%= scope.lookupvar('graphite::gr_carbonlink_hosts').join("','") %>']
 <% end -%>
 
 #####################################
@@ -245,7 +245,11 @@ CARBONLINK_HOSTS = ['<%= scope.lookupvar('graphite::gr_carbonlink_hosts').join("
 # NOTE - this has been moved to the bottom to gain access to app_settings.
 <%-
 if scope.lookupvar('graphite::gr_use_remote_user_auth') == 'True'
-	if scope.lookupvar('graphite::gr_remote_user_header_name') != :undef
+	if [:undef, nil].include? scope.lookupvar('graphite::gr_remote_user_header_name')
+-%>
+USE_REMOTE_USER_AUTHENTICATION = True
+<%-
+	else
 -%>
 # NOTE - This puppet module handles this slightly differently to the default Django approach
 # with local_settings.py / settings.py
@@ -258,10 +262,6 @@ MIDDLEWARE_CLASSES += (
 AUTHENTICATION_BACKENDS.insert(0,'django.contrib.auth.backends.RemoteUserBackend')
 # Disable the logic in settings.py that does this in a non-custom way.
 USE_REMOTE_USER_AUTHENTICATION = False
-<%-
-	else
--%>
-USE_REMOTE_USER_AUTHENTICATION = True
 <%-
 	end
 else
