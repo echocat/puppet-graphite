@@ -20,7 +20,7 @@ if [ $# -gt 1 ]; then
     shift
     INSTANCES=$@
 else
-    INSTANCES=$(awk '$1 ~ /^\[relay/ { sub("\[relay:?","", $1); sub("]$","", $1); if ($1 == "") { print "a"} else { print $1} }' "${CARBON_CONF}")
+    INSTANCES=$(echo a;egrep "\[relay:.\]" "${CARBON_CONF}"|cut -b 8)
 fi
 
 case "${OPERATION}" in
