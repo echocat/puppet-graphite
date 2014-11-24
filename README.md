@@ -597,6 +597,15 @@ Default is false. Set lock writes for whisper
 
 Default is false. Set fallocate_create for whisper
 
+#####'gr_log_cache_performance'
+Default is false. Logs timings for remote calls to carbon-cache
+
+#####'gr_log_rendering_performance'
+Default is false. Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
+
+#####'gr_log_metric_access'
+Default is false. Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
+
 ##Requirements
 
 ###Modules needed:
