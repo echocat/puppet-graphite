@@ -218,7 +218,7 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
   if cache_instances != nil
     cache_instances.sort.each do |name, params| -%>
 [<%= name %>]
-<% params.each do |param_name, param_value| -%>
+<% params.sort.each do |param_name, param_value| -%>
 <%= param_name %> = <%= param_value %>
 <% end -%>
 
@@ -306,7 +306,7 @@ CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interva
   if relay_instances != nil
     relay_instances.sort.each do |name, params| -%>
 [<%= name %>]
-<% params.each do |param_name, param_value| -%>
+<% params.sort.each do |param_name, param_value| -%>
 <%= param_name %> = <%= param_value %>
 <% end -%>
 
@@ -399,7 +399,7 @@ CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interva
   if aggregator_instances != nil
     aggregator_instances.sort.each do |name, params| -%>
 [<%= name %>]
-<% params.each do |param_name, param_value| -%>
+<% params.sort.each do |param_name, param_value| -%>
 <%= param_name %> = <%= param_value %>
 <% end -%>
 
