@@ -35,8 +35,8 @@
 #   Port of line receiver.
 #   Default is 2003
 # [*gr_enable_udp_listener*]
-#   Set this to True to enable the UDP listener.
-#   Default is False.
+#   Set this to 'True' to enable the UDP listener.
+#   Default is 'False' (String).
 # [*gr_udp_receiver_interface*]
 #   Its clear, isnt it?
 #   Default is 0.0.0.0
@@ -50,11 +50,11 @@
 #   Self explaining.
 #   Default is 2004
 # [*gr_use_insecure_unpickler*]
-#   Set this to True to revert to the old-fashioned insecure unpickler.
-#   Default is False.
+#   Set this to 'True' to revert to the old-fashioned insecure unpickler.
+#   Default is 'False' (String).
 #[*gr_use_whitelist*]
-#   Set this to True to allow for using whitelists and blacklists.
-#   Default is False.
+#   Set this to 'True' to allow for using whitelists and blacklists.
+#   Default is 'False' (String).
 #[*gr_whitelist*]
 #   List of patterns to be included in whitelist.conf.
 #   Default is [ '.*' ]
@@ -198,7 +198,7 @@
 # [*gr_aggregator_pickle_port*]
 #   Default is 2024.
 # [*gr_aggregator_forward_all*]
-#   Default is 'True'
+#   Default is 'True' (String).
 # [*gr_aggregator_destinations*]
 #   Array of backend carbons
 #   Default is [ '127.0.0.1:2004' ]
@@ -208,7 +208,7 @@
 # [*gr_aggregator_max_queue_size*]
 #   Default is 10000
 # [*gr_aggregator_use_flow_control*]
-#   Default is 'True'
+#   Default is 'True' (String).
 # [*gr_aggregator_max_intervals*]
 #   Default is 5
 # [*gr_aggregator_rules*]
@@ -221,11 +221,11 @@
 #    }
 # [*gr_amqp_enable*]
 #   Set this to 'True' to enable the AMQP.
-#   Default is 'False'.
+#   Default is 'False' (String).
 # [*gr_amqp_verbose*]
 #   Set this to 'True' to enable. Verbose means a line will be logged for
 #   every metric received useful for testing.
-#   Default is 'False'.
+#   Default is 'False' (String).
 # [*gr_amqp_host*]
 #   Self explaining.
 #   Default is localhost.
@@ -246,7 +246,7 @@
 #   Default is graphite.
 # [*gr_amqp_metric_name_in_body*]
 #   Self explaining.
-#   Default is 'False'.
+#   Default is 'False' (String).
 # [*gr_memcache_hosts*]
 #   Array of memcache hosts. e.g.: ['127.0.0.1:11211', '10.10.10.1:11211']
 #   Defalut is undef.
@@ -339,20 +339,17 @@
 # [*gr_whisper_fallocate_create*]
 #   Set fallocate_create for whisper
 #   Default is false
-#
 # [*gr_log_cache_performance*]
 #   logs timings for remote calls to carbon-cache
-#   Default is false
-#
+#   Default is 'False' (String)
 # [*gr_log_rendering_performance*]
 #   Triggers the creation of rendering.log which logs timings for calls to
 #   the The Render URL API
-#   Default is false
-#
+#   Default is 'False' (String)
 # [*gr_log_metric_access*]
 #   Trigges the creation of metricaccess.log which logs access to Whisper
 #   and RRD data files
-#   Default is false
+#   Default is 'False' (String)
 #
 # === Examples
 #
