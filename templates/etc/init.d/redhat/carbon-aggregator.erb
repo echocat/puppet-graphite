@@ -22,8 +22,14 @@
 PYTHON_CMD='python -W ignore'
 CARBON_DAEMON="aggregator"
 GRAPHITE_DIR="/opt/graphite"
-INSTANCES=`grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2`
 pidfile=""
+OPERATION="$1"
+if [ $# -gt 1 ]; then
+    shift
+    INSTANCES=$@
+else
+	INSTANCES=`grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2`
+fi
 
 start()
 {
@@ -134,7 +140,7 @@ rh_status_q() {
     rh_status >/dev/null 2>&1
 }
 
-case "$1" in
+case "${OPERATION}" in
     start)
         $1
         ;;
@@ -168,7 +174,7 @@ case "$1" in
         done
         ;;
     *)
-        echo "Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+        echo "Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload} [instance instance ...]"
         exit 2
 esac
 exit $?
