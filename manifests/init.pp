@@ -339,7 +339,21 @@
 # [*gr_whisper_fallocate_create*]
 #   Set fallocate_create for whisper
 #   Default is false
-
+#
+# [*gr_log_cache_performance*]
+#   logs timings for remote calls to carbon-cache
+#   Default is false
+#
+# [*gr_log_rendering_performance*]
+#   Triggers the creation of rendering.log which logs timings for calls to
+#   the The Render URL API
+#   Default is false
+#
+# [*gr_log_metric_access*]
+#   Trigges the creation of metricaccess.log which logs access to Whisper
+#   and RRD data files
+#   Default is false
+#
 # === Examples
 #
 # class {'graphite':
@@ -495,7 +509,10 @@ class graphite (
   $gr_relay_instances           = [],
   $gr_aggregator_instances      = [],
   $gr_whisper_lock_writes       = 'False',
-  $gr_whisper_fallocate_create  = 'False'
+  $gr_whisper_fallocate_create  = 'False',
+  $gr_log_cache_performance     = 'False',
+  $gr_log_rendering_performance = 'False',
+  $gr_log_metric_access         = 'False',
 ) {
   # Validation of input variables.
   # TODO - validate all the things
