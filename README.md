@@ -593,18 +593,22 @@ Example: see gr_cache_instances
 #####`gr_whisper_lock_writes`
 
 Default is false. Set lock writes for whisper
+
 #####`gr_whisper_fallocate_create`
 
 Default is false. Set fallocate_create for whisper
 
 #####'gr_log_cache_performance'
-Default is false. Logs timings for remote calls to carbon-cache
+
+Default is 'False' (string). Logs timings for remote calls to carbon-cache
 
 #####'gr_log_rendering_performance'
-Default is false. Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
+
+Default is 'False' (string). Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
 
 #####'gr_log_metric_access'
-Default is false. Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
+
+Default is 'False' (string). Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
 
 ##Requirements
 
