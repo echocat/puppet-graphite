@@ -31,17 +31,17 @@ start()
         if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
-        prog=carbon-cache-${INSTANCE}
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+        prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         # check if instance is already running
         rh_status_q && continue
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
         retval=$?
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
         if [ rh_status_q ]; then
-            touch /var/lock/subsys/carbon-cache-${INSTANCE}
+            touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
             echo
         else
@@ -59,19 +59,19 @@ stop()
         if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
-        prog=carbon-cache-${INSTANCE}
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+        prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         # check if instance is already stopped
         rh_status_q || continue
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
         sleep 3
-        while [ -f ${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid ]; do
-            echo "waiting another 5 secs for carbon-cache-${INSTANCE} to stop"
+        while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
+            echo "waiting another 5 secs for carbon-${CARBON_DAEMON}-${INSTANCE} to stop"
             sleep 5
             #TODO: add timer to prevend endless waiting
         done
-        rm -f /var/lock/subsys/carbon-cache-${INSTANCE}
+        rm -f /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
         echo -n $"Stopping carbon-${CARBON_DAEMON}:${INSTANCE}..."
         echo_success
         echo
@@ -86,27 +86,27 @@ restart() {
         if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
-        prog=carbon-cache-${INSTANCE}
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+        prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
         sleep 3
-        while [ -f ${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid ]; do
-            echo "waiting another 5 secs for carbon-cache-${INSTANCE} to stop"
+        while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
+            echo "waiting another 5 secs for carbon-${CARBON_DAEMON}-${INSTANCE} to stop"
             sleep 5
             #TODO: add timer to prevend endless waiting
         done
-        rm -f /var/lock/subsys/carbon-cache-${INSTANCE}
+        rm -f /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
         echo -n $"Stopping carbon-${CARBON_DAEMON}:${INSTANCE}..."
         echo_success
         echo
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
         retval=$?
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
         if [ rh_status_q ]; then
-            touch /var/lock/subsys/carbon-cache-${INSTANCE}
+            touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
             echo
         else
@@ -152,8 +152,8 @@ case "$1" in
         ;;
     condrestart|try-restart)
         # TODO: bad behavior. only checking instance "a" at the moment
-        pidfile=${GRAPHITE_DIR}/storage/carbon-cache-a.pid
-        prog=carbon-cache-a
+        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-a.pid
+        prog=carbon-${CARBON_DAEMON}-a
         rh_status_q || exit 0
         restart
         ;;
@@ -162,8 +162,8 @@ case "$1" in
             if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
-            pidfile=${GRAPHITE_DIR}/storage/carbon-cache-${INSTANCE}.pid
-            prog=carbon-cache-${INSTANCE}
+            pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+            prog=carbon-${CARBON_DAEMON}-${INSTANCE}
             rh_status
         done
         ;;
