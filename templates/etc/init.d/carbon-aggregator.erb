@@ -3,7 +3,7 @@
 
 # chkconfig: 345 80 20
 # description: Start/Stop carbon-aggregator
-# processname: carbon-cache
+# processname: carbon-aggregator
 # config: /opt/graphite/conf/carbon.conf
 
 ### BEGIN INIT INFO
@@ -87,7 +87,7 @@ restart() {
             INSTANCE="a";
         fi;
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
-        prog=carbon-cache-${INSTANCE}
+        prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
         sleep 3
@@ -163,7 +163,7 @@ case "$1" in
                 INSTANCE="a";
             fi;
             pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
-            prog=carbon-cache-${INSTANCE}
+            prog=carbon-${CARBON_DAEMON}-${INSTANCE}
             rh_status
         done
         ;;
