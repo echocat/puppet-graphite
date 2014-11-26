@@ -38,10 +38,13 @@
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 3.2.0"
+    },
+    {
+      "name": "rodjek/logrotate",
+      "version_requirement": ">= 1.1.1"
     }
   ],
   "types": [
-
   ],
   "checksums": {
     "CHANGELOG.md": "104330eac3b7546371c66234ac022718",

@@ -181,18 +181,15 @@ class graphite::config inherits graphite::params {
 
   # configure logrotate script for carbon
 
-  file { '/opt/graphite/bin/carbon-logrotate.sh':
-    ensure  => file,
-    mode    => '0544',
-    content => template('graphite/opt/graphite/bin/carbon-logrotate.sh.erb'),
-  }
-
-  cron { 'Rotate carbon logs':
-    command => '/opt/graphite/bin/carbon-logrotate.sh',
-    user    => root,
-    hour    => 1,
-    minute  => 15,
-    require => File['/opt/graphite/bin/carbon-logrotate.sh'];
+  logrotate::rule { 'carbon':
+    path          => '/opt/graphite/storage/log/carbon-cache/',
+    rotate        => 30,
+    rotate_every  => 'day',
+    compress      => true,
+    delaycompress => true,
+    copytruncate  => true,
+    missingok     => false,
+    ifempty       => false,
   }
 
   # startup carbon engine
