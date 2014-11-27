@@ -10,7 +10,7 @@
 class graphite::config_nginx inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  if $::osfamily != 'debian' {
+  if $::osfamily != 'Debian' {
     fail("nginx-based graphite is not supported on ${::operatingsystem} (only supported on Debian)")
   }
 

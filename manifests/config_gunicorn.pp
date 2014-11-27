@@ -10,7 +10,8 @@
 class graphite::config_gunicorn inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  if $::osfamily == 'debian' {
+  if $::osfamily == 'Debian' {
+
     package {
       'gunicorn':
         ensure => installed,
@@ -40,11 +41,13 @@ class graphite::config_gunicorn inherits graphite::params {
       notify  => Service['gunicorn'],
       require => Package['gunicorn'],
     }
-  } elsif $::osfamily == 'redhat' {
-    package { 'python-gunicorn':
-      ensure => installed,
-      before => Exec['Chown graphite for web user'],
-      notify => Exec['Chown graphite for web user'],
+  } elsif $::osfamily == 'RedHat' {
+
+    package {
+      'python-gunicorn':
+        ensure => installed,
+        before => Exec['Chown graphite for web user'],
+        notify => Exec['Chown graphite for web user'];
     }
   } else {
     fail("wsgi/gunicorn-based graphite is not supported on ${::operatingsystem} (only supported on Debian & RedHat)")

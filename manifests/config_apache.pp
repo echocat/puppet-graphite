@@ -34,6 +34,7 @@ class graphite::config_apache inherits graphite::params {
           command => 'a2enmod headers',
           creates => '/etc/apache2/mods-enabled/headers.load',
           require => Package[$::graphite::params::apache_wsgi_pkg],
+          notify  => Service[$::graphite::params::apache_service_name];
         }
       }
 
@@ -78,8 +79,8 @@ class graphite::config_apache inherits graphite::params {
         Exec['Chown graphite for web user'],
         Exec['Initial django db creation'],
         Package[$::graphite::params::apache_wsgi_pkg],
-      ];
-
+      ],
+      notify  => Service[$::graphite::params::apache_service_name];
     "${::graphite::params::apacheconf_dir}/graphite.conf":
       ensure  => file,
       content => template($::graphite::gr_apache_conf_template),
@@ -88,7 +89,8 @@ class graphite::config_apache inherits graphite::params {
       owner   => $::graphite::params::web_user,
       require => [
         File["${::graphite::params::apache_dir}/ports.conf"],
-      ];
+      ],
+      notify  => Service[$::graphite::params::apache_service_name];
   }
 
   case $::osfamily {
