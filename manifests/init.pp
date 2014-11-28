@@ -291,7 +291,7 @@
 # [*gr_ldap_user_query*]
 #   Set ldap user query.  Default = '(username=%s)'
 # [*gr_ldap_options*]
-#   Hash of additional LDAP options to be enabled. 
+#   Hash of additional LDAP options to be enabled.
 #   For example, { 'ldap.OPT_X_TLS_REQUIRE_CERT' => 'ldap.OPT_X_TLS_ALLOW' }
 #   Default = { }
 # [*gr_use_remote_user_auth*]
@@ -308,7 +308,7 @@
 # [*gunicorn_workers*]
 #   value to pass to gunicorn's --worker arg.
 #   Default is 2
-# [*gr_cache_instances*]    
+# [*gr_cache_instances*]
 #   Allow multiple additional cache instances. (beside the default one)
 #   Default = []
 #   Example value:
@@ -467,8 +467,8 @@ class graphite (
   $gr_aggregator_use_flow_control = 'True',
   $gr_aggregator_max_intervals  = 5,
   $gr_aggregator_rules          = {
-    'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
     'carbon-all-mem'   => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
+    'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
     },
   $gr_amqp_enable               = 'False',
   $gr_amqp_verbose              = 'False',
@@ -524,5 +524,4 @@ class graphite (
   class { 'graphite::install':}~>
   class { 'graphite::config':}->
   anchor { 'graphite::end':}
-
 }

@@ -8,7 +8,6 @@
 # None.
 #
 class graphite::config_nginx inherits graphite::params {
-
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   if $::osfamily != 'debian' {
@@ -48,10 +47,12 @@ class graphite::config_nginx inherits graphite::params {
       ensure  => directory,
       mode    => '0755',
       require => Package['nginx'];
+
     '/etc/nginx/sites-available':
       ensure  => directory,
       mode    => '0755',
       require => File['/etc/nginx'];
+
     '/etc/nginx/sites-enabled':
       ensure  => directory,
       mode    => '0755',
@@ -71,6 +72,7 @@ class graphite::config_nginx inherits graphite::params {
         Exec['Chown graphite for web user']
       ],
       notify  => Service['nginx'];
+
     '/etc/nginx/sites-enabled/graphite':
       ensure  => link,
       target  => '/etc/nginx/sites-available/graphite',
@@ -86,6 +88,7 @@ class graphite::config_nginx inherits graphite::params {
     undef   => absent,
     default => file,
   }
+
   file {
     '/etc/nginx/graphite-htpasswd':
       ensure  => $nginx_htpasswd_file_presence,
@@ -95,5 +98,4 @@ class graphite::config_nginx inherits graphite::params {
       require => Package['nginx'],
       notify  => Service['nginx'];
   }
-
 }
