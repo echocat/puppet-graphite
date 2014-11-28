@@ -26,7 +26,7 @@ class graphite::install(
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
   # using the pip package provider requires python-pip
-  
+
   if ! defined(Package[$::graphite::params::python_pip_pkg]) {
     package { $::graphite::params::python_pip_pkg :
       provider => undef, # default to package provider auto-discovery
@@ -39,7 +39,7 @@ class graphite::install(
   }
 
   # install python headers and libs for pip
-  
+
   if ! defined(Package[$::graphite::params::python_dev_pkg]) {
     package { $::graphite::params::python_dev_pkg :
       provider => undef, # default to package provider auto-discovery
@@ -56,15 +56,15 @@ class graphite::install(
     provider => undef, # default to package provider auto-discovery
   }->
   package{'django-tagging':
-    ensure   => $django_tagging_ver,
+    ensure => $django_tagging_ver,
   }->
   package{'twisted':
-    name     => 'Twisted',
-    ensure   => $twisted_ver,
+    ensure => $twisted_ver,
+    name   => 'Twisted',
   }->
   package{'txamqp':
-    name     => 'txAMQP',
-    ensure   => $txamqp_ver,
+    ensure => $txamqp_ver,
+    name   => 'txAMQP',
   }->
   package{'graphite-web':
     ensure   => $::graphite::params::graphiteVersion,
