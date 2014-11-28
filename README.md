@@ -12,9 +12,9 @@
     * [Configuration with multiple cache, relay and/or aggregator instances](#configuration-with-multiple-cache-relay-andor-aggregator-instances)
 
 4. [Usage - The class and available configurations](#usage)
-7. [Requirements](#requirements)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Contributing to the graphite module](#contributing)
+5. [Requirements](#requirements)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [Contributing to the graphite module](#contributing)
 
 ##Overview
 
