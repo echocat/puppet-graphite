@@ -11,7 +11,6 @@ class graphite::install(
   $twisted_ver        = '11.1.0',
   $txamqp_ver         = '0.4',
 ) inherits graphite::params {
-
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
@@ -26,7 +25,7 @@ class graphite::install(
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
   # using the pip package provider requires python-pip
-  
+
   if ! defined(Package[$::graphite::params::python_pip_pkg]) {
     package { $::graphite::params::python_pip_pkg :
       provider => undef, # default to package provider auto-discovery
@@ -39,7 +38,7 @@ class graphite::install(
   }
 
   # install python headers and libs for pip
-  
+
   if ! defined(Package[$::graphite::params::python_dev_pkg]) {
     package { $::graphite::params::python_dev_pkg :
       provider => undef, # default to package provider auto-discovery
@@ -55,25 +54,31 @@ class graphite::install(
     ensure   => 'installed',
     provider => undef, # default to package provider auto-discovery
   }->
+
   package{'django-tagging':
-    ensure   => $django_tagging_ver,
+    ensure => $django_tagging_ver,
   }->
+
   package{'twisted':
-    name     => 'Twisted',
-    ensure   => $twisted_ver,
+    ensure => $twisted_ver,
+    name   => 'Twisted',
   }->
+
   package{'txamqp':
-    name     => 'txAMQP',
-    ensure   => $txamqp_ver,
+    ensure => $txamqp_ver,
+    name   => 'txAMQP',
   }->
+
   package{'graphite-web':
-    ensure   => $::graphite::params::graphiteVersion,
+    ensure => $::graphite::params::graphiteVersion,
   }->
+
   package{'carbon':
-    ensure   => $::graphite::params::carbonVersion,
+    ensure => $::graphite::params::carbonVersion,
   }->
+
   package{'whisper':
-    ensure   => $::graphite::params::whisperVersion,
+    ensure => $::graphite::params::whisperVersion,
   }->
 
   # workaround for unusual graphite install target:
@@ -82,9 +87,9 @@ class graphite::install(
     ensure => link,
     target => $::graphite::params::carbin_pip_hack_target,
   }->
+
   file { $::graphite::params::gweb_pip_hack_source :
     ensure => link,
     target => $::graphite::params::gweb_pip_hack_target,
   }
-
 }

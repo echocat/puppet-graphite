@@ -8,7 +8,6 @@
 # None.
 #
 class graphite::config_apache inherits graphite::params {
-
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   # we need an apache with python support
@@ -27,30 +26,33 @@ class graphite::config_apache inherits graphite::params {
   }
 
   case $::osfamily {
-    debian: {
+    'Debian': {
       # mod_header is disabled on Ubuntu by default,
       # but we need it for CORS headers
       if $::graphite::gr_web_cors_allow_from_all {
         exec { 'enable mod_headers':
           command => 'a2enmod headers',
           creates => '/etc/apache2/mods-enabled/headers.load',
-          require => Package[$::graphite::params::apache_wsgi_pkg]
+          require => Package[$::graphite::params::apache_wsgi_pkg],
         }
       }
+
       exec { 'Disable default apache site':
         command => 'a2dissite 000-default',
+        notify  => Service[$::graphite::params::apache_service_name],
         onlyif  => 'test -f /etc/apache2/sites-enabled/000-default.conf',
         require => Package[$::graphite::params::apache_wsgi_pkg],
-        notify  => Service[$::graphite::params::apache_service_name];
       }
     }
-    redhat: {
+
+    'RedHat': {
       file { "${::graphite::params::apacheconf_dir}/welcome.conf":
         ensure  => absent,
+        notify  => Service[$::graphite::params::apache_service_name],
         require => Package[$::graphite::params::apache_wsgi_pkg],
-        notify  => Service[$::graphite::params::apache_service_name];
       }
     }
+
     default: {
       fail("Module graphite is not supported on ${::operatingsystem}")
     }
@@ -61,52 +63,55 @@ class graphite::config_apache inherits graphite::params {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => Exec['Chown graphite for web user'];
+    require    => Exec['Chown graphite for web user'],
   }
 
   # Deploy configfiles
   file {
     "${::graphite::params::apache_dir}/ports.conf":
       ensure  => file,
-      owner   => $::graphite::params::web_user,
+      content => template('graphite/etc/apache2/ports.conf.erb'),
       group   => $::graphite::params::web_group,
       mode    => '0644',
-      content => template('graphite/etc/apache2/ports.conf.erb'),
+      owner   => $::graphite::params::web_user,
       require => [
-        Package[$::graphite::params::apache_wsgi_pkg],
+        Exec['Chown graphite for web user'],
         Exec['Initial django db creation'],
-        Exec['Chown graphite for web user']
+        Package[$::graphite::params::apache_wsgi_pkg],
       ];
+
     "${::graphite::params::apacheconf_dir}/graphite.conf":
       ensure  => file,
-      owner   => $::graphite::params::web_user,
+      content => template($::graphite::gr_apache_conf_template),
       group   => $::graphite::params::web_group,
       mode    => '0644',
-      content => template($::graphite::gr_apache_conf_template),
+      owner   => $::graphite::params::web_user,
       require => [
         File["${::graphite::params::apache_dir}/ports.conf"],
       ];
   }
 
   case $::osfamily {
-    debian: {
+    'Debian': {
       file { '/etc/apache2/sites-enabled/graphite.conf':
         ensure  => link,
-        target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
+        notify  => Service[$::graphite::params::apache_service_name],
         require => File['/etc/apache2/sites-available/graphite.conf'],
-        notify  => Service[$::graphite::params::apache_service_name];
+        target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
       }
     }
-    redhat: {
+
+    'RedHat': {
       if $::graphite::gr_apache_port != '80' {
         file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
           ensure  => link,
-          target  => "${::graphite::params::apache_dir}/ports.conf",
+          notify  => Service[$::graphite::params::apache_service_name],
           require => File["${::graphite::params::apache_dir}/ports.conf"],
-          notify  => Service[$::graphite::params::apache_service_name];
+          target  => "${::graphite::params::apache_dir}/ports.conf",
         }
       }
     }
+
     default: {}
   }
 }
