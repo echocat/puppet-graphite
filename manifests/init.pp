@@ -23,7 +23,7 @@
 #   Changes the limits of 'gr_max_updates_per_second' when a stop/shutdown
 #   is initiated to another value to speed up/slow down flushing if carbon is
 #   going to shutdown but cached a lot.
-#   Default is 'false' (Bool) which means 'no change'.
+#   Default is 'undef' which means 'do not change gr_max_updates_per_second on shutdown'.
 # [*gr_max_creates_per_minute*]
 #   Softly limits the number of whisper files that get created each minute.
 #   Default is 50.
@@ -369,7 +369,7 @@ class graphite (
   $gr_user                               = '',
   $gr_max_cache_size                     = inf,
   $gr_max_updates_per_second             = 500,
-  $gr_max_updates_per_second_on_shutdown = false,
+  $gr_max_updates_per_second_on_shutdown = undef,
   $gr_max_creates_per_minute             = 50,
   $gr_carbon_metric_prefix               = 'carbon',
   $gr_carbon_metric_interval             = 60,
