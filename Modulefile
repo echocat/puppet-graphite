@@ -1,5 +1,5 @@
 name 'dwerder-graphite'
-version '5.7.0'
+version '5.8.0'
 source 'git clone https://github.com/echocat/puppet-graphite.git'
 author 'Daniel Werdermann'
 license 'Mozilla Public License Version 2.0'
