@@ -1,3 +1,10 @@
+## 2014-11-30 - 5.8.0 (Feature release)
+
+#### Features:
+
+- add setting for carbon.conf:
+    * MAX_UPDATES_PER_SECOND_ON_SHUTDOWN
+
 ## 2014-11-14 - 5.7.0 (Feature release)
 
 #### Features:

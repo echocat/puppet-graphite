@@ -172,6 +172,10 @@ Default is 'inf'. Limits the size of the cache to avoid swapping or becoming CPU
 
 Default is 500. Limits the number of whisper update_many() calls per second, which effectively means the number of write requests sent to the disk.
 
+#####`gr_max_updates_per_second_on_shutdown`
+
+Default is false (no limit change on shutdown). Change the limits of gr_max_updates_per_second in case of an stop/shutdown event to speed up/slow down the shutdown process.
+
 #####`gr_max_creates_per_minute`
 
 Default is 50. Softly limits the number of whisper files that get created each minute.
