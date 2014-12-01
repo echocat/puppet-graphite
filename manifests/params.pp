@@ -102,6 +102,21 @@ class graphite::params {
           $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
           $gweb_pip_hack_source   = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
+          $graphitepkgs = [
+            'Django14',
+            'MySQL-python',
+            'bitmap',
+            'bitmap-fonts-compat',
+            'gcc',
+            'pyOpenSSL',
+            'pycairo',
+            'python-crypto',
+            'python-ldap',
+            'python-memcached',
+            'python-psycopg2',
+            'python-sqlite2',
+            'python-zope-interface',
+          ]
         }
 
         /^7\.\d+/: {
@@ -109,28 +124,27 @@ class graphite::params {
           $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
           $gweb_pip_hack_source   = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
           $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
+          $graphitepkgs = [
+            'python-django',
+            'MySQL-python',
+            'bitmap',
+            'bitmap-fonts-compat',
+            'gcc',
+            'pyOpenSSL',
+            'pycairo',
+            'python-crypto',
+            'python-ldap',
+            'python-memcached',
+            'python-psycopg2',
+            'python-sqlite3dbm',
+            'python-zope-interface',
+          ]
         }
 
         default: {
           fail('Unsupported Redhat release')
         }
       }
-
-      $graphitepkgs = [
-        'Django14',
-        'MySQL-python',
-        'bitmap',
-        'bitmap-fonts-compat',
-        'gcc',
-        'pyOpenSSL',
-        'pycairo',
-        'python-crypto',
-        'python-ldap',
-        'python-memcached',
-        'python-psycopg2',
-        'python-sqlite2',
-        'python-zope-interface',
-      ]
     }
 
     default: {
