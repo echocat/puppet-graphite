@@ -1,19 +1,22 @@
-## 2014-11-30 - 5.8.0 (Feature release)
+## 2014-12-01 - 5.7.0 (Feature/Bugfix release)
 
 #### Features:
 
-- add setting for carbon.conf:
-    * MAX_UPDATES_PER_SECOND_ON_SHUTDOWN
-
-## 2014-11-14 - 5.7.0 (Feature release)
-
-#### Features:
-
-- allow creation of multiple cache, relay and aggregator instances.
-- adapt init script for multiple instances.
-- add several settings for carbon.conf:
+- allow creation of multiple cache, relay and aggregator instances
+- adapt init script for multiple instances
+- add several settings for
     * WHISPER_LOCK_WRITES
     * WHISPER_FALLOCATE_CREATE
+    * LOG_CACHE_PERFORMANCE
+    * LOG_RENDERING_PERFORMANCE
+    * LOG_METRIC_ACCESS
+    * MAX_UPDATES_PER_SECOND_ON_SHUTDOWN
+- new seperate init scripts for RedHat and Debian  
+
+#### Bugfixes:
+
+- improvements for puppet future parser
+- update package names for RedHat 7
 
 ## 2014-11-14 - 5.6.0 (Feature/Bugfix release)
 
