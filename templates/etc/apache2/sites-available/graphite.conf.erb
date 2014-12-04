@@ -72,7 +72,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 <% end %>
 	</Directory>
 
-<% if scope.lookupvar('graphite::params::gr_web_cors_allow_from_all') %>
+<% if scope.lookupvar('graphite::gr_web_cors_allow_from_all') %>
 	Header set Access-Control-Allow-Origin "*"
 	Header set Access-Control-Allow-Methods "GET, OPTIONS, POST"
 	Header set Access-Control-Allow-Headers "origin, authorization, accept"

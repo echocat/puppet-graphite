@@ -125,6 +125,9 @@
 #   Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 # [*gr_web_user*]
 #   Username to chown the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
+# [*gr_web_cors_allow_from_all*]
+#   Include CORS Headers for all hosts (*) in web server config
+#   Default is false.
 # [*gr_use_ssl*]
 #   If true, alter web server config to enable SSL.
 #   Default is false.
@@ -419,6 +422,7 @@ class graphite (
   $gr_web_servername                     = $::fqdn,
   $gr_web_group                          = undef,
   $gr_web_user                           = undef,
+  $gr_web_cors_allow_from_all            = false,
   $gr_use_ssl                            = false,
   $gr_ssl_cert                           = undef,
   $gr_ssl_key                            = undef,
