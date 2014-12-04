@@ -28,7 +28,6 @@ class graphite::params {
   $enable_carbon_relay = false
   $nginxconf_dir       = '/etc/nginx/sites-available'
 
-
   case $::osfamily {
     'Debian': {
       $apache_dir                = '/etc/apache2'
@@ -70,6 +69,22 @@ class graphite::params {
         'python-sqlite',
         'python-twisted',
       ]
+
+      case $::lsbdistcodename {
+        /squeeze|wheezy|precise/: {
+          $gr_apache_24               = false
+          $gr_web_cors_allow_from_all = false
+        }
+
+        /jessie|trusty|utopic|vivid/: {
+          $gr_apache_24               = true
+          $gr_web_cors_allow_from_all = true
+        }
+
+        default: {
+          fail('Unsupported Debian release')
+        }
+      }
     }
 
     'RedHat': {
@@ -98,10 +113,12 @@ class graphite::params {
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $carbin_pip_hack_source = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
-          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
-          $gweb_pip_hack_source   = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
-          $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
+          $carbin_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
+          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
+          $gr_apache_24               = false
+          $gr_web_cors_allow_from_all = false
+          $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
+          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $graphitepkgs = [
             'Django14',
             'MySQL-python',
@@ -120,10 +137,12 @@ class graphite::params {
         }
 
         /^7\.\d+/: {
-          $carbin_pip_hack_source = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
-          $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
-          $gweb_pip_hack_source   = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
-          $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
+          $carbin_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
+          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
+          $gr_apache_24               = true
+          $gr_web_cors_allow_from_all = true
+          $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
+          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
           $graphitepkgs = [
             'python-django',
             'MySQL-python',
