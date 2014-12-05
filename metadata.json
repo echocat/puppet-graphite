@@ -31,45 +31,13 @@
   "source": "git clone https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Mozilla Public License Version 2.0",
-  "summary": "Graphite Monitoring Module",
-  "description": "This module installs and makes basic configs for graphite, with carbon and whisper",
+  "summary": "Installs and configures graphite, carbon (caches,relays,aggregators) and whisper",
   "project_page": "https://github.com/echocat/puppet-graphite",
+  "issues_url": "https://github.com/echocat/puppet-graphite/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 3.2.0"
     }
-  ],
-  "types": [
-
-  ],
-  "checksums": {
-    "CHANGELOG.md": "104330eac3b7546371c66234ac022718",
-    "LICENSE": "b8f0e5c64f1455cd12bd227a9d9d43a0",
-    "Modulefile": "482e2e7218dd0ae3e4767a8258171d09",
-    "README.md": "00e13356411bbd732d6dbdc2a7e256c1",
-    "manifests/config.pp": "3f359e2be9edbc5be60fa071c88a68bf",
-    "manifests/config_apache.pp": "2bd2acc5c8daac19ed02c86ebee453ec",
-    "manifests/config_gunicorn.pp": "bccc31bd7eab10a063565ec25e03322a",
-    "manifests/config_nginx.pp": "e9f8d65d704ba083edff399210d0a5ed",
-    "manifests/init.pp": "28007feb31e3a4dd2a70a6f1fe0e298f",
-    "manifests/install.pp": "ee0ca8c1ff1bc0dd46fc036683b6512c",
-    "manifests/params.pp": "af605e56b3f63ca26be2041d9458c3fa",
-    "templates/etc/apache2/ports.conf.erb": "022825fb1efdad933d6e39cc25a943e5",
-    "templates/etc/apache2/sites-available/graphite.conf.erb": "ae7bd95a47efce8734030f0d490a4f26",
-    "templates/etc/gunicorn.d/graphite.erb": "c3e43b8d42f11fc793de35ce4417c659",
-    "templates/etc/init.d/carbon-aggregator.erb": "e5b275da4eb6f79ca5e54026b697c3ef",
-    "templates/etc/init.d/carbon-cache.erb": "90dcc40af47f8a5a9d08e8b5ff0ad1e4",
-    "templates/etc/init.d/carbon-relay.erb": "d962df2237d8517946f3fff0fdcc03e4",
-    "templates/etc/nginx/sites-available/graphite.erb": "25287ef6ddf6451a8b43446289c84fe6",
-    "templates/opt/graphite/bin/carbon-logrotate.sh.erb": "7c13f336dd820daada4d1dd2b1b8fb9c",
-    "templates/opt/graphite/conf/aggregation-rules.conf.erb": "5ea8c38cfa3424d6b797e172e1e3a0cd",
-    "templates/opt/graphite/conf/carbon.conf.erb": "ab0781748b6d6cd2116fb7d966e3f4f8",
-    "templates/opt/graphite/conf/graphite.wsgi.erb": "4714e01760eaec667ccab3bb747397af",
-    "templates/opt/graphite/conf/relay-rules.conf.erb": "d94571a9573b802dd452ebdf95721ae0",
-    "templates/opt/graphite/conf/storage-aggregation.conf.erb": "d5ca301322b38a2092f9ac564bfdc554",
-    "templates/opt/graphite/conf/storage-schemas.conf.erb": "4bc00354a10ce3285fa3b6d87c3a1a25",
-    "templates/opt/graphite/webapp/graphite/custom_auth.py.erb": "9075a769a8bdfc2e841cfb7e5167b668",
-    "templates/opt/graphite/webapp/graphite/local_settings.py.erb": "b3b2c9edee2c8b58c792c45dd3cacc3e"
-  }
+  ]
 }
