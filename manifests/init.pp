@@ -150,9 +150,6 @@
 # [*gr_apache_conf_template*]
 #   Template to use for Apache vhost config.
 #   Default is graphite/etc/apache2/sites-available/graphite.conf.erb
-# [*gr_apache_24*]
-#   Boolean to enable configuration parts for Apache 2.4 instead of 2.2
-#   Default is false. (use Apache 2.2 config)
 # [*gr_django_1_4_or_less*]
 #   Set to true to use old Django settings style.
 #   Default is false.
@@ -433,7 +430,6 @@ class graphite (
   $gr_apache_port                        = 80,
   $gr_apache_port_https                  = 443,
   $gr_apache_conf_template               = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
-  $gr_apache_24                          = false,
   $gr_django_1_4_or_less                 = false,
   $gr_django_db_engine                   = 'django.db.backends.sqlite3',
   $gr_django_db_name                     = '/opt/graphite/storage/graphite.db',
