@@ -11,6 +11,7 @@ group :development, :test do
   gem 'pry',                     :require => false
   gem 'simplecov',               :require => false
   gem 'vagrant-wrapper',         :require => false
+  gem "puppet-syntax",           :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
