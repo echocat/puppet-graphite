@@ -9,6 +9,15 @@
 /test/version_tmp/
 /tmp/
 
+# Beaker/Vagrant
+.vagrant/
+
+# Puppet Files
+pkg
+spec/fixtures
+.rspec_system
+.vagrant/
+
 ## Specific to RubyMotion:
 .dat*
 .repl_history

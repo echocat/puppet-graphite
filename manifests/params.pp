@@ -80,7 +80,7 @@ class graphite::params {
         }
 
         default: {
-          fail('Unsupported Debian release')
+          fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
     }
@@ -157,7 +157,7 @@ class graphite::params {
         }
 
         default: {
-          fail('Unsupported Redhat release')
+          fail("Unsupported RedHat release: '${::operatingsystemrelease}'")
         }
       }
     }

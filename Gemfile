@@ -2,7 +2,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :test do
   gem 'rake',                    :require => false
-  gem 'rspec-puppet',            :require => false
+  gem "rspec-puppet",            :git => 'https://github.com/rodjek/rspec-puppet.git'
   gem 'puppetlabs_spec_helper',  :require => false
   gem 'serverspec',              :require => false
   gem 'puppet-lint',             :require => false
@@ -11,6 +11,7 @@ group :development, :test do
   gem 'pry',                     :require => false
   gem 'simplecov',               :require => false
   gem 'vagrant-wrapper',         :require => false
+  gem "puppet-syntax",           :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
