@@ -2,10 +2,15 @@ require 'spec_helper'
 
 describe 'graphite' do
 
+  context 'Unsupported OS' do
+    let(:facts) {{ :osfamily => 'unsupported' }}
+    it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /unsupported os./ )}
+  end
+
   context 'RedHat supported platforms' do
     ['6.5','7.5'].each do | operatingsystemrelease |
       let(:facts) {{ :osfamily => 'RedHat', :operatingsystemrelease => operatingsystemrelease}}
-      describe "defaults" do
+      describe "Release #{operatingsystemrelease}" do
         it { should contain_anchor('graphite::begin') }
         it { should contain_class('graphite::install') }
         it { should contain_class('graphite::config') }
@@ -26,7 +31,7 @@ describe 'graphite' do
   context 'Debian supported platforms' do
     ['trusty','squeeze'].each do | lsbdistcodename |
       let(:facts) {{ :osfamily => 'Debian', :lsbdistcodename => lsbdistcodename}}
-      describe "defaults" do
+      describe "Lsbdistcodename #{lsbdistcodename}" do
         it { should contain_anchor('graphite::begin') }
         it { should contain_class('graphite::install') }
         it { should contain_class('graphite::config') }
