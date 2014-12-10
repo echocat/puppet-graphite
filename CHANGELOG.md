@@ -1,3 +1,17 @@
+## 2014-12-10 - 5.8.0 (Feature/Bugfix release)
+
+#### Features:
+
+- first rspec tests
+- usage of apache 2.2 vs 2.4 configs is autodetected now.
+  This remove parameter `gr_apache_24`
+- change license from MPL 2.0 to Apache 2.0
+
+#### Bugfixes:
+
+- update metadata.json to meet puppetlabs requierements
+- remove deprcated Modulefile 
+
 ## 2014-12-01 - 5.7.0 (Feature/Bugfix release)
 
 #### Features:
