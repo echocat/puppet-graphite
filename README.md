@@ -314,6 +314,7 @@ Path to SSL dir containing keys and certs. Default is undef.
 Default is undef. Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 
 #####`gr_web_user`
+
 Default is undef. Username to chown the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
 
 #####`gr_apache_port`
@@ -330,7 +331,8 @@ Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-
 
 #####`gr_apache_24`
 
-Default is false (boolean). If you set this to 'true' and use 'apache' in `gr_web_server`, then the configuration for Apache 2.4 is used, else it will be Apache 2.2 compatible configuration.
+Boolean to enable configuration parts for Apache 2.4 instead of 2.2
+Default is false/true (autodected. see params.pp)
 
 #####`gr_django_1_4_or_less`
 
