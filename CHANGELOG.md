@@ -3,8 +3,8 @@
 #### Features:
 
 - first rspec tests
-- usage of apache 2.2 vs 2.4 configs is autodetected now.
-  This remove parameter `gr_apache_24`
+- usage of apache 2.2 vs 2.4 configs is autodetected now
+  This removes parameter `gr_apache_24`
 - change license from MPL 2.0 to Apache 2.0
 
 #### Bugfixes:

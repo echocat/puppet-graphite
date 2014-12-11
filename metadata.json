@@ -27,7 +27,7 @@
     }
   ],
   "name": "dwerder-graphite",
-  "version": "5.7.1",
+  "version": "5.8.0",
   "source": "git clone https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Apache 2.0",
