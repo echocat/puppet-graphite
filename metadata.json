@@ -26,16 +26,17 @@
       "version_requirement": ">=2.7.20 <4.0.0"
     }
   ],
-  "name": "dwerder-graphite",
-  "version": "5.8.0",
+  "name": "echocat-graphite",
+  "version": "6.0.0",
   "source": "git clone https://github.com/echocat/puppet-graphite.git",
-  "author": "Daniel Werdermann",
+  "author": "echocat",
   "license": "Apache 2.0",
   "summary": "Installs and configures graphite, carbon (caches,relays,aggregators) and whisper",
   "project_page": "https://github.com/echocat/puppet-graphite",
   "issues_url": "https://github.com/echocat/puppet-graphite/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 3.2.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 3.2.0"},
+    {"name":"rodjek-logrotate","version_requirement":">= 1.1.1"}
   ]
 
 }

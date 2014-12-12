@@ -28,6 +28,7 @@ RSpec.configure do |c|
     hosts.each do |host|
       shell('/bin/touch /etc/puppet/hiera.yaml')
       shell('puppet module install puppetlabs-stdlib --version 3.2.0', { :acceptable_exit_codes => [0,1] })
+      shell('puppet module install rodjek-logrotate --version 1.1.1', { :acceptable_exit_codes => [0,1] })
     end
   end
 end
