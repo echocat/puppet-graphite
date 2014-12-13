@@ -6,5 +6,8 @@ fixtures:
     logrotate:
       repo: "git://github.com/rodjek/puppet-logrotate.git"
       ref: "1.1.1"
+    python:
+      repo: "git://github.com/stankevich/puppet-python.git"
+      ref: "1.8.2"
   symlinks:
     graphite: "#{source_dir}"
