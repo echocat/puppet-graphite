@@ -14,8 +14,8 @@ class graphite::config inherits graphite::params {
   # invoke virtualenv if enabled by $python_provider
   if $graphite::python_provider == 'virtualenv' {
     $venv_environment = [
-      "PATH=${virtualenv}/bin:\$PATH",
-      "VIRTUAL_ENV=${virtualenv}",
+      "PATH=${::virtualenv}/bin:\$PATH",
+      "VIRTUAL_ENV=${::virtualenv}",
     ]
   } else {
     $venv_environment = []

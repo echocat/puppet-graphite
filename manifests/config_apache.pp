@@ -10,7 +10,7 @@
 class graphite::config_apache inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  $virtualenv = $::graphite::params::virtualenv 
+  $virtualenv = $::graphite::params::virtualenv
 
   # we need an apache with python support
 
