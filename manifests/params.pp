@@ -10,7 +10,6 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
-  $python_pip_pkg  = 'python-pip'
   $graphiteVersion = '0.9.12'
   $carbonVersion   = '0.9.12'
   $whisperVersion  = '0.9.12'
@@ -24,9 +23,12 @@ class graphite::params {
   $carbon_dl_url = "https://github.com/graphite-project/carbon/archive/${::graphite::params::carbonVersion}.tar.gz"
   $carbon_dl_loc = "${build_dir}/carbon-${::graphite::params::carbonVersion}"
 
-  $install_prefix      = '/opt/'
+  $install_prefix      = '/opt'
   $enable_carbon_relay = false
   $nginxconf_dir       = '/etc/nginx/sites-available'
+
+  # Set the default virtualenv in case it's enabled
+  $virtualenv = "${install_prefix}/graphite"
 
   case $::osfamily {
     'Debian': {
@@ -50,23 +52,13 @@ class graphite::params {
         $web_user = 'www-data'
       }
 
-      $python_dev_pkg = 'python-dev'
-
-      # see https://github.com/graphite-project/carbon/issues/86
-      $carbin_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbonVersion}-py2.7.egg-info"
-      $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
-      $gweb_pip_hack_source   = "/usr/lib/python2.7/dist-packages/graphite_web-${carbonVersion}-py2.7.egg-info"
-      $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${carbonVersion}-py2.7.egg-info"
-
       $graphitepkgs = [
         'python-cairo',
-        'python-django',
         'python-ldap',
         'python-memcache',
         'python-mysqldb',
         'python-psycopg2',
         'python-simplejson',
-        'python-sqlite',
         'python-twisted',
       ]
 
@@ -106,18 +98,11 @@ class graphite::params {
         $web_user = 'apache'
       }
 
-      $python_dev_pkg = 'python-devel'
-
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $carbin_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
-          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
           $apache_24               = false
-          $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $graphitepkgs = [
-            'Django14',
             'MySQL-python',
             'bitmap',
             'bitmap-fonts-compat',
@@ -128,19 +113,12 @@ class graphite::params {
             'python-ldap',
             'python-memcached',
             'python-psycopg2',
-            'python-sqlite2',
-            'python-zope-interface',
           ]
         }
 
         /^7\.\d+/: {
-          $carbin_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
-          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
           $apache_24               = true
-          $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
           $graphitepkgs = [
-            'python-django',
             'MySQL-python',
             'bitmap',
             'bitmap-fonts-compat',
@@ -151,8 +129,6 @@ class graphite::params {
             'python-ldap',
             'python-memcached',
             'python-psycopg2',
-            'python-sqlite3dbm',
-            'python-zope-interface',
           ]
         }
 

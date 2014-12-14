@@ -24,6 +24,10 @@ else
 	INSTANCES=`grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2`
 fi
 
+<% @venv_environment.each do |line| -%>
+  <%= line %>
+<% end -%>
+
 case "${OPERATION}" in
     start)
         for instance in ${INSTANCES}; do

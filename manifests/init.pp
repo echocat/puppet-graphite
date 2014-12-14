@@ -355,6 +355,9 @@
 #   Trigges the creation of metricaccess.log which logs access to Whisper
 #   and RRD data files
 #   Default is 'False' (String)
+# [*python_provider*]
+#   string of 'system' or 'virtualenv'
+#   sets how to use python, virtualenv will require stankevich/python
 #
 # === Examples
 #
@@ -516,6 +519,7 @@ class graphite (
   $gr_log_cache_performance              = 'False',
   $gr_log_rendering_performance          = 'False',
   $gr_log_metric_access                  = 'False',
+  $python_provider                       = 'system',
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

@@ -2,6 +2,12 @@
 
 import os, sys
 sys.path.append('/opt/graphite/webapp')
+
+<% unless @virtualenv.empty? -%>
+import site
+site.addsitedir('<%= @virtualenv -%>/lib/python2.6/site-packages')
+<% end -%>
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'graphite.settings'
 
 import django.core.handlers.wsgi
