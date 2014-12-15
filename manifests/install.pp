@@ -64,7 +64,7 @@ class graphite::install(
     },
     'Twisted'        => {
       ensure => $twisted_ver,
-      before => Python::Pip['txamqp'],
+      before => Python::Pip['txAMQP'],
     },
     'txAMQP'         => {
       ensure => $txamqp_ver,
