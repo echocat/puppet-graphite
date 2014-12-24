@@ -35,9 +35,9 @@
   "project_page": "https://github.com/echocat/puppet-graphite",
   "issues_url": "https://github.com/echocat/puppet-graphite/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 4.2.0"},
-    {"name":"rodjek-logrotate","version_requirement":">= 1.1.1"},
-    {"name":"stankevich-python","version_requirement":">= 1.7.5"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.2.0"},
+    {"name":"rodjek/logrotate","version_requirement":">= 1.1.1"},
+    {"name":"stankevich/python","version_requirement":">= 1.7.5"}
   ]
 
 }
