@@ -113,6 +113,7 @@ class graphite::params {
             'python-ldap',
             'python-memcached',
             'python-psycopg2',
+            'sqlite-devel',
           ]
         }
 
