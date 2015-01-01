@@ -6,6 +6,9 @@ fixtures:
     apache: 
       repo: "git://github.com/puppetlabs/puppetlabs-apache.git"
       ref: "1.2.0"
+    concat: 
+      repo: "git://github.com/puppetlabs/puppetlabs-concat.git"
+      ref: "1.1.1"
     logrotate:
       repo: "git://github.com/rodjek/puppet-logrotate.git"
       ref: "1.1.1"
