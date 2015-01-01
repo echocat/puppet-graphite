@@ -39,18 +39,8 @@ class graphite::params {
       $apache_wsgi_socket_prefix = '/var/run/apache2/wsgi'
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
-
-      if $graphite::gr_web_group {
-        $web_group = $graphite::gr_web_group
-      } else {
-        $web_group = 'www-data'
-      }
-
-      if $graphite::gr_web_user {
-        $web_user = $graphite::gr_web_user
-      } else {
-        $web_user = 'www-data'
-      }
+      $web_group                 = 'www-data'
+      $web_user                  = 'www-data'
 
       $graphitepkgs = [
         'python-cairo',
@@ -85,18 +75,8 @@ class graphite::params {
       $apache_wsgi_socket_prefix = 'run/wsgi'
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
-
-      if $graphite::gr_web_group {
-        $web_group = $graphite::gr_web_group
-      } else {
-        $web_group = 'apache'
-      }
-
-      if $graphite::gr_web_user {
-        $web_user = $graphite::gr_web_user
-      } else {
-        $web_user = 'apache'
-      }
+      $web_group                 = 'apache'
+      $web_user                  = 'apache'
 
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
@@ -113,6 +93,7 @@ class graphite::params {
             'python-ldap',
             'python-memcached',
             'python-psycopg2',
+            'sqlite-devel',
           ]
         }
 

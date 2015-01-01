@@ -31,7 +31,7 @@ class graphite::config inherits graphite::params {
   case $graphite::gr_web_server {
     'apache': {
       include graphite::config_apache
-      $web_server_package_require = [Package[$::graphite::params::apache_pkg]]
+      $web_server_package_require = [Class['apache']]
     }
 
     'nginx': {

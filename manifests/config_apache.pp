@@ -12,108 +12,76 @@ class graphite::config_apache inherits graphite::params {
 
   $virtualenv = $::graphite::params::virtualenv
 
+  class { 'apache':
+    default_mods        => false,
+    default_confd_files => false,
+    default_vhost       => false,
+    before              => Exec['Chown graphite for web user'],
+    notify              => Exec['Chown graphite for web user'],
+  }
+
   # we need an apache with python support
-
-  package {
-    $::graphite::params::apache_pkg:
-      ensure => installed,
-      before => Exec['Chown graphite for web user'],
-      notify => Exec['Chown graphite for web user'];
-  }
-
-  package {
-    $::graphite::params::apache_wsgi_pkg:
-      ensure  => installed,
-      require => Package[$::graphite::params::apache_pkg]
-  }
+  class { 'apache::mod::wsgi': }
 
   case $::osfamily {
     'Debian': {
       # mod_header is disabled on Ubuntu by default,
       # but we need it for CORS headers
       if $::graphite::gr_web_cors_allow_from_all {
-        exec { 'enable mod_headers':
-          command => 'a2enmod headers',
-          creates => '/etc/apache2/mods-enabled/headers.load',
-          require => Package[$::graphite::params::apache_wsgi_pkg],
-        }
-      }
-
-      exec { 'Disable default apache site':
-        command => 'a2dissite 000-default',
-        notify  => Service[$::graphite::params::apache_service_name],
-        onlyif  => 'test -f /etc/apache2/sites-enabled/000-default.conf',
-        require => Package[$::graphite::params::apache_wsgi_pkg],
+        include apache::mod::headers
       }
     }
-
-    'RedHat': {
-      file { "${::graphite::params::apacheconf_dir}/welcome.conf":
-        ensure  => absent,
-        notify  => Service[$::graphite::params::apache_service_name],
-        require => Package[$::graphite::params::apache_wsgi_pkg],
-      }
-    }
-
-    default: {
-      fail("Module graphite is not supported on ${::operatingsystem}")
-    }
-  }
-
-  service { $::graphite::params::apache_service_name:
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-    require    => Exec['Chown graphite for web user'],
+    default: {}
   }
 
   # Deploy configfiles
-  file {
-    "${::graphite::params::apache_dir}/ports.conf":
-      ensure  => file,
-      content => template('graphite/etc/apache2/ports.conf.erb'),
-      group   => $::graphite::params::web_group,
-      mode    => '0644',
-      owner   => $::graphite::params::web_user,
-      require => [
-        Exec['Chown graphite for web user'],
-        Exec['Initial django db creation'],
-        Package[$::graphite::params::apache_wsgi_pkg],
-      ];
 
-    "${::graphite::params::apacheconf_dir}/graphite.conf":
-      ensure  => file,
-      content => template($::graphite::gr_apache_conf_template),
-      group   => $::graphite::params::web_group,
-      mode    => '0644',
-      owner   => $::graphite::params::web_user,
-      require => [
-        File["${::graphite::params::apache_dir}/ports.conf"],
-      ];
+  apache::vhost { "graphite.${::domain}":
+    port                        => $::graphite::gr_apache_port,
+    servername                  => $::graphite::gr_web_servername,
+    docroot                     => '/opt/graphite/webapp',
+    wsgi_application_group      => '%{GLOBAL}',
+    wsgi_daemon_process         => 'graphite',
+    wsgi_daemon_process_options => {
+      processes          => '5',
+      threads            => '5',
+      display-name       => '%{GROUP}',
+      inactivity-timeout => '120',
+    },
+    wsgi_import_script          => '/opt/graphite/conf/graphite.wsgi',
+    wsgi_import_script_options  => {
+      process-group     => 'graphite',
+      application-group => '%{GLOBAL}',
+    },
+    wsgi_process_group          => 'graphite',
+    wsgi_script_aliases         => {
+      '/' => '/opt/graphite/conf/graphite.wsgi',
+    },
+    aliases                     => [
+      {
+        alias => '/content/',
+        path  => '/opt/graphite/webapp/content/',
+      },
+      {
+        alias => '/media/',
+        path  => '@DJANGO_ROOT@/contrib/admin/media/',
+      },
+    ],
+    directories                 => [
+      { path       => '/content/',
+        provider   => 'location',
+        sethandler => 'None',
+      },
+      { path       => '/media/',
+        provider   => 'location',
+        sethandler => 'None',
+      },
+      { path     => '/opt/graphite/conf/',
+        provider => 'directory',
+        order    => 'deny,allow',
+        allow    => 'from all',
+      },
+    ],
   }
 
-  case $::osfamily {
-    'Debian': {
-      file { '/etc/apache2/sites-enabled/graphite.conf':
-        ensure  => link,
-        notify  => Service[$::graphite::params::apache_service_name],
-        require => File['/etc/apache2/sites-available/graphite.conf'],
-        target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
-      }
-    }
-
-    'RedHat': {
-      if $::graphite::gr_apache_port != '80' {
-        file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
-          ensure  => link,
-          notify  => Service[$::graphite::params::apache_service_name],
-          require => File["${::graphite::params::apache_dir}/ports.conf"],
-          target  => "${::graphite::params::apache_dir}/ports.conf",
-        }
-      }
-    }
-
-    default: {}
-  }
 }
