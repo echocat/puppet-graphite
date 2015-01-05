@@ -38,7 +38,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	Alias /content/ /opt/graphite/webapp/content/
 	<Location "/content/">
 			SetHandler None
-<% if scope.lookupvar('graphite::params::gr_apache_24') %>
+<% if scope.lookupvar('graphite::gr_apache_24') %>
 			Options All
 			AllowOverride All
 			Require all granted
@@ -52,7 +52,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	Alias /media/ "@DJANGO_ROOT@/contrib/admin/media/"
 	<Location "/media/">
 			SetHandler None
-<% if scope.lookupvar('graphite::params::gr_apache_24') %>
+<% if scope.lookupvar('graphite::gr_apache_24') %>
 			Options All
 			AllowOverride All
 			Require all granted
@@ -62,7 +62,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	# The graphite.wsgi file has to be accessible by apache. It won't
 	# be visible to clients because of the DocumentRoot though.
 	<Directory /opt/graphite/conf/>
-<% if scope.lookupvar('graphite::params::gr_apache_24') %>
+<% if scope.lookupvar('graphite::gr_apache_24') %>
 			Options All
 			AllowOverride All
 			Require all granted
