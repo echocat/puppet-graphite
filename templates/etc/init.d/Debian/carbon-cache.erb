@@ -26,12 +26,12 @@ fi
 
 case "${OPERATION}" in
     start)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start
         done
         ;;
     stop)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop
             sleep 3
             while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
@@ -42,12 +42,12 @@ case "${OPERATION}" in
         done
         ;;
     status)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} status
         done
         ;;
     restart)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop
             sleep 3
             while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
