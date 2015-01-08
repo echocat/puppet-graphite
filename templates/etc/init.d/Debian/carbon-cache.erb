@@ -41,6 +41,7 @@ case "${OPERATION}" in
                 sleep 5
                 CNT=`expr ${CNT} - 1`
             done
+            # TODO: kill process if it runs in timeout .. or not? 
         done
         ;;
     status)
