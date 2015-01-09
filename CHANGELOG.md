@@ -1,3 +1,15 @@
+## 2015-01-09 - 5.9.0 (Feature/Bugfix release)
+
+#### Features:
+
+- enhance relay template to set all options
+
+#### Bugfixes:
+
+- fix usage and autodetect of apache 2.2 vs 2.4
+- Debian: fix carbon restart script for multiple instances
+- fix metadata dependency to work with librarian puppet
+
 ## 2014-12-10 - 5.8.0 (Feature/Bugfix release)
 
 #### Features:
