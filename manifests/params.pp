@@ -72,11 +72,11 @@ class graphite::params {
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
-          $gr_apache_24               = false
+          $apache_24               = false
         }
 
         /jessie|trusty|utopic|vivid/: {
-          $gr_apache_24               = true
+          $apache_24               = true
         }
 
         default: {
@@ -113,7 +113,7 @@ class graphite::params {
         /^6\.\d+$/: {
           $carbon_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
           $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
-          $gr_apache_24               = false
+          $apache_24               = false
           $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
           $graphitepkgs = [
@@ -136,7 +136,7 @@ class graphite::params {
         /^7\.\d+/: {
           $carbon_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
           $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
-          $gr_apache_24               = true
+          $apache_24               = true
           $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
           $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
           $graphitepkgs = [
