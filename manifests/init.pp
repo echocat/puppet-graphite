@@ -72,6 +72,9 @@
 # [*gr_cache_query_port*]
 #   Self explaining.
 #   Default is 7002.
+# [*gr_cache_write_strategy*]
+#   The thread that writes metrics to disk can use on of the following strategies: sorted, max and naive.
+#   Default is 'sorted'.
 # [*gr_timezone*]
 #   Timezone for graphite to be used.
 #   Default is GMT.
@@ -386,6 +389,7 @@ class graphite (
   $gr_blacklist                          = [ ],
   $gr_cache_query_interface              = '0.0.0.0',
   $gr_cache_query_port                   = 7002,
+  $gr_cache_write_strategy               = 'sorted',
   $gr_timezone                           = 'GMT',
   $gr_storage_schemas                    = [
     {
