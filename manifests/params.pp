@@ -59,6 +59,7 @@ class graphite::params {
       $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
 
       $graphitepkgs = [
+        'python-tz',
         'python-cairo',
         'python-django',
         'python-ldap',
