@@ -358,6 +358,15 @@
 #   Trigges the creation of metricaccess.log which logs access to Whisper
 #   and RRD data files
 #   Default is 'False' (String)
+# [*wsgi_processes*]
+#   WSGI process count.
+#   Default is 5
+# [*wsgi_threads*]
+#   WSGI process threads.
+#   Default is 5
+# [*wsgi_inactivity-timeout*]
+#   WSGI inactivity-timeout in seconds.
+#   Default is 120
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
@@ -559,6 +568,9 @@ class graphite (
   $gr_log_cache_performance              = 'False',
   $gr_log_rendering_performance          = 'False',
   $gr_log_metric_access                  = 'False',
+  $wsgi_processes                        =  5,
+  $wsgi_threads                          =  5,
+  $wsgi_inactivity_timeout               =  120,
   $gr_django_tagging_pkg                 = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                 = $::graphite::params::django_tagging_ver,
   $gr_twisted_pkg                        = $::graphite::params::twisted_pkg,
