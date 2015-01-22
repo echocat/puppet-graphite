@@ -359,6 +359,9 @@
 #   and RRD data files
 #   Default is 'False' (String)
 #
+# [*gr_pip_instal*]
+#   
+#
 # === Examples
 #
 # class {'graphite':
@@ -520,6 +523,19 @@ class graphite (
   $gr_log_cache_performance              = 'False',
   $gr_log_rendering_performance          = 'False',
   $gr_log_metric_access                  = 'False',
+  $gr_pip_install                        = 'True',
+  $gr_django_tagging_pkg                 = $::graphite::params::django_tagging_pkg,
+  $gr_django_tagging_ver                 = $::graphite::params::django_tagging_ver,
+  $gr_twisted_pkg                        = $::graphite::params::twisted_pkg,
+  $gr_twisted_ver                        = $::graphite::params::twisted_ver,
+  $gr_txamqp_pkg                         = $::graphite::params::txamqp_pkg,
+  $gr_txamqp_ver                         = $::graphite::params::txamqp_ver,
+  $gr_graphite_pkg                       = $::graphite::params::graphite_pkg,
+  $gr_graphite_ver                       = $::graphite::params::graphite_ver,
+  $gr_carbon_pkg                         = $::graphite::params::carbon_pkg,
+  $gr_carbon_ver                         = $::graphite::params::carbon_ver,
+  $gr_whisper_pkg                        = $::graphite::params::whisper_pkg,
+  $gr_whisper_ver                        = $::graphite::params::whisper_ver,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

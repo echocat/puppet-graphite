@@ -10,10 +10,19 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
-  $python_pip_pkg  = 'python-pip'
-  $graphiteVersion = '0.9.12'
-  $carbonVersion   = '0.9.12'
-  $whisperVersion  = '0.9.12'
+  $python_pip_pkg     = 'python-pip'
+  $django_tagging_pkg = 'django_tagging'
+  $django_tagging_ver = '0.3.1'
+  $twisted_pkg        = 'Twisted'
+  $twisted_ver        = '11.1.0'
+  $txamqp_pkg         = 'txAMQP'
+  $txamqp_ver         = '0.4'
+  $graphite_pkg       = 'graphite-web'
+  $graphite_ver       = '0.9.12'
+  $carbon_pkg         = 'carbon'
+  $carbon_ver         = '0.9.12'
+  $whisper_pkg        = 'whisper'
+  $whisper_ver        = '0.9.12'
 
   $whisper_dl_url = "http://github.com/graphite-project/whisper/archive/${::graphite::params::whisperVersion}.tar.gz"
   $whisper_dl_loc = "${build_dir}/whisper-${::graphite::params::whisperVersion}"
@@ -68,7 +77,6 @@ class graphite::params {
         'python-psycopg2',
         'python-simplejson',
         'python-sqlite',
-        'python-twisted',
       ]
 
       case $::lsbdistcodename {
