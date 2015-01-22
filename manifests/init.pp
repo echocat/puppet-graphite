@@ -358,6 +358,15 @@
 #   Trigges the creation of metricaccess.log which logs access to Whisper
 #   and RRD data files
 #   Default is 'False' (String)
+# [*wsgi_processes*]
+#   WSGI process count.
+#   Default is 5
+# [*wsgi_threads*]
+#   WSGI process threads.
+#   Default is 5
+# [*wsgi_inactivity-timeout*]
+#   WSGI inactivity-timeout in seconds.
+#   Default is 120
 #
 # === Examples
 #
@@ -520,6 +529,9 @@ class graphite (
   $gr_log_cache_performance              = 'False',
   $gr_log_rendering_performance          = 'False',
   $gr_log_metric_access                  = 'False',
+  $wsgi_processes                        =  5,
+  $wsgi_threads                          =  5,
+  $wsgi_inactivity_timeout               =  120,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

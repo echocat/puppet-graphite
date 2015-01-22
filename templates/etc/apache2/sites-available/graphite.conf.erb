@@ -26,7 +26,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 
 	# I've found that an equal number of processes & threads tends
 	# to show the best performance for Graphite (ymmv).
-	WSGIDaemonProcess graphite processes=5 threads=5 display-name='%{GROUP}' inactivity-timeout=120
+	WSGIDaemonProcess graphite processes=<%= scope.lookupvar('graphite::wsgi_processes') -%> threads=<%= scope.lookupvar('graphite::wsgi_threads') -%> display-name='%{GROUP}' inactivity-timeout=<%= scope.lookupvar('graphite::wsgi_inactivity_timeout') %>
 	WSGIProcessGroup graphite
 	WSGIApplicationGroup %{GLOBAL}
 	WSGIImportScript /opt/graphite/conf/graphite.wsgi process-group=graphite application-group=%{GLOBAL}
