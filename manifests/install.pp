@@ -10,6 +10,9 @@ class graphite::install(
   $django_tagging_ver = '0.3.1',
   $twisted_ver        = '11.1.0',
   $txamqp_ver         = '0.4',
+  $graphite_web_loc   = 'graphite-web',
+  $carbon_loc         = 'carbon',
+  $whisper_loc        = 'whisper',
 ) inherits graphite::params {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
@@ -70,15 +73,18 @@ class graphite::install(
   }->
 
   package{'graphite-web':
-    ensure => $::graphite::params::graphiteVersion,
+    ensure => installed,
+    name => $graphite_web_loc,
   }->
 
   package{'carbon':
-    ensure => $::graphite::params::carbonVersion,
+    ensure => installed,
+    name => $carbon_loc,
   }->
 
   package{'whisper':
-    ensure => $::graphite::params::whisperVersion,
+    ensure => installed,
+    name => $whisper_loc
   }->
 
   # workaround for unusual graphite install target:

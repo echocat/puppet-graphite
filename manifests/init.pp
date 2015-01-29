@@ -532,6 +532,9 @@ class graphite (
   $wsgi_processes                        =  5,
   $wsgi_threads                          =  5,
   $wsgi_inactivity_timeout               =  120,
+  $gr_graphite_web_loc                   = undef,
+  $gr_carbon_loc                         = undef,
+  $gr_whisper_loc                        = undef,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
@@ -543,7 +546,11 @@ class graphite (
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   anchor { 'graphite::begin':}->
-  class { 'graphite::install':}~>
+  class { 'graphite::install':
+    graphite_web_loc   => $gr_graphite_web_loc,
+    carbon_loc         => $gr_carbon_loc,
+    whisper_loc        => $gr_whisper_loc,
+  }~>
   class { 'graphite::config':}->
   anchor { 'graphite::end':}
 }
