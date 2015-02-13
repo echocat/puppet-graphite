@@ -433,6 +433,18 @@ Default is '0.0.0.0' (string). Address for line interface to listen on.
 
 Default is 2023. TCP port for line interface to listen on.
 
+#####`gr_aggregator_enable_udp_listener`
+
+Default is 'False' (string). Set this to True to enable the UDP listener.
+
+#####`gr_aggregator_udp_receiver_interface`
+
+Default is '0.0.0.0' (string). Its clear, isnt it?
+
+#####`gr_aggregator_udp_receiver_port`
+
+Default is 2023. Self explaining.
+
 #####`gr_aggregator_pickle_interface`
 
 Default is '0.0.0.0' (string). IP address for pickle interface.
