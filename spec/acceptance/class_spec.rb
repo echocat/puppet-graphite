@@ -22,7 +22,7 @@ describe 'graphite class' do
       it { should_not be_listening.with('udp') }
     end
   end
-  context 'with TCP+UDP cache and TCP+UDP aggregator configured' do
+  context 'with TCP & UDP carbon-cache and TCP & UDP carbon-aggregator configured' do
     it 'should work with no errors' do
       pp = <<-EOS
       class { 'graphite':
