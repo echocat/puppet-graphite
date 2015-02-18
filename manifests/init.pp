@@ -367,6 +367,45 @@
 # [*wsgi_inactivity-timeout*]
 #   WSGI inactivity-timeout in seconds.
 #   Default is 120
+# [*gr_django_tagging_pkg*]
+#   String. The name of the django tagging package to install
+#   Default: django-tagging
+# [*gr_django_tagging_ver*] 
+#   String. The version of the django tagging package to install
+#   Default: 0.3.1
+# [*gr_twisted_pkg*]
+#   String. The name of the twisted package to install
+#   Default: Twisted
+# [*gr_twisted_ver*] 
+#   String. The version of the twisted package to install
+#   Default: 11.1.0
+# [*gr_txamqp_pkg*]
+#   String. The name of the txamqp package to install
+#   Default: txAMQP
+# [*gr_txamqp_ver*] 
+#   String. The version of the txamqp package to install
+#   Default: 0.4
+# [*gr_graphite_pkg*]
+#   String. The name of the graphite package to install
+#   Default: graphite-web
+# [*gr_graphite_ver*] 
+#   String. The version of the graphite package to install
+#   Default: 0.9.12
+# [*gr_carbon_pkg*]
+#   String. The name of the carbon package to install
+#   Default: carbon
+# [*gr_carbon_ver*] 
+#   String. The version of the carbon package to install
+#   Default: 0.9.12
+# [*gr_whisper_pkg*]
+#   String. The name of the whisper package to install
+#   Default: whisper
+# [*gr_whisper_ver*] 
+#   String. The version of the whisper package to install
+#   Default: 0.9.12
+# [*gr_pip_install*]
+#   Boolean. Should the package be installed via pip
+#   Default: true  
 #
 # === Examples
 #
@@ -532,6 +571,19 @@ class graphite (
   $wsgi_processes                        =  5,
   $wsgi_threads                          =  5,
   $wsgi_inactivity_timeout               =  120,
+  $gr_django_tagging_pkg                 = $::graphite::params::django_tagging_pkg,
+  $gr_django_tagging_ver                 = $::graphite::params::django_tagging_ver,
+  $gr_twisted_pkg                        = $::graphite::params::twisted_pkg,
+  $gr_twisted_ver                        = $::graphite::params::twisted_ver,
+  $gr_txamqp_pkg                         = $::graphite::params::txamqp_pkg,
+  $gr_txamqp_ver                         = $::graphite::params::txamqp_ver,
+  $gr_graphite_pkg                       = $::graphite::params::graphite_pkg,
+  $gr_graphite_ver                       = $::graphite::params::graphite_ver,
+  $gr_carbon_pkg                         = $::graphite::params::carbon_pkg,
+  $gr_carbon_ver                         = $::graphite::params::carbon_ver,
+  $gr_whisper_pkg                        = $::graphite::params::whisper_pkg,
+  $gr_whisper_ver                        = $::graphite::params::whisper_ver,
+  $gr_pip_install                        = true,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

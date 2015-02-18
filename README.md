@@ -148,6 +148,27 @@ ones set for the principal instance.
 
 So in this case you would have 3 cache instances, the first one is `cache` (you can refer to it as `cache:a` too), `cache:b` and `cache:c`. cache:a will listen on ports 2003, 2004 and 7002 for line, pickle and query respectively. But, cache:b will do it on ports 2103, 2104, and 7102, and cache:c on 2203, 2204 and 7202. All other parameters from cache:a will be inherited by cache:b and c.
 
+###Installing with something other than pip and specifying package names and versions
+If you need to install via something other pip, an internal apt repo with fpm converted packages for instance, you can set `gr_pip_install` to false.
+If you're doing this you'll most likely have to override the default package names and versions as well. 
+```puppet
+  class { '::graphite':
+    gr_pip_install        => false,
+    gr_django_tagging_pkg => 'python-django-tagging',
+    gr_django_tagging_ver => 'present',
+    gr_twisted_pkg        => 'python-twisted',
+    gr_twisted_ver        => 'present',
+    gr_txamqp_pkg         => 'python-txamqp',
+    gr_txamqp_ver         => 'present',
+    gr_graphite_pkg       => 'python-graphite-web',
+    gr_graphite_ver       => 'present',
+    gr_carbon_pkg         => 'python-carbon',
+    gr_carbon_ver         => 'present',
+    gr_whisper_pkg        => 'python-whisper',
+    gr_whisper_ver        => 'present',
+  }
+```
+
 ##Usage
 
 ####Class: `graphite`
@@ -604,17 +625,70 @@ Default is false. Set lock writes for whisper
 
 Default is false. Set fallocate_create for whisper
 
-#####'gr_log_cache_performance'
+#####`gr_log_cache_performance`
 
 Default is 'False' (string). Logs timings for remote calls to carbon-cache
 
-#####'gr_log_rendering_performance'
+#####`gr_log_rendering_performance`
 
 Default is 'False' (string). Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
 
-#####'gr_log_metric_access'
+#####`gr_log_metric_access`
 
 Default is 'False' (string). Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
+
+#####`gr_django_tagging_pkg`
+
+Default is 'django-tagging' (string) The name of the django-tagging package that should be installed
+
+#####`gr_django_tagging_ver`
+
+Default is '0.3.1' (string) The version of the django-tagging package that should be installed
+
+#####`gr_twisted_pkg`
+
+Default is 'Twisted' (string) The name of the twisted package that should be installed
+
+#####`gr_twisted_ver`
+
+Default is '11.1.0' (string) The version of the twisted package that should be installed
+
+#####`gr_txamqp_pkg`
+
+Default is 'txAMQP' (string) The name of the txamqp package that should be installed
+
+#####`gr_txamqp_ver`
+
+Default is '0.4' (string) The version of the txamqp package that should be installed
+
+#####`gr_graphite_pkg`
+
+Default is 'graphite-web' (string) The name of the graphite package that should be installed
+
+#####`gr_graphite_ver`
+
+Default is '0.9.12' (string) The version of the graphite package that should be installed
+
+#####`gr_carbon_pkg`
+
+Default is 'carbon' (string) The name of the carbon package that should be installed
+
+#####`gr_carbon_ver`
+
+Default is '0.9.12' (string) The version of the carbon package that should be installed
+
+#####`gr_whisper_pkg`
+
+Default is 'whisper' (string) The name of the whisper package that should be installed
+
+#####`gr_whisper_ver`
+
+Default is '0.9.12' (string) The version of the whisper package that should be installed
+
+#####`gr_pip_install`
+
+Default is true (Bool). Should packages be installed via pip
+
 
 ##Requirements
 
