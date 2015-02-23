@@ -1,3 +1,16 @@
+## 2015-02-23 - 5.10.0 (Feature/Bugfix release)
+
+#### Features:
+
+- add UDP listener support to Carbon Aggregator
+- added kill command after stop_counter finished for carbon shutdown
+- Configureable WSGI params
+- Support installing via other methods than pip (like RPM)
+
+#### Bugfixes:
+
+- Logrotate filtering out .gz files
+
 ## 2015-01-09 - 5.9.0 (Feature/Bugfix release)
 
 #### Features:
