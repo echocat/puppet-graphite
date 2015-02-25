@@ -379,42 +379,42 @@
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
-# [*gr_django_tagging_ver*] 
+# [*gr_django_tagging_ver*]
 #   String. The version of the django tagging package to install
 #   Default: 0.3.1
 # [*gr_twisted_pkg*]
 #   String. The name of the twisted package to install
 #   Default: Twisted
-# [*gr_twisted_ver*] 
+# [*gr_twisted_ver*]
 #   String. The version of the twisted package to install
 #   Default: 11.1.0
 # [*gr_txamqp_pkg*]
 #   String. The name of the txamqp package to install
 #   Default: txAMQP
-# [*gr_txamqp_ver*] 
+# [*gr_txamqp_ver*]
 #   String. The version of the txamqp package to install
 #   Default: 0.4
 # [*gr_graphite_pkg*]
 #   String. The name of the graphite package to install
 #   Default: graphite-web
-# [*gr_graphite_ver*] 
+# [*gr_graphite_ver*]
 #   String. The version of the graphite package to install
 #   Default: 0.9.12
 # [*gr_carbon_pkg*]
 #   String. The name of the carbon package to install
 #   Default: carbon
-# [*gr_carbon_ver*] 
+# [*gr_carbon_ver*]
 #   String. The version of the carbon package to install
 #   Default: 0.9.12
 # [*gr_whisper_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
-# [*gr_whisper_ver*] 
+# [*gr_whisper_ver*]
 #   String. The version of the whisper package to install
 #   Default: 0.9.12
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
-#   Default: true  
+#   Default: true
 #
 # === Examples
 #
@@ -484,8 +484,8 @@ class graphite (
   },
   $gr_web_server                         = 'apache',
   $gr_web_servername                     = $::fqdn,
-  $gr_web_group                          = undef,
-  $gr_web_user                           = undef,
+  $gr_web_group                          = $graphite::params::web_group,
+  $gr_web_user                           = $graphite::params::web_user,
   $gr_web_cors_allow_from_all            = false,
   $gr_use_ssl                            = false,
   $gr_ssl_cert                           = undef,
