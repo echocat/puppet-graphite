@@ -78,7 +78,7 @@ The defaults are determined by your operating system e.g. Debian systems have on
 
 ###Configure Graphite with Grafana
 
-This setup will use the [puppetlabs/apache](https://forge.puppetlabs.com/puppetlabs/apache) and [dwerder/grafana](https://forge.puppetlabs.com/dwerder/grafana) modules to setup a graphite system with grafana frontend. You will also need an elasticsearch as it is required for grafana.
+This setup will use the [puppetlabs-apache](https://forge.puppetlabs.com/puppetlabs/apache) and [dwerder-grafana](https://forge.puppetlabs.com/dwerder/grafana) modules to setup a graphite system with grafana frontend. You will also need an elasticsearch as it is required for grafana.
 
 ```puppet
 include '::apache'
