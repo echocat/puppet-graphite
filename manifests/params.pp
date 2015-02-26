@@ -12,7 +12,7 @@ class graphite::params {
 
   $python_pip_pkg     = 'python-pip'
   $django_tagging_pkg = 'django-tagging'
-  $django_tagging_ver = '0.3.4'
+  $django_tagging_ver = '0.3.1'
   $twisted_pkg        = 'Twisted'
   $twisted_ver        = '11.1.0'
   $txamqp_pkg         = 'txAMQP'
