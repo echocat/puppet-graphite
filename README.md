@@ -7,6 +7,7 @@
 3. [Setup - The basics of getting started with graphite](#setup)
     * [Beginning with graphite - Installation](#beginning-with-graphite)
     * [Configure MySQL and Memcached](#configure-mysql-and-memcached)
+    * [Configure Graphite with Grafana](#configure-graphite-with-grafana)
     * [Configuration with Apache 2.4 and CORS](#configuration-with-apache-24-and-cors)
     * [Configuration with Additional LDAP Options](#configuration-with-additional-ldap-options)
     * [Configuration with multiple cache, relay and/or aggregator instances](#configuration-with-multiple-cache-relay-andor-aggregator-instances)
@@ -73,6 +74,71 @@ The defaults are determined by your operating system e.g. Debian systems have on
     gr_django_db_port         => '3306',
     gr_memcache_hosts         => ['127.0.0.1:11211']
   }
+```
+
+###Configure Graphite with Grafana
+
+This setup will use the [puppetlabs-apache](https://forge.puppetlabs.com/puppetlabs/apache) and [dwerder-grafana](https://forge.puppetlabs.com/dwerder/grafana) modules to setup a graphite system with grafana frontend. You will also need an elasticsearch as it is required for grafana.
+
+```puppet
+include '::apache'
+
+apache::vhost { graphite.my.domain:
+  port    => '80',
+  docroot => '/opt/graphite/webapp',
+  wsgi_application_group      => '%{GLOBAL}',
+  wsgi_daemon_process         => 'graphite',
+  wsgi_daemon_process_options => {
+    processes          => '5',
+    threads            => '5',
+    display-name       => '%{GROUP}',
+    inactivity-timeout => '120',
+  },
+  wsgi_import_script          => '/opt/graphite/conf/graphite.wsgi',
+  wsgi_import_script_options  => {
+    process-group     => 'graphite',
+    application-group => '%{GLOBAL}'
+  },
+  wsgi_process_group          => 'graphite',
+  wsgi_script_aliases         => {
+    '/' => '/opt/graphite/conf/graphite.wsgi'
+  },
+  headers => [
+    'set Access-Control-Allow-Origin "*"',
+    'set Access-Control-Allow-Methods "GET, OPTIONS, POST"',
+    'set Access-Control-Allow-Headers "origin, authorization, accept"',
+  ],
+  directories => [{
+    path => '/media/',
+    order => 'deny,allow',
+    allow => 'from all'}
+  ]
+}->
+class { 'graphite':
+  gr_web_server => 'none'
+}
+
+apache::vhost { 'grafana.my.domain':
+  servername      => 'grafana.my.domain',
+  port            => 80,
+  docroot         => '/opt/grafana',
+  error_log_file  => 'grafana_error.log',
+  access_log_file => 'grafana_access.log',
+  directories     => [
+    {
+      path            => '/opt/grafana',
+      options         => [ 'None' ],
+      allow           => 'from All',
+      allow_override  => [ 'None' ],
+      order           => 'Allow,Deny',
+    }
+  ]
+}->
+class {'grafana':
+  graphite_host      => 'graphite.my.domain',
+  elasticsearch_host => 'elasticsearach.my.domain',
+  elasticsearch_port => 9200,
+}
 ```
 
 ###Configuration with Apache 2.4 and CORS
@@ -147,6 +213,27 @@ ones set for the principal instance.
 ```
 
 So in this case you would have 3 cache instances, the first one is `cache` (you can refer to it as `cache:a` too), `cache:b` and `cache:c`. cache:a will listen on ports 2003, 2004 and 7002 for line, pickle and query respectively. But, cache:b will do it on ports 2103, 2104, and 7102, and cache:c on 2203, 2204 and 7202. All other parameters from cache:a will be inherited by cache:b and c.
+
+###Installing with something other than pip and specifying package names and versions
+If you need to install via something other pip, an internal apt repo with fpm converted packages for instance, you can set `gr_pip_install` to false.
+If you're doing this you'll most likely have to override the default package names and versions as well. 
+```puppet
+  class { '::graphite':
+    gr_pip_install        => false,
+    gr_django_tagging_pkg => 'python-django-tagging',
+    gr_django_tagging_ver => 'present',
+    gr_twisted_pkg        => 'python-twisted',
+    gr_twisted_ver        => 'present',
+    gr_txamqp_pkg         => 'python-txamqp',
+    gr_txamqp_ver         => 'present',
+    gr_graphite_pkg       => 'python-graphite-web',
+    gr_graphite_ver       => 'present',
+    gr_carbon_pkg         => 'python-carbon',
+    gr_carbon_ver         => 'present',
+    gr_whisper_pkg        => 'python-whisper',
+    gr_whisper_ver        => 'present',
+  }
+```
 
 ##Usage
 
@@ -433,6 +520,18 @@ Default is '0.0.0.0' (string). Address for line interface to listen on.
 
 Default is 2023. TCP port for line interface to listen on.
 
+#####`gr_aggregator_enable_udp_listener`
+
+Default is 'False' (string). Set this to True to enable the UDP listener.
+
+#####`gr_aggregator_udp_receiver_interface`
+
+Default is '0.0.0.0' (string). Its clear, isnt it?
+
+#####`gr_aggregator_udp_receiver_port`
+
+Default is 2023. Self explaining.
+
 #####`gr_aggregator_pickle_interface`
 
 Default is '0.0.0.0' (string). IP address for pickle interface.
@@ -604,17 +703,70 @@ Default is false. Set lock writes for whisper
 
 Default is false. Set fallocate_create for whisper
 
-#####'gr_log_cache_performance'
+#####`gr_log_cache_performance`
 
 Default is 'False' (string). Logs timings for remote calls to carbon-cache
 
-#####'gr_log_rendering_performance'
+#####`gr_log_rendering_performance`
 
 Default is 'False' (string). Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
 
-#####'gr_log_metric_access'
+#####`gr_log_metric_access`
 
 Default is 'False' (string). Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
+
+#####`gr_django_tagging_pkg`
+
+Default is 'django-tagging' (string) The name of the django-tagging package that should be installed
+
+#####`gr_django_tagging_ver`
+
+Default is '0.3.1' (string) The version of the django-tagging package that should be installed
+
+#####`gr_twisted_pkg`
+
+Default is 'Twisted' (string) The name of the twisted package that should be installed
+
+#####`gr_twisted_ver`
+
+Default is '11.1.0' (string) The version of the twisted package that should be installed
+
+#####`gr_txamqp_pkg`
+
+Default is 'txAMQP' (string) The name of the txamqp package that should be installed
+
+#####`gr_txamqp_ver`
+
+Default is '0.4' (string) The version of the txamqp package that should be installed
+
+#####`gr_graphite_pkg`
+
+Default is 'graphite-web' (string) The name of the graphite package that should be installed
+
+#####`gr_graphite_ver`
+
+Default is '0.9.12' (string) The version of the graphite package that should be installed
+
+#####`gr_carbon_pkg`
+
+Default is 'carbon' (string) The name of the carbon package that should be installed
+
+#####`gr_carbon_ver`
+
+Default is '0.9.12' (string) The version of the carbon package that should be installed
+
+#####`gr_whisper_pkg`
+
+Default is 'whisper' (string) The name of the whisper package that should be installed
+
+#####`gr_whisper_ver`
+
+Default is '0.9.12' (string) The version of the whisper package that should be installed
+
+#####`gr_pip_install`
+
+Default is true (Bool). Should packages be installed via pip
+
 
 ##Requirements
 

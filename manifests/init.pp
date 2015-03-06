@@ -201,6 +201,15 @@
 #   Default is '0.0.0.0'
 # [*gr_aggregator_line_port*]
 #   Default is 2023.
+# [*gr_aggregator_enable_udp_listener*]
+#   Set this to True to enable the UDP listener.
+#   Default is False.
+# [*gr_aggregator_udp_receiver_interface*]
+#   Its clear, isnt it?
+#   Default is 0.0.0.0
+# [*gr_aggregator_udp_receiver_port*]
+#   Self explaining.
+#   Default is 2023
 # [*gr_aggregator_pickle_interface*]
 #   Default is '0.0.0.0'
 # [*gr_aggregator_pickle_port*]
@@ -367,6 +376,45 @@
 # [*wsgi_inactivity-timeout*]
 #   WSGI inactivity-timeout in seconds.
 #   Default is 120
+# [*gr_django_tagging_pkg*]
+#   String. The name of the django tagging package to install
+#   Default: django-tagging
+# [*gr_django_tagging_ver*]
+#   String. The version of the django tagging package to install
+#   Default: 0.3.1
+# [*gr_twisted_pkg*]
+#   String. The name of the twisted package to install
+#   Default: Twisted
+# [*gr_twisted_ver*]
+#   String. The version of the twisted package to install
+#   Default: 11.1.0
+# [*gr_txamqp_pkg*]
+#   String. The name of the txamqp package to install
+#   Default: txAMQP
+# [*gr_txamqp_ver*]
+#   String. The version of the txamqp package to install
+#   Default: 0.4
+# [*gr_graphite_pkg*]
+#   String. The name of the graphite package to install
+#   Default: graphite-web
+# [*gr_graphite_ver*]
+#   String. The version of the graphite package to install
+#   Default: 0.9.12
+# [*gr_carbon_pkg*]
+#   String. The name of the carbon package to install
+#   Default: carbon
+# [*gr_carbon_ver*]
+#   String. The version of the carbon package to install
+#   Default: 0.9.12
+# [*gr_whisper_pkg*]
+#   String. The name of the whisper package to install
+#   Default: whisper
+# [*gr_whisper_ver*]
+#   String. The version of the whisper package to install
+#   Default: 0.9.12
+# [*gr_pip_install*]
+#   Boolean. Should the package be installed via pip
+#   Default: true
 #
 # === Examples
 #
@@ -436,8 +484,8 @@ class graphite (
   },
   $gr_web_server                         = 'apache',
   $gr_web_servername                     = $::fqdn,
-  $gr_web_group                          = undef,
-  $gr_web_user                           = undef,
+  $gr_web_group                          = $graphite::params::web_group,
+  $gr_web_user                           = $graphite::params::web_user,
   $gr_web_cors_allow_from_all            = false,
   $gr_use_ssl                            = false,
   $gr_ssl_cert                           = undef,
@@ -477,6 +525,9 @@ class graphite (
   $gr_enable_carbon_aggregator           = false,
   $gr_aggregator_line_interface          = '0.0.0.0',
   $gr_aggregator_line_port               = 2023,
+  $gr_aggregator_enable_udp_listener     = 'False',
+  $gr_aggregator_udp_receiver_interface  = '0.0.0.0',
+  $gr_aggregator_udp_receiver_port       = 2023,
   $gr_aggregator_pickle_interface        = '0.0.0.0',
   $gr_aggregator_pickle_port             = 2024,
   $gr_aggregator_forward_all             = 'True',
@@ -532,9 +583,19 @@ class graphite (
   $wsgi_processes                        =  5,
   $wsgi_threads                          =  5,
   $wsgi_inactivity_timeout               =  120,
-  $gr_graphite_web_loc                   = undef,
-  $gr_carbon_loc                         = undef,
-  $gr_whisper_loc                        = undef,
+  $gr_django_tagging_pkg                 = $::graphite::params::django_tagging_pkg,
+  $gr_django_tagging_ver                 = $::graphite::params::django_tagging_ver,
+  $gr_twisted_pkg                        = $::graphite::params::twisted_pkg,
+  $gr_twisted_ver                        = $::graphite::params::twisted_ver,
+  $gr_txamqp_pkg                         = $::graphite::params::txamqp_pkg,
+  $gr_txamqp_ver                         = $::graphite::params::txamqp_ver,
+  $gr_graphite_pkg                       = $::graphite::params::graphite_pkg,
+  $gr_graphite_ver                       = $::graphite::params::graphite_ver,
+  $gr_carbon_pkg                         = $::graphite::params::carbon_pkg,
+  $gr_carbon_ver                         = $::graphite::params::carbon_ver,
+  $gr_whisper_pkg                        = $::graphite::params::whisper_pkg,
+  $gr_whisper_ver                        = $::graphite::params::whisper_ver,
+  $gr_pip_install                        = true,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
@@ -546,11 +607,6 @@ class graphite (
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   anchor { 'graphite::begin':}->
-  class { 'graphite::install':
-    graphite_web_loc   => $gr_graphite_web_loc,
-    carbon_loc         => $gr_carbon_loc,
-    whisper_loc        => $gr_whisper_loc,
-  }~>
   class { 'graphite::config':}->
   anchor { 'graphite::end':}
 }
