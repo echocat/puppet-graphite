@@ -6,20 +6,9 @@
 #
 # None.
 #
-class graphite::install(
-  $django_tagging_ver = '0.3.1',
-  $twisted_ver        = '11.1.0',
-  $txamqp_ver         = '0.4',
-  $graphite_web_loc   = 'graphite-web',
-  $carbon_loc         = 'carbon',
-  $whisper_loc        = 'whisper',
-) inherits graphite::params {
+class graphite::install inherits graphite::params {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
-  }
-
-  Package {
-    provider => 'pip',
   }
 
   # for full functionality we need these packages:
@@ -27,29 +16,43 @@ class graphite::install(
   #           python-django-tagging, python-simplejson
   # optinal: python-ldap, python-memcache, memcached, python-sqlite
 
-  # using the pip package provider requires python-pip
-
-  if ! defined(Package[$::graphite::params::python_pip_pkg]) {
-    package { $::graphite::params::python_pip_pkg :
-      provider => undef, # default to package provider auto-discovery
-      before   => [
-        Package['django-tagging'],
-        Package['twisted'],
-        Package['txamqp'],
-      ]
+  if $::graphite::gr_pip_install {
+    Package {
+      provider => 'pip',
     }
-  }
 
-  # install python headers and libs for pip
+    # using the pip package provider requires python-pip
 
-  if ! defined(Package[$::graphite::params::python_dev_pkg]) {
-    package { $::graphite::params::python_dev_pkg :
-      provider => undef, # default to package provider auto-discovery
-      before   => [
-        Package['django-tagging'],
-        Package['twisted'],
-        Package['txamqp'],
-      ]
+    if ! defined(Package[$::graphite::params::python_pip_pkg]) {
+      package { $::graphite::params::python_pip_pkg :
+        provider => undef, # default to package provider auto-discovery
+        before   => [
+          Package['django-tagging'],
+          Package['twisted'],
+          Package['txamqp'],
+          Package['gunicorn'],
+          Package['pytz'],
+          Package['simplejson'],
+          Package['pyparsing']
+        ]
+      }
+    }
+
+    # install python headers and libs for pip
+
+    if ! defined(Package[$::graphite::params::python_dev_pkg]) {
+      package { $::graphite::params::python_dev_pkg :
+        provider => undef, # default to package provider auto-discovery
+        before   => [
+          Package['django-tagging'],
+          Package['twisted'],
+          Package['txamqp'],
+          Package['gunicorn'],
+          Package['pytz'],
+          Package['simplejson'],
+          Package['pyparsing']
+        ]
+      }
     }
   }
 
@@ -58,44 +61,58 @@ class graphite::install(
     provider => undef, # default to package provider auto-discovery
   }->
 
-  package{'django-tagging':
-    ensure => $django_tagging_ver,
+  package{ 'django-tagging':
+      ensure => $::graphite::gr_django_tagging_ver,
+      name   => $::graphite::gr_django_tagging_pkg,
   }->
 
   package{'twisted':
-    ensure => $twisted_ver,
-    name   => 'Twisted',
+    ensure => $::graphite::gr_twisted_ver,
+    name   => $::graphite::gr_twisted_pkg,
   }->
 
   package{'txamqp':
-    ensure => $txamqp_ver,
-    name   => 'txAMQP',
+    ensure => $::graphite::gr_txamqp_ver,
+    name   => $::graphite::gr_txamqp_pkg,
+  }->
+
+  package{
+    ['gunicorn', 'pytz']:
+      ;
+    'simplejson':
+      ensure => '2.1.6';
+    'pyparsing':
+      ensure => '1.5.7';
   }->
 
   package{'graphite-web':
-    ensure => installed,
-    name => $graphite_web_loc,
+    ensure => $::graphite::gr_graphite_ver,
+    name   => $::graphite::gr_graphite_pkg,
   }->
 
   package{'carbon':
-    ensure => installed,
-    name => $carbon_loc,
+    ensure => $::graphite::gr_carbon_ver,
+    name   => $::graphite::gr_carbon_pkg,
   }->
 
   package{'whisper':
-    ensure => installed,
-    name => $whisper_loc
-  }->
+    ensure => $::graphite::gr_whisper_ver,
+    name   => $::graphite::gr_whisper_pkg,
+  }
 
-  # workaround for unusual graphite install target:
-  # https://github.com/graphite-project/carbon/issues/86
-  file { $::graphite::params::carbon_pip_hack_source :
-    ensure => link,
-    target => $::graphite::params::carbon_pip_hack_target,
-  }->
+  if $::graphite::gr_pip_install {
+    # workaround for unusual graphite install target:
+    # https://github.com/graphite-project/carbon/issues/86
+    file { $::graphite::params::carbon_pip_hack_source :
+      ensure  => link,
+      target  => $::graphite::params::carbon_pip_hack_target,
+      require => Package['whisper'],
+    }
 
-  file { $::graphite::params::gweb_pip_hack_source :
-    ensure => link,
-    target => $::graphite::params::gweb_pip_hack_target,
+    file { $::graphite::params::gweb_pip_hack_source :
+      ensure  => link,
+      target  => $::graphite::params::gweb_pip_hack_target,
+      require => Package['whisper'],
+    }
   }
 }

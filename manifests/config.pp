@@ -49,8 +49,8 @@ class graphite::config inherits graphite::params {
   # first init of user db for graphite
 
   exec { 'Initial django db creation':
-    command     => 'python manage.py syncdb --noinput',
-    cwd         => '/opt/graphite/webapp/graphite',
+    command     => 'env PYTHONPATH=/opt/graphite/webapp django-admin syncdb --noinput --settings=graphite.settings',
+    cwd         => '/opt/graphite/webapp',
     refreshonly => true,
     require     => File['/opt/graphite/webapp/graphite/local_settings.py'],
     subscribe   => Class['graphite::install'],
@@ -59,7 +59,7 @@ class graphite::config inherits graphite::params {
   # change access permissions for web server
 
   exec { 'Chown graphite for web user':
-    command     => "chown -R ${::graphite::params::web_user}:${::graphite::params::web_group} /opt/graphite/storage/",
+    command     => "chown -R ${::graphite::gr_web_user}:${::graphite::gr_web_group} /opt/graphite/storage/",
     cwd         => '/opt/graphite/',
     refreshonly => true,
     require     => $web_server_package_require,
@@ -68,7 +68,7 @@ class graphite::config inherits graphite::params {
   # change access permissions for carbon-cache to align with gr_user
   # (if different from web_user)
 
-  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::params::web_user {
+  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::gr_web_user {
     file {
       '/opt/graphite/storage/whisper':
         ensure  => directory,
@@ -92,17 +92,17 @@ class graphite::config inherits graphite::params {
     '/opt/graphite/webapp/graphite/local_settings.py':
       ensure  => file,
       content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
-      group   => $::graphite::params::web_group,
+      group   => $::graphite::gr_web_group,
       mode    => '0644',
-      owner   => $::graphite::params::web_user,
+      owner   => $::graphite::gr_web_user,
       require => $web_server_package_require;
 
     '/opt/graphite/conf/graphite.wsgi':
       ensure  => file,
       content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
-      group   => $::graphite::params::web_group,
+      group   => $::graphite::gr_web_group,
       mode    => '0644',
-      owner   => $::graphite::params::web_user,
+      owner   => $::graphite::gr_web_user,
       require => $web_server_package_require;
   }
 
@@ -110,9 +110,9 @@ class graphite::config inherits graphite::params {
     file { '/opt/graphite/webapp/graphite/custom_auth.py':
       ensure  => file,
       content => template('graphite/opt/graphite/webapp/graphite/custom_auth.py.erb'),
-      group   => $::graphite::params::web_group,
+      group   => $::graphite::gr_web_group,
       mode    => '0644',
-      owner   => $::graphite::params::web_user,
+      owner   => $::graphite::gr_web_user,
       require => $web_server_package_require,
     }
   }
