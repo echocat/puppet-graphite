@@ -8,7 +8,6 @@
 # None.
 #
 class graphite::config inherits graphite::params {
-  Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   # If virtualenv is used, then the environment must
   # be considered carefully for other operations
@@ -30,6 +29,7 @@ class graphite::config inherits graphite::params {
     }
   } else {
     $venv_environment = []
+    Exec { path => '/bin:/usr/bin:/usr/sbin' }
   }
 
   # for full functionality we need this packages:
