@@ -1,3 +1,9 @@
+## 2015-03-09 - 5.10.2 (Bugfix release)
+
+#### Bugfixes:
+
+- Fixed #162 sort hashes to avoid pseudo changes in relay-rules.conf
+
 ## 2015-02-26 - 5.10.1 (Bugfix release)
 
 #### Bugfixes:
