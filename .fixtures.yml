@@ -3,10 +3,10 @@ fixtures:
     stdlib: 
       repo: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
       ref: "4.2.0"
-    apache: 
+    apache:
       repo: "git://github.com/puppetlabs/puppetlabs-apache.git"
       ref: "1.2.0"
-    concat: 
+    concat:
       repo: "git://github.com/puppetlabs/puppetlabs-concat.git"
       ref: "1.1.1"
     logrotate:
