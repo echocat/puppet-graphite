@@ -28,7 +28,7 @@ if [ $# -gt 1 ]; then
     shift
     INSTANCES=$*
 else
-	INSTANCES=$(grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
+    INSTANCES=$(grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
     INSTANCES=${INSTANCES/${CARBON_DAEMON}/a}
 fi
 
@@ -147,7 +147,7 @@ case "${OPERATION}" in
         ;;
     stop)
         $1
-		;;
+        ;;
     restart)
         $1
         ;;
