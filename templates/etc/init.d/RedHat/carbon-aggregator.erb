@@ -26,9 +26,9 @@ pidfile=""
 OPERATION="$1"
 if [ $# -gt 1 ]; then
     shift
-    INSTANCES=$@
+    INSTANCES=$*
 else
-	INSTANCES=`grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2`
+	INSTANCES=$(grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
 fi
 
 start()
@@ -46,7 +46,7 @@ start()
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
-        if [ rh_status_q ]; then
+        if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
             echo
@@ -111,7 +111,7 @@ restart() {
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
-        if [ rh_status_q ]; then
+        if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
             echo
