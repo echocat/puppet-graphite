@@ -58,33 +58,42 @@ class graphite::config inherits graphite::params {
 
   # change access permissions for web server
 
-  exec { 'Chown graphite for web user':
-    command     => "chown -R ${::graphite::gr_web_user}:${::graphite::gr_web_group} /opt/graphite/storage/",
-    cwd         => '/opt/graphite/',
-    refreshonly => true,
-    require     => $web_server_package_require,
+  file {
+    ['/opt/graphite/storage',
+     '/opt/graphite/storage/lists',
+     '/opt/graphite/storage/log',
+     '/opt/graphite/storage/rrd',
+     '/opt/graphite/storage/run']:
+      ensure  => directory,
+      group   => $::graphite::gr_web_group,
+      mode    => '0755',
+      owner   => $::graphite::gr_web_user;
   }
 
   # change access permissions for carbon-cache to align with gr_user
   # (if different from web_user)
 
-  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::gr_web_user {
-    file {
-      '/opt/graphite/storage/whisper':
-        ensure  => directory,
-        group   => $::graphite::gr_group,
-        mode    => '0755',
-        owner   => $::graphite::gr_user,
-        path    => $::graphite::gr_local_data_dir,
-        require => Exec['Chown graphite for web user'];
+  if $::graphite::gr_user != '' {
+    $carbon_user  = $::graphite::gr_user
+    $carbon_group = $::graphite::gr_group
+  } else {
+    $carbon_user  = $::graphite::gr_web_user
+    $carbon_group = $::graphite::gr_web_group
+  }
 
-      '/opt/graphite/storage/log/carbon-cache':
-        ensure  => directory,
-        group   => $::graphite::gr_group,
-        mode    => '0755',
-        owner   => $::graphite::gr_user,
-        require => Exec['Chown graphite for web user'];
-    }
+  file {
+    '/opt/graphite/storage/whisper':
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      owner   => $carbon_user,
+      path    => $::graphite::gr_local_data_dir;
+
+    '/opt/graphite/storage/log/carbon-cache':
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      owner   => $carbon_user;
   }
 
   # Deploy configfiles
