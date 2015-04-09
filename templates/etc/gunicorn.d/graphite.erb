@@ -1,8 +1,8 @@
 CONFIG = {
     'mode': 'django',
     'working_dir': '/opt/graphite/webapp/graphite',
-    'user': 'www-data',
-    'group': 'www-data',
+    'user': '<%= scope.lookupvar('graphite::gr_web_user') %>',
+    'group': '<%= scope.lookupvar('graphite::gr_web_group') %>',
     'args': (
 	'--timeout=<%= scope.lookupvar('graphite::gunicorn_arg_timeout') %>',
         '--bind=unix:/var/run/graphite.sock',
