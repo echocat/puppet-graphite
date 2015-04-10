@@ -18,9 +18,7 @@ class graphite::config_nginx inherits graphite::params {
 
   package {
     'nginx':
-      ensure => installed,
-      before => Exec['Chown graphite for web user'],
-      notify => Exec['Chown graphite for web user'];
+      ensure => installed;
   }
 
   file { '/etc/nginx/sites-enabled/default':
@@ -34,8 +32,7 @@ class graphite::config_nginx inherits graphite::params {
       ensure     => running,
       enable     => true,
       hasrestart => true,
-      hasstatus  => true,
-      require    => Exec['Chown graphite for web user'];
+      hasstatus  => true;
   }
 
   # Ensure that some directories exist first. This is normally handled by the
@@ -68,8 +65,7 @@ class graphite::config_nginx inherits graphite::params {
       content => template('graphite/etc/nginx/sites-available/graphite.erb'),
       require => [
         File['/etc/nginx/sites-available'],
-        Exec['Initial django db creation'],
-        Exec['Chown graphite for web user']
+        Exec['Initial django db creation']
       ],
       notify  => Service['nginx'];
 

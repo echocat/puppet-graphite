@@ -14,9 +14,7 @@ class graphite::config_apache inherits graphite::params {
 
   package {
     $::graphite::params::apache_pkg:
-      ensure => installed,
-      before => Exec['Chown graphite for web user'],
-      notify => Exec['Chown graphite for web user'];
+      ensure => installed;
   }
 
   package {
@@ -63,8 +61,7 @@ class graphite::config_apache inherits graphite::params {
     ensure     => running,
     enable     => true,
     hasrestart => true,
-    hasstatus  => true,
-    require    => Exec['Chown graphite for web user'],
+    hasstatus  => true;
   }
 
   # Deploy configfiles
@@ -76,7 +73,6 @@ class graphite::config_apache inherits graphite::params {
       mode    => '0644',
       owner   => $::graphite::params::web_user,
       require => [
-        Exec['Chown graphite for web user'],
         Exec['Initial django db creation'],
         Package[$::graphite::params::apache_wsgi_pkg],
       ],
@@ -88,6 +84,7 @@ class graphite::config_apache inherits graphite::params {
       mode    => '0644',
       owner   => $::graphite::params::web_user,
       require => [
+        File['/opt/graphite/storage'],
         File["${::graphite::params::apache_dir}/ports.conf"],
       ],
       notify  => Service[$::graphite::params::apache_service_name];
