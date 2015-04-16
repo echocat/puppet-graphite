@@ -59,11 +59,13 @@ class graphite::config inherits graphite::params {
   # change access permissions for web server
 
   file {
-    ['/opt/graphite/storage',
-     '/opt/graphite/storage/lists',
-     '/opt/graphite/storage/log',
-     '/opt/graphite/storage/rrd',
-     '/opt/graphite/storage/run']:
+    [
+      '/opt/graphite/storage',
+      '/opt/graphite/storage/lists',
+      '/opt/graphite/storage/log',
+      '/opt/graphite/storage/rrd',
+      '/opt/graphite/storage/run'
+    ]:
       ensure  => directory,
       group   => $::graphite::gr_web_group,
       mode    => '0755',
