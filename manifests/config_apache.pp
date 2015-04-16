@@ -37,6 +37,7 @@ class graphite::config_apache inherits graphite::params {
   # Deploy configfiles
 
   apache::vhost { "graphite.${::domain}":
+    require                     => Class['graphite::install'],
     port                        => $::graphite::gr_apache_port,
     servername                  => $::graphite::gr_web_servername,
     docroot                     => '/opt/graphite/webapp',
