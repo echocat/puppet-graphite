@@ -50,6 +50,14 @@ MEMCACHE_HOSTS = ['<%= scope.lookupvar('graphite::gr_memcache_hosts').join("','"
 
 #DEFAULT_CACHE_DURATION = 60 # Cache images and data for 1 minute
 
+# disable cache to reduce graph errors
+# https://github.com/graphite-project/graphite-web/issues/576#issuecomment-36246428
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    },
+}
+
 
 #####################################
 # Filesystem Paths #
