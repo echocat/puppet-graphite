@@ -63,6 +63,7 @@ class graphite::config inherits graphite::params {
       '/opt/graphite/storage',
       '/opt/graphite/storage/lists',
       '/opt/graphite/storage/log',
+      '/opt/graphite/storage/log/webapp',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/run'
     ]:
