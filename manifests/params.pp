@@ -43,12 +43,6 @@ class graphite::params {
 
       $python_dev_pkg = 'python-dev'
 
-      # see https://github.com/graphite-project/carbon/issues/86
-      $carbon_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbon_ver}-py2.7.egg-info"
-      $carbon_pip_hack_target = "/opt/graphite/lib/carbon-${carbon_ver}-py2.7.egg-info"
-      $gweb_pip_hack_source   = "/usr/lib/python2.7/dist-packages/graphite_web-${graphite_ver}-py2.7.egg-info"
-      $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.7.egg-info"
-
       $graphitepkgs = [
         'python-tz',
         'python-cairo',
@@ -93,11 +87,7 @@ class graphite::params {
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $carbon_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbon_ver}-py2.6.egg-info"
-          $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbon_ver}-py2.6.egg-info"
-          $apache_24               = false
-          $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphite_ver}-py2.6.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.6.egg-info"
+          $apache_24    = false
           $graphitepkgs = [
             'Django14',
             'MySQL-python',
@@ -116,11 +106,7 @@ class graphite::params {
         }
 
         /^7\.\d+/: {
-          $carbon_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbon_ver}-py2.7.egg-info"
-          $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbon_ver}-py2.7.egg-info"
-          $apache_24               = true
-          $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphite_ver}-py2.7.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.7.egg-info"
+          $apache_24    = true
           $graphitepkgs = [
             'python-django',
             'MySQL-python',

@@ -86,15 +86,56 @@ class graphite::install inherits graphite::params {
   if $::graphite::gr_pip_install {
     # workaround for unusual graphite install target:
     # https://github.com/graphite-project/carbon/issues/86
-    file { $::graphite::params::carbon_pip_hack_source :
+
+    unless $::osfamily =~ /(Debian|RedHat)/ {
+      fail('unsupported os.')
+    }
+
+    $carbon_pip_hack_source = $::osfamily ? {
+      'Debian' => "/usr/lib/python2.7/dist-packages/carbon-${::graphite::gr_carbon_ver}-py2.7.egg-info",
+      'RedHat' => $::operatingsystemrelease ? {
+        /^6\.\d+$/ => "/usr/lib/python2.6/site-packages/carbon-${::graphite::gr_carbon_ver}-py2.6.egg-info",
+        /^7\.\d+/  => "/usr/lib/python2.7/site-packages/carbon-${::graphite::gr_carbon_ver}-py2.7.egg-info",
+        default    => fail("Unsupported RedHat release: '${::operatingsystemrelease}'"),
+      },
+    }
+
+    $carbon_pip_hack_target = $::osfamily ? {
+      'Debian' => "/opt/graphite/lib/carbon-${::graphite::gr_carbon_ver}-py2.7.egg-info",
+      'RedHat' => $::operatingsystemrelease ? {
+        /^6\.\d+$/ => "/opt/graphite/lib/carbon-${::graphite::gr_carbon_ve}-py2.6.egg-info",
+        /^7\.\d+/  => "/opt/graphite/lib/carbon-${::graphite::gr_carbon_ve}-py2.7.egg-info",
+        default    => fail("Unsupported RedHat release: '${::operatingsystemrelease}'"),
+      },
+    }
+
+    $gweb_pip_hack_source = $::osfamily ? {
+      'Debian' => "/usr/lib/python2.7/dist-packages/graphite_web-${::graphite::gr_graphite_ver}-py2.7.egg-info",
+      'RedHat' => $::operatingsystemrelease ? {
+        /^6\.\d+$/ => "/usr/lib/python2.6/site-packages/graphite_web-${::graphite::gr_graphite_ver}-py2.6.egg-info",
+        /^7\.\d+/  => "/usr/lib/python2.7/site-packages/graphite_web-${::graphite::gr_graphite_ver}-py2.7.egg-info",
+        default    => fail("Unsupported RedHat release: '${::operatingsystemrelease}'"),
+      },
+    }
+
+    $gweb_pip_hack_target = $::osfamily ? {
+      'Debian' => "/opt/graphite/webapp/graphite_web-${::graphite::gr_graphite_ver}-py2.7.egg-info",
+      'RedHat' => $::operatingsystemrelease ? {
+        /^6\.\d+$/ => "/opt/graphite/webapp/graphite_web-${::graphite::gr_graphite_ver}-py2.6.egg-info",
+        /^7\.\d+/  => "/opt/graphite/webapp/graphite_web-${::graphite::gr_graphite_ver}-py2.7.egg-info",
+        default    => fail("Unsupported RedHat release: '${::operatingsystemrelease}'"),
+      },
+    }
+
+    file { $carbon_pip_hack_source :
       ensure  => link,
-      target  => $::graphite::params::carbon_pip_hack_target,
+      target  => $carbon_pip_hack_target,
       require => Package['whisper'],
     }
 
-    file { $::graphite::params::gweb_pip_hack_source :
+    file { $gweb_pip_hack_source :
       ensure  => link,
-      target  => $::graphite::params::gweb_pip_hack_target,
+      target  => $gweb_pip_hack_target,
       require => Package['whisper'],
     }
   }
