@@ -24,15 +24,6 @@ class graphite::params {
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.12'
 
-  $whisper_dl_url = "http://github.com/graphite-project/whisper/archive/${::graphite::params::whisper_ver}.tar.gz"
-  $whisper_dl_loc = "${build_dir}/whisper-${::graphite::params::whisper_ver}"
-
-  $webapp_dl_url = "http://github.com/graphite-project/graphite-web/archive/${::graphite::params::graphite_ver}.tar.gz"
-  $webapp_dl_loc = "${build_dir}/graphite-web-${::graphite::params::graphite_ver}"
-
-  $carbon_dl_url = "https://github.com/graphite-project/carbon/archive/${::graphite::params::carbon_ver}.tar.gz"
-  $carbon_dl_loc = "${build_dir}/carbon-${::graphite::params::carbon_ver}"
-
   $install_prefix      = '/opt/'
   $enable_carbon_relay = false
   $nginxconf_dir       = '/etc/nginx/sites-available'
