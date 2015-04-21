@@ -21,8 +21,6 @@
 
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
-Github Master: [![Build Status](https://secure.travis-ci.org/echocat/puppet-graphite.png?branch=master)](https://travis-ci.org/echocat/puppet-graphite)
-
 ##Module Description
 
 [Graphite](http://graphite.readthedocs.org/en/latest/overview.html), and its components Carbon and Whisper, is an enterprise-scale monitoring tool. This module sets up a simple graphite server with all its components. Furthermore it can be used to set up more complex graphite environments with metric aggregation, clustering and so on.

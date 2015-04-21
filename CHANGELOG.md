@@ -1,3 +1,11 @@
+## 2015-04-21 - 5.10.3 (Bugfix release)
+
+#### Bugfixes
+
+- Fixed #170 Faster directory permission handling
+- Fixed #164 RedHat/Debian: Fix init script error for Redhat and fix some bash style
+- Fixed #169 Use gr_web_user / gr_web_group variables in gunicorn template
+
 ## 2015-03-09 - 5.10.2 (Bugfix release)
 
 #### Bugfixes:
