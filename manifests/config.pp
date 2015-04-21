@@ -49,8 +49,8 @@ class graphite::config inherits graphite::params {
   # first init of user db for graphite
 
   exec { 'Initial django db creation':
-    command     => 'python manage.py syncdb --noinput',
-    cwd         => '/opt/graphite/webapp/graphite',
+    command     => 'env PYTHONPATH=/opt/graphite/webapp django-admin syncdb --noinput --settings=graphite.settings',
+    cwd         => '/opt/graphite/webapp',
     refreshonly => true,
     require     => File['/opt/graphite/webapp/graphite/local_settings.py'],
     subscribe   => Class['graphite::install'],

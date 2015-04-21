@@ -30,6 +30,10 @@ class graphite::install inherits graphite::params {
           Package['django-tagging'],
           Package['twisted'],
           Package['txamqp'],
+          Package['gunicorn'],
+          Package['pytz'],
+          Package['simplejson'],
+          Package['pyparsing']
         ]
       }
     }
@@ -43,6 +47,10 @@ class graphite::install inherits graphite::params {
           Package['django-tagging'],
           Package['twisted'],
           Package['txamqp'],
+          Package['gunicorn'],
+          Package['pytz'],
+          Package['simplejson'],
+          Package['pyparsing']
         ]
       }
     }
@@ -66,6 +74,15 @@ class graphite::install inherits graphite::params {
   package{'txamqp':
     ensure => $::graphite::gr_txamqp_ver,
     name   => $::graphite::gr_txamqp_pkg,
+  }->
+
+  package{
+    ['gunicorn', 'pytz']:
+      ;
+    'simplejson':
+      ensure => '2.1.6';
+    'pyparsing':
+      ensure => '1.5.7';
   }->
 
   package{'graphite-web':

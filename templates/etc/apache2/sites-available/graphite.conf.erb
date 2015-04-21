@@ -36,6 +36,8 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	WSGIScriptAlias / /opt/graphite/conf/graphite.wsgi
 
 	Alias /content/ /opt/graphite/webapp/content/
+    Alias /static/ /opt/graphite/webapp/content/
+
 	<Location "/content/">
 			SetHandler None
 <% if scope.lookupvar('graphite::gr_apache_24') %>
