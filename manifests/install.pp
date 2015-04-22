@@ -87,7 +87,7 @@ class graphite::install inherits graphite::params {
     # workaround for unusual graphite install target:
     # https://github.com/graphite-project/carbon/issues/86
 
-    unless $::osfamily =~ /(Debian|RedHat)/ {
+    if $::osfamily !~ /(Debian|RedHat)/ {
       fail('unsupported os.')
     }
 
