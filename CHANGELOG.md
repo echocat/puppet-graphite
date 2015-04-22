@@ -1,3 +1,14 @@
+## 2015-05-22 - 5.11.0 (Feature/Bugfix release)
+
+#### Features:
+
+- Issue #175 Adding gunicorn_bind option to gunicorn
+
+#### Bugfixes:
+
+- Fixed #174 RedHat: delay checking the process has started to aviod race-conition failures on start
+- Fixed #165 Debian: fix first carbon instance name in init scripts
+
 ## 2015-04-21 - 5.10.3 (Bugfix release)
 
 #### Bugfixes
