@@ -87,10 +87,6 @@ class graphite::install inherits graphite::params {
     # workaround for unusual graphite install target:
     # https://github.com/graphite-project/carbon/issues/86
 
-    if $::osfamily !~ /(Debian|RedHat)/ {
-      fail('unsupported os.')
-    }
-
     $carbon_pip_hack_source = $::osfamily ? {
       'Debian' => "/usr/lib/python2.7/dist-packages/carbon-${::graphite::gr_carbon_ver}-py2.7.egg-info",
       'RedHat' => $::operatingsystemrelease ? {
