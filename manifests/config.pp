@@ -8,17 +8,28 @@
 # None.
 #
 class graphite::config inherits graphite::params {
-  Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  # This variable will be used in init scripts to 
-  # invoke virtualenv if enabled by $python_provider
+  # If virtualenv is used, then the environment must
+  # be considered carefully for other operations
   if $graphite::python_provider == 'virtualenv' {
+    # Set a local convenience variable
+    $_venv=$graphite::params::virtualenv
+
+    # This will be used in init scripts templates
     $venv_environment = [
-      "PATH=${::virtualenv}/bin:\$PATH",
-      "VIRTUAL_ENV=${::virtualenv}",
+      "PATH=${_venv}/bin:\$PATH",
+      "VIRTUAL_ENV=${_venv}",
     ]
+
+    # All Exec 'path' and 'environment' params need to
+    # include the VIRTUAL_ENV and PATH variables
+    Exec {
+      environment => "VIRTUAL_ENV=${_venv}",
+      path        => "${_venv}/bin:/bin:/usr/bin:/usr/sbin",
+    }
   } else {
     $venv_environment = []
+    Exec { path => '/bin:/usr/bin:/usr/sbin' }
   }
 
   # for full functionality we need this packages:
@@ -60,7 +71,6 @@ class graphite::config inherits graphite::params {
   # first init of user db for graphite
 
   exec { 'Initial django db creation':
-    environment => $venv_environment,
     command     => 'python manage.py syncdb --noinput',
     cwd         => '/opt/graphite/webapp/graphite',
     refreshonly => true,
