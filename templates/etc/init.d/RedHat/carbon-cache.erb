@@ -46,6 +46,7 @@ start()
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
+        sleep 1
         if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
