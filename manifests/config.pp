@@ -99,6 +99,15 @@ class graphite::config inherits graphite::params {
       owner   => $carbon_user;
   }
 
+  # Lets ensure graphite.db owner is the same as gr_web_user
+  file {
+    '/opt/graphite/storage/graphite.db':
+      ensure  => file,
+      group   => $::graphite::gr_web_group,
+      mode    => '0644',
+      owner   => $::graphite::gr_web_user;
+  }
+
   # Deploy configfiles
   file {
     '/opt/graphite/webapp/graphite/local_settings.py':

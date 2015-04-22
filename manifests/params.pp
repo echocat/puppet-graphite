@@ -24,15 +24,6 @@ class graphite::params {
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.12'
 
-  $whisper_dl_url = "http://github.com/graphite-project/whisper/archive/${::graphite::params::whisper_ver}.tar.gz"
-  $whisper_dl_loc = "${build_dir}/whisper-${::graphite::params::whisper_ver}"
-
-  $webapp_dl_url = "http://github.com/graphite-project/graphite-web/archive/${::graphite::params::graphite_ver}.tar.gz"
-  $webapp_dl_loc = "${build_dir}/graphite-web-${::graphite::params::graphite_ver}"
-
-  $carbon_dl_url = "https://github.com/graphite-project/carbon/archive/${::graphite::params::carbon_ver}.tar.gz"
-  $carbon_dl_loc = "${build_dir}/carbon-${::graphite::params::carbon_ver}"
-
   $install_prefix      = '/opt/'
   $enable_carbon_relay = false
   $nginxconf_dir       = '/etc/nginx/sites-available'
@@ -51,12 +42,6 @@ class graphite::params {
       $web_user = 'www-data'
 
       $python_dev_pkg = 'python-dev'
-
-      # see https://github.com/graphite-project/carbon/issues/86
-      $carbon_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbon_ver}-py2.7.egg-info"
-      $carbon_pip_hack_target = "/opt/graphite/lib/carbon-${carbon_ver}-py2.7.egg-info"
-      $gweb_pip_hack_source   = "/usr/lib/python2.7/dist-packages/graphite_web-${graphite_ver}-py2.7.egg-info"
-      $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.7.egg-info"
 
       $graphitepkgs = [
         'python-tz',
@@ -102,11 +87,7 @@ class graphite::params {
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $carbon_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbon_ver}-py2.6.egg-info"
-          $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbon_ver}-py2.6.egg-info"
-          $apache_24               = false
-          $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphite_ver}-py2.6.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.6.egg-info"
+          $apache_24    = false
           $graphitepkgs = [
             'Django14',
             'MySQL-python',
@@ -125,11 +106,7 @@ class graphite::params {
         }
 
         /^7\.\d+/: {
-          $carbon_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbon_ver}-py2.7.egg-info"
-          $carbon_pip_hack_target     = "/opt/graphite/lib/carbon-${carbon_ver}-py2.7.egg-info"
-          $apache_24               = true
-          $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphite_ver}-py2.7.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphite_ver}-py2.7.egg-info"
+          $apache_24    = true
           $graphitepkgs = [
             'python-django',
             'MySQL-python',
