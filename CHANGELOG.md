@@ -2,9 +2,9 @@
 
 #### Bugfixes:
 
-Fixed #177 ensure graphite.db permissions are same as web user
-Fixed #177 puppet 2.7 does not support unless
-Fixed #177 pip symlink hack uses correct graphite version
+- Fixed #177 ensure graphite.db permissions are same as web user
+- Fixed #177 puppet 2.7 does not support unless
+- Fixed #177 pip symlink hack uses correct graphite version
 
 ## 2015-05-22 - 5.11.0 (Feature/Bugfix release)
 
