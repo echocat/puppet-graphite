@@ -322,6 +322,9 @@
 # [*gunicorn_arg_timeout*]
 #   value to pass to gunicorn's --timeout arg.
 #   Default is 30
+# [*gunicorn_bind*]
+#   value to pass to gunicorn's --bind arg.
+#   Default is unix:/var/run/graphite.sock
 # [*gunicorn_workers*]
 #   value to pass to gunicorn's --worker arg.
 #   Default is 2
@@ -571,6 +574,7 @@ class graphite (
   $gr_remote_user_header_name            = undef,
   $gr_local_data_dir                     = '/opt/graphite/storage/whisper',
   $gunicorn_arg_timeout                  = 30,
+  $gunicorn_bind                         = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                      = 2,
   $gr_cache_instances                    = [],
   $gr_relay_instances                    = [],

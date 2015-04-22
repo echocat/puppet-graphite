@@ -661,6 +661,10 @@ The sample external auth app is available from [here](https://github.com/antoine
 
 Default is 30.  value to pass to gunicorns --timeout arg.
 
+#####`gunicorn_bind`
+
+Default is 'unix:/var/run/graphite.sock'.  value to pass to gunicorns --bind arg.
+
 #####`gunicorn_workers`
   
 Default is 2. value to pass to gunicorn's --worker arg.
