@@ -28,7 +28,7 @@ fi
 case "${OPERATION}" in
     start)
         for INSTANCE in ${INSTANCES}; do
-            if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start
@@ -36,7 +36,7 @@ case "${OPERATION}" in
         ;;
     stop)
         for INSTANCE in ${INSTANCES}; do
-            if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop
@@ -56,7 +56,7 @@ case "${OPERATION}" in
         ;;
     status)
         for INSTANCE in ${INSTANCES}; do
-            if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} status
