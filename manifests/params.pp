@@ -24,9 +24,8 @@ class graphite::params {
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.12'
 
-  $install_prefix      = '/opt/'
-  $enable_carbon_relay = false
-  $nginxconf_dir       = '/etc/nginx/sites-available'
+  $install_prefix     = '/opt/'
+  $nginxconf_dir      = '/etc/nginx/sites-available'
 
   case $::osfamily {
     'Debian': {
