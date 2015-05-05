@@ -11,6 +11,9 @@
 #   The user who runs graphite. If this is empty carbon runs as the user that
 #   invokes it.
 #   Default is empty.
+# [*gr_enable_carbon_cache*]
+#   Enable carbon cache.
+#   Default is true.
 # [*gr_max_cache_size*]
 #   Limit the size of the cache to avoid swapping or becoming CPU bound. Use
 #   the value "inf" (infinity) for an unlimited cache size.
@@ -430,6 +433,7 @@
 class graphite (
   $gr_group                              = '',
   $gr_user                               = '',
+  $gr_enable_carbon_cache                = true,
   $gr_max_cache_size                     = inf,
   $gr_max_updates_per_second             = 500,
   $gr_max_updates_per_second_on_shutdown = undef,

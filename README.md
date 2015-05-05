@@ -251,6 +251,10 @@ Default is empty. The group of the user (see gr_user) who runs graphite.
 
 Default is empty. The user who runs graphite. If this is empty carbon runs as the user that invokes it.
 
+#####`gr_enable_carbon_cache`
+
+Default is true. Enable carbon cache.
+
 #####`gr_max_cache_size`
 
 Default is 'inf'. Limits the size of the cache to avoid swapping or becoming CPU bound. Use the value "inf" (infinity) for an unlimited cache size.
