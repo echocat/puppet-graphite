@@ -115,7 +115,8 @@ apache::vhost { graphite.my.domain:
   ]
 }->
 class { 'graphite':
-  gr_web_server => 'none'
+  gr_web_server           => 'none',
+  gr_disable_webapp_cache => true,
 }
 
 apache::vhost { 'grafana.my.domain':
@@ -775,6 +776,10 @@ Default is '0.9.12' (string) The version of the whisper package that should be i
 
 Default is true (Bool). Should packages be installed via pip
 
+#####`gr_disable_webapp_cache`
+
+Default is false (Bool). Should the caching of the webapp be disabled. This helps with some
+display issues in grafana.
 
 ##Requirements
 

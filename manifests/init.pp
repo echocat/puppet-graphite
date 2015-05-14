@@ -421,6 +421,10 @@
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
+#[*gr_disable_webapp_cache*]
+#   Boolean. Should the caching of the webapp be disabled. This helps with some
+#   display issues in grafana.
+#   Default: false
 #
 # === Examples
 #
@@ -604,6 +608,7 @@ class graphite (
   $gr_whisper_pkg                        = $::graphite::params::whisper_pkg,
   $gr_whisper_ver                        = $::graphite::params::whisper_ver,
   $gr_pip_install                        = true,
+  $gr_disable_webapp_cache               = false,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
