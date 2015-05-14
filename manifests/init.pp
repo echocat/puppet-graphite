@@ -421,6 +421,10 @@
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
+#[*gr_disable_webapp_cache*]
+#   Boolean. Should the caching of the webapp be disabled. This helps with some
+#   display issues in grafana.
+#   Default: false
 #
 # === Examples
 #
