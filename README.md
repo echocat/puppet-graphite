@@ -115,7 +115,7 @@ apache::vhost { graphite.my.domain:
   ]
 }->
 class { 'graphite':
-  gr_web_server          => 'none',
+  gr_web_server           => 'none',
   gr_disable_webapp_cache => true,
 }
 
