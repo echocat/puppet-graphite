@@ -604,6 +604,7 @@ class graphite (
   $gr_whisper_pkg                        = $::graphite::params::whisper_pkg,
   $gr_whisper_ver                        = $::graphite::params::whisper_ver,
   $gr_pip_install                        = true,
+  $gr_disable_webapp_cache               = false,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

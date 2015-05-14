@@ -51,6 +51,7 @@ MEMCACHE_HOSTS = ['<%= scope.lookupvar('graphite::gr_memcache_hosts').join("','"
 
 #DEFAULT_CACHE_DURATION = 60 # Cache images and data for 1 minute
 
+<% if scope.lookupvar('graphite::gr_disable_webapp_cache') -%>
 # disable cache to reduce graph errors
 # https://github.com/graphite-project/graphite-web/issues/576#issuecomment-36246428
 CACHES = {
@@ -59,6 +60,7 @@ CACHES = {
     },
 }
 
+<% end -%>
 
 #####################################
 # Filesystem Paths #
