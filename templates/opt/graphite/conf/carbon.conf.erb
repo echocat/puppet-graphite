@@ -87,7 +87,7 @@ PICKLE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_pickle_receiver_in
 PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_pickle_receiver_port') %>
 
 # Set to false to disable logging of successful connections
-LOG_LISTENER_CONNECTIONS = True
+LOG_LISTENER_CONNECTIONS = <%= scope.lookupvar('graphite::gr_log_listener_connections') %>
 
 # Per security concerns outlined in Bug #817247 the pickle receiver
 # will use a more secure and slightly less efficient unpickler.
@@ -241,7 +241,7 @@ PICKLE_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_relay_pickle_inter
 PICKLE_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_relay_pickle_port') %>
 
 # Set to false to disable logging of successful connections
-LOG_LISTENER_CONNECTIONS = True
+LOG_LISTENER_CONNECTIONS = <%= scope.lookupvar('graphite::gr_relay_log_listener_connections') %>
 
 # Carbon-relay has several options for metric routing controlled by RELAY_METHOD
 #
@@ -337,7 +337,7 @@ UDP_RECEIVER_INTERFACE = <%= scope.lookupvar('graphite::gr_aggregator_udp_receiv
 UDP_RECEIVER_PORT = <%= scope.lookupvar('graphite::gr_aggregator_udp_receiver_port') %>
 
 # Set to false to disable logging of successful connections
-LOG_LISTENER_CONNECTIONS = True
+LOG_LISTENER_CONNECTIONS = <%= scope.lookupvar('graphite::gr_aggregator_log_listener_connections') %>
 
 # If set true, metric received will be forwarded to DESTINATIONS in addition to
 # the output of the aggregation rules. If set false the carbon-aggregator will

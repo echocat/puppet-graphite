@@ -308,6 +308,10 @@ Default is '0.0.0.0' (string). Pickle is a special receiver who handle tuples of
 
 Default is 2004. Self explaining
 
+#####`gr_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
+
 #####`gr_use_insecure_unpickler`
 
 Default is 'False' (string). Set this to 'True' to revert to the old-fashioned insecure unpickler.
@@ -480,6 +484,10 @@ Default is '0.0.0.0' (string)
 
 Default is 2014 (integer)
 
+#####`gr_relay_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
+
 #####`gr_relay_method`
 
 Default is 'rules'
@@ -544,6 +552,10 @@ Default is '0.0.0.0' (string). IP address for pickle interface.
 #####`gr_aggregator_pickle_port`
 
 Default is 2024. Pickle port.
+
+#####`gr_aggregator_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
 
 #####`gr_aggregator_forward_all`
 
