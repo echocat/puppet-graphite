@@ -101,7 +101,7 @@ class graphite::config inherits graphite::params {
 
   # Lets ensure graphite.db owner is the same as gr_web_user
   file {
-    '/opt/graphite/storage/graphite.db':
+    $::graphite::gr_django_db_name:
       ensure  => file,
       group   => $::graphite::gr_web_group,
       mode    => '0644',
