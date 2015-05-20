@@ -12,7 +12,7 @@
 
 - Fixed #178 fix POSIX test syntax on init script
 
-## 2015-05-22 - 5.11.1 (Bugfix release)
+## 2015-04-22 - 5.11.1 (Bugfix release)
 
 #### Bugfixes:
 
