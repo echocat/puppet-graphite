@@ -20,6 +20,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 <VirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>>
 	ServerName <%= scope.lookupvar('graphite::gr_web_servername') %>
 	DocumentRoot "/opt/graphite/webapp"
+<% if scope.lookupvar('graphite::gr_apache_noproxy') %>	NoProxy <%= scope.lookupvar('graphite::gr_apache_noproxy') %><% end %>
 
 	ErrorLog /opt/graphite/storage/error.log
 	CustomLog /opt/graphite/storage/access.log common

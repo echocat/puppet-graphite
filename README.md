@@ -430,6 +430,20 @@ Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-
 Boolean to enable configuration parts for Apache 2.4 instead of 2.2
 Default is false/true (autodected. see params.pp)
 
+#####`gr_apache_noproxy`
+
+Optional setting to disable proxying of requests. When set, will supply a value to 'NoProxy'.
+```
+{
+  gr_apache_noproxy   => "0.0.0.0/0"
+}
+```
+Will insert:
+```
+  NoProxy 0.0.0.0/0
+```
+In the /etc/apache2/conf.d/graphite.conf file.
+
 #####`gr_django_1_4_or_less`
 
 Default is false (boolean). Django settings style.

@@ -516,6 +516,7 @@ class graphite (
   $gr_apache_port_https                   = 443,
   $gr_apache_conf_template                = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
   $gr_apache_24                           = $::graphite::params::apache_24,
+  $gr_apache_noproxy                      = undef,
   $gr_django_1_4_or_less                  = false,
   $gr_django_db_engine                    = 'django.db.backends.sqlite3',
   $gr_django_db_name                      = '/opt/graphite/storage/graphite.db',
