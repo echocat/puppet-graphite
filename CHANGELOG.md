@@ -1,3 +1,44 @@
+## 2015-05-20 - 5.12.0 (Feature release)
+
+#### Features:
+
+- Issue #181 Add parameter `gr_enable_carbon_cache` (defaults to true)
+- Issue #182 Add parameter `gr_disable_webapp_cache` to disable django cache for use with Grafana
+- Issue #183 Add parameter `gr_log_listener_connections`
+
+## 2015-04-24 - 5.11.2 (Bugfix release)
+
+#### Bugfixes:
+
+- Fixed #178 fix POSIX test syntax on init script
+
+## 2015-04-22 - 5.11.1 (Bugfix release)
+
+#### Bugfixes:
+
+- Fixed #177 ensure graphite.db permissions are same as web user
+- Fixed #177 puppet 2.7 does not support unless
+- Fixed #177 pip symlink hack uses correct graphite version
+
+## 2015-04-22 - 5.11.0 (Feature/Bugfix release)
+
+#### Features:
+
+- Issue #175 Adding gunicorn_bind option to gunicorn
+
+#### Bugfixes:
+
+- Fixed #174 RedHat: delay checking the process has started to aviod race-conition failures on start
+- Fixed #165 Debian: fix first carbon instance name in init scripts
+
+## 2015-04-21 - 5.10.3 (Bugfix release)
+
+#### Bugfixes
+
+- Fixed #170 Faster directory permission handling
+- Fixed #164 RedHat/Debian: Fix init script error for Redhat and fix some bash style
+- Fixed #169 Use gr_web_user / gr_web_group variables in gunicorn template
+
 ## 2015-03-09 - 5.10.2 (Bugfix release)
 
 #### Bugfixes:

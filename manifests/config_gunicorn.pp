@@ -14,9 +14,7 @@ class graphite::config_gunicorn inherits graphite::params {
 
     package {
       'gunicorn':
-        ensure => installed,
-        before => Exec['Chown graphite for web user'],
-        notify => Exec['Chown graphite for web user'];
+        ensure => installed;
     }
 
     service { 'gunicorn':
@@ -25,7 +23,8 @@ class graphite::config_gunicorn inherits graphite::params {
       hasrestart => true,
       hasstatus  => false,
       require    => [
-        Exec['Chown graphite for web user'],
+        File['/opt/graphite/storage/run'],
+        File['/opt/graphite/storage/log'],
         Exec['Initial django db creation'],
         Package['gunicorn'],
       ],
@@ -45,9 +44,7 @@ class graphite::config_gunicorn inherits graphite::params {
 
     package {
       'python-gunicorn':
-        ensure => installed,
-        before => Exec['Chown graphite for web user'],
-        notify => Exec['Chown graphite for web user'];
+        ensure => installed;
     }
   } else {
     fail("wsgi/gunicorn-based graphite is not supported on ${::operatingsystem} (only supported on Debian & RedHat)")

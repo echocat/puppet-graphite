@@ -35,7 +35,7 @@ fi
 start()
 {
     for INSTANCE in ${INSTANCES}; do
-        if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+        if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
@@ -47,6 +47,7 @@ start()
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
+        sleep 1
         if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success
@@ -63,7 +64,7 @@ start()
 stop()
 {
     for INSTANCE in ${INSTANCES}; do
-        if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+        if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
@@ -90,7 +91,7 @@ restart() {
     # To be sure that at least one intance is always running during restart,
     # we will restart one instance at a time.
     for INSTANCE in ${INSTANCES}; do
-        if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+        if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
@@ -166,7 +167,7 @@ case "${OPERATION}" in
         ;;
     status)
         for INSTANCE in ${INSTANCES}; do
-            if [ "${INSTANCE}" == "${CARBON_DAEMON}" ]; then
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
             pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid

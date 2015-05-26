@@ -58,33 +58,54 @@ class graphite::config inherits graphite::params {
 
   # change access permissions for web server
 
-  exec { 'Chown graphite for web user':
-    command     => "chown -R ${::graphite::gr_web_user}:${::graphite::gr_web_group} /opt/graphite/storage/",
-    cwd         => '/opt/graphite/',
-    refreshonly => true,
-    require     => $web_server_package_require,
+  file {
+    [
+      '/opt/graphite/storage',
+      '/opt/graphite/storage/lists',
+      '/opt/graphite/storage/log',
+      '/opt/graphite/storage/log/webapp',
+      '/opt/graphite/storage/rrd',
+      '/opt/graphite/storage/run'
+    ]:
+      ensure  => directory,
+      group   => $::graphite::gr_web_group,
+      mode    => '0755',
+      owner   => $::graphite::gr_web_user;
   }
 
   # change access permissions for carbon-cache to align with gr_user
   # (if different from web_user)
 
-  if $::graphite::gr_user != '' and $::graphite::gr_user != $::graphite::gr_web_user {
-    file {
-      '/opt/graphite/storage/whisper':
-        ensure  => directory,
-        group   => $::graphite::gr_group,
-        mode    => '0755',
-        owner   => $::graphite::gr_user,
-        path    => $::graphite::gr_local_data_dir,
-        require => Exec['Chown graphite for web user'];
+  if $::graphite::gr_user != '' {
+    $carbon_user  = $::graphite::gr_user
+    $carbon_group = $::graphite::gr_group
+  } else {
+    $carbon_user  = $::graphite::gr_web_user
+    $carbon_group = $::graphite::gr_web_group
+  }
 
-      '/opt/graphite/storage/log/carbon-cache':
-        ensure  => directory,
-        group   => $::graphite::gr_group,
-        mode    => '0755',
-        owner   => $::graphite::gr_user,
-        require => Exec['Chown graphite for web user'];
-    }
+  file {
+    '/opt/graphite/storage/whisper':
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      owner   => $carbon_user,
+      path    => $::graphite::gr_local_data_dir;
+
+    '/opt/graphite/storage/log/carbon-cache':
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      owner   => $carbon_user;
+  }
+
+  # Lets ensure graphite.db owner is the same as gr_web_user
+  file {
+    '/opt/graphite/storage/graphite.db':
+      ensure  => file,
+      group   => $::graphite::gr_web_group,
+      mode    => '0644',
+      owner   => $::graphite::gr_web_user;
   }
 
   # Deploy configfiles
@@ -118,28 +139,29 @@ class graphite::config inherits graphite::params {
   }
 
   # configure carbon engines
-  if $::graphite::gr_enable_carbon_relay and $::graphite::gr_enable_carbon_aggregator {
-    $notify_services = [
-      Service['carbon-aggregator'],
-      Service['carbon-cache'],
-      Service['carbon-relay'],
-    ]
+  if $::graphite::gr_enable_carbon_cache {
+      $service_cache = Service['carbon-cache']
+  } else {
+      $service_cache = undef
   }
-  elsif $::graphite::gr_enable_carbon_relay {
-    $notify_services = [
-      Service['carbon-cache'],
-      Service['carbon-relay'],
-    ]
+
+  if $::graphite::gr_enable_carbon_relay {
+      $service_relay = Service['carbon-relay']
+  } else {
+      $service_relay = undef
   }
-  elsif $::graphite::gr_enable_carbon_aggregator {
-    $notify_services = [
-      Service['carbon-aggregator'],
-      Service['carbon-cache'],
-    ]
+
+  if $::graphite::gr_enable_carbon_aggregator {
+      $service_aggregator = Service['carbon-aggregator']
+  } else {
+      $service_aggregator = undef
   }
-  else {
-    $notify_services = [ Service['carbon-cache'] ]
-  }
+
+  $notify_services = delete_undef_values([
+      $service_cache,
+      $service_relay,
+      $service_aggregator
+  ])
 
   if $::graphite::gr_enable_carbon_relay {
     file { '/opt/graphite/conf/relay-rules.conf':
@@ -204,19 +226,22 @@ class graphite::config inherits graphite::params {
   }
 
   # startup carbon engine
-  service { 'carbon-cache':
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-    require    => File['/etc/init.d/carbon-cache'],
-  }
 
-  file { '/etc/init.d/carbon-cache':
-    ensure  => file,
-    content => template("graphite/etc/init.d/${::osfamily}/carbon-cache.erb"),
-    mode    => '0750',
-    require => File['/opt/graphite/conf/carbon.conf'],
+  if $graphite::gr_enable_carbon_cache {
+    service { 'carbon-cache':
+      ensure     => running,
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
+      require    => File['/etc/init.d/carbon-cache'],
+    }
+
+    file { '/etc/init.d/carbon-cache':
+      ensure  => file,
+      content => template("graphite/etc/init.d/${::osfamily}/carbon-cache.erb"),
+      mode    => '0750',
+      require => File['/opt/graphite/conf/carbon.conf'],
+    }
   }
 
   if $graphite::gr_enable_carbon_relay {

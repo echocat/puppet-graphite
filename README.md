@@ -115,7 +115,8 @@ apache::vhost { graphite.my.domain:
   ]
 }->
 class { 'graphite':
-  gr_web_server => 'none'
+  gr_web_server           => 'none',
+  gr_disable_webapp_cache => true,
 }
 
 apache::vhost { 'grafana.my.domain':
@@ -251,6 +252,10 @@ Default is empty. The group of the user (see gr_user) who runs graphite.
 
 Default is empty. The user who runs graphite. If this is empty carbon runs as the user that invokes it.
 
+#####`gr_enable_carbon_cache`
+
+Default is true. Enable carbon cache.
+
 #####`gr_max_cache_size`
 
 Default is 'inf'. Limits the size of the cache to avoid swapping or becoming CPU bound. Use the value "inf" (infinity) for an unlimited cache size.
@@ -302,6 +307,10 @@ Default is '0.0.0.0' (string). Pickle is a special receiver who handle tuples of
 #####`gr_pickle_receiver_port`
 
 Default is 2004. Self explaining
+
+#####`gr_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
 
 #####`gr_use_insecure_unpickler`
 
@@ -421,6 +430,20 @@ Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-
 Boolean to enable configuration parts for Apache 2.4 instead of 2.2
 Default is false/true (autodected. see params.pp)
 
+#####`gr_apache_noproxy`
+
+Optional setting to disable proxying of requests. When set, will supply a value to 'NoProxy'.
+```
+{
+  gr_apache_noproxy   => "0.0.0.0/0"
+}
+```
+Will insert:
+```
+  NoProxy 0.0.0.0/0
+```
+In the /etc/apache2/conf.d/graphite.conf file.
+
 #####`gr_django_1_4_or_less`
 
 Default is false (boolean). Django settings style.
@@ -474,6 +497,10 @@ Default is '0.0.0.0' (string)
 #####`gr_relay_pickle_port`
 
 Default is 2014 (integer)
+
+#####`gr_relay_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
 
 #####`gr_relay_method`
 
@@ -539,6 +566,10 @@ Default is '0.0.0.0' (string). IP address for pickle interface.
 #####`gr_aggregator_pickle_port`
 
 Default is 2024. Pickle port.
+
+#####`gr_aggregator_log_listener_connections`
+
+Default is 'True' (string). Logs successful connections
 
 #####`gr_aggregator_forward_all`
 
@@ -661,6 +692,10 @@ The sample external auth app is available from [here](https://github.com/antoine
 
 Default is 30.  value to pass to gunicorns --timeout arg.
 
+#####`gunicorn_bind`
+
+Default is 'unix:/var/run/graphite.sock'.  value to pass to gunicorns --bind arg.
+
 #####`gunicorn_workers`
   
 Default is 2. value to pass to gunicorn's --worker arg.
@@ -767,6 +802,10 @@ Default is '0.9.12' (string) The version of the whisper package that should be i
 
 Default is true (Bool). Should packages be installed via pip
 
+#####`gr_disable_webapp_cache`
+
+Default is false (Bool). Should the caching of the webapp be disabled. This helps with some
+display issues in grafana.
 
 ##Requirements
 
