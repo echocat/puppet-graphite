@@ -159,6 +159,11 @@
 # [*gr_apache_conf_template*]
 #   Template to use for Apache vhost config.
 #   Default is graphite/etc/apache2/sites-available/graphite.conf.erb
+# [*gr_apache_conf_prefix*]
+#   Prefix of the Apache config file. Useful if you want to change the order of
+#   the virtual hosts to be loaded.
+#   For example: '000-'
+#   Default is ''.
 # [*gr_apache_24*]
 #   Boolean to enable configuration parts for Apache 2.4 instead of 2.2
 #   Default is false/true (autodected. see params.pp)
@@ -515,6 +520,7 @@ class graphite (
   $gr_apache_port                         = 80,
   $gr_apache_port_https                   = 443,
   $gr_apache_conf_template                = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
+  $gr_apache_conf_prefix                  = '',
   $gr_apache_24                           = $::graphite::params::apache_24,
   $gr_apache_noproxy                      = undef,
   $gr_django_1_4_or_less                  = false,
