@@ -77,7 +77,7 @@ class graphite::config_apache inherits graphite::params {
         Package[$::graphite::params::apache_wsgi_pkg],
       ],
       notify  => Service[$::graphite::params::apache_service_name];
-    "${::graphite::params::apacheconf_dir}/${::graphite::gr_apache_conf_prefix}graphite.conf":
+    "${::graphite::params::apacheconf_dir}/graphite.conf":
       ensure  => file,
       content => template($::graphite::gr_apache_conf_template),
       group   => $::graphite::params::web_group,
@@ -95,7 +95,7 @@ class graphite::config_apache inherits graphite::params {
       file { "/etc/apache2/sites-enabled/${::graphite::gr_apache_conf_prefix}graphite.conf":
         ensure  => link,
         notify  => Service[$::graphite::params::apache_service_name],
-        require => File["/etc/apache2/sites-available/${::graphite::gr_apache_conf_prefix}graphite.conf"],
+        require => File["${::graphite::params::apacheconf_dir}/graphite.conf"],
         target  => "${::graphite::params::apacheconf_dir}/graphite.conf",
       }
     }
