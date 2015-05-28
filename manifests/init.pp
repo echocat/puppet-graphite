@@ -387,6 +387,16 @@
 #   Trigges the creation of metricaccess.log which logs access to Whisper
 #   and RRD data files
 #   Default is 'False' (String)
+# [*gr_remote_rendering*]
+#   Enable remote rendering of Graphs on a remote webapp
+#   Default is false (Boolean)
+# [*gr_rendering_hosts*]
+#   Array of IP (and optionally port) of the webapp on each remote server that
+#   will be used for rendering.
+#   Default is undef
+# [*gr_rendering_timeout*]
+#   Rendering timeout value
+#   Default is undef
 # [*wsgi_processes*]
 #   WSGI process count.
 #   Default is 5
@@ -611,6 +621,9 @@ class graphite (
   $gr_log_cache_performance               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
+  $gr_remote_rendering                    = false,
+  $gr_rendering_hosts                     = undef,
+  $gr_rendering_timeout                   = undef,
   $wsgi_processes                         =  5,
   $wsgi_threads                           =  5,
   $wsgi_inactivity_timeout                =  120,

@@ -425,6 +425,11 @@ Default is 443. The HTTPS port apache will use.
 
 Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-available/graphite.conf.erb'.
 
+#####`gr_apache_conf_prefix`
+
+Default is '' (String). Prefix of the Apache config file. Useful if you want to change the order of the virtual hosts to be loaded.
+For example: '000-'
+
 #####`gr_apache_24`
 
 Boolean to enable configuration parts for Apache 2.4 instead of 2.2
@@ -749,6 +754,18 @@ Default is 'False' (string). Triggers the creation of rendering.log which logs t
 #####`gr_log_metric_access`
 
 Default is 'False' (string). Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
+
+#####`gr_remote_rendering`
+
+Default is false (Boolean). Enable remote rendering of Graphs on a remote webapp
+
+#####`gr_rendering_hosts*]
+
+Default is undef. Array of IP (and optionally port) of the webapp on each remote server that will be used for rendering
+
+#####`gr_rendering_timeout*]
+
+Default is undef. Rendering timeout value
 
 #####`gr_django_tagging_pkg`
 
