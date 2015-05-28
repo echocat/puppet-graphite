@@ -242,7 +242,7 @@ REMOTE_PREFETCH_DATA = <%= scope.lookupvar('graphite::gr_prefetch_cache') %>
 # access to metric data or should have CLUSTER_SERVERS configured
 #RENDERING_HOSTS = []
 #REMOTE_RENDER_CONNECT_TIMEOUT = 1.0
-<% if [:undef, nil].include? scope.lookupvar('graphite::gr_rendering_hosts') -%>
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_rendering_hosts') -%>
 REMOTE_RENDERING = True
 RENDERING_HOSTS = ['<%= scope.lookupvar('graphite::gr_rendering_hosts').join("','") %>']
 REMOTE_RENDER_CONNECT_TIMEOUT = <%= scope.lookupvar('graphite::gr_rendering_hosts_timeout') %>
@@ -266,7 +266,7 @@ CARBONLINK_TIMEOUT = <%= scope.lookupvar('graphite::gr_carbonlink_hosts_timeout'
 # It's more effective, but python-carbon 0.9.13 (or latest from 0.9.x branch) is required
 # See https://github.com/graphite-project/carbon/pull/132 for details
 #CARBONLINK_QUERY_BULK = False
-<% if [:undef, nil].include? scope.lookupvar('graphite::gr_carbonlink_query_bulk') -%>
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_carbonlink_query_bulk') -%>
 CARBONLINK_QUERY_BULK = <%= scope.lookupvar('graphite::gr_carbonlink_query_bulk') %>
 <% end -%>
 
