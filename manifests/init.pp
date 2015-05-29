@@ -294,14 +294,30 @@
 # [*gr_carbonlink_hosts*]
 #   Array of carbonlink hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 #   Default is undef.
+# [*gr_carbonlink_hosts_timeout*]
+#   Timeout to fetch query from local carbonlink hosts
+#   Default is 1.0
+# [*gr_carbonlink_query_bulk*]
+#   Boolean. 0.9.13 function. Using 'query-bulk' queries for carbon.
+#   Default: false
 # [*gr_cluster_fetch_timeout*]
-#    Timeout to fetch series data.   Default = 6
+#   Timeout to fetch series data.   Default = 6
 # [*gr_cluster_find_timeout*]
-#    Timeout for metric find requests.   Default = 2.5
+#   Timeout for metric find requests.   Default = 2.5
 # [*gr_cluster_retry_delay*]
-#    Time before retrying a failed remote webapp.  Default = 60
+#   Time before retrying a failed remote webapp.  Default = 60
 # [*gr_cluster_cache_duration*]
-#    Time to cache remote metric find results.  Default = 300
+#   Time to cache remote metric find results.  Default = 300
+# [*gr_rendering_hosts*]
+#   Array of remote rendering hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
+#   Default is undef, setting this also enabled REMOTE_RENDER=True
+# [*gr_rendering_hosts_timeout*]
+#   Timeout for remote render connection attempts.
+#   Default is 1.0
+# [*gr_prefetch_cache*]
+#   Set to True to fetch all metrics using a single http request per remote server
+#   instead of one http request per target, per remote server.
+#   Default is undef
 # [*nginx_htpasswd*]
 #   The user and salted SHA-1 (SSHA) password for Nginx authentication.
 #   If set, Nginx will be configured to use HTTP Basic authentication with the
@@ -435,7 +451,7 @@
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
-#[*gr_disable_webapp_cache*]
+# [*gr_disable_webapp_cache*]
 #   Boolean. Should the caching of the webapp be disabled. This helps with some
 #   display issues in grafana.
 #   Default: false
@@ -628,6 +644,11 @@ class graphite (
   $gr_whisper_ver                         = $::graphite::params::whisper_ver,
   $gr_pip_install                         = true,
   $gr_disable_webapp_cache                = false,
+  $gr_carbonlink_query_bulk               = undef,
+  $gr_carbonlink_hosts_timeout            = '1.0',
+  $gr_rendering_hosts                     = undef,
+  $gr_rendering_hosts_timeout             = '1.0',
+  $gr_prefetch_cache                      = undef
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things

@@ -223,6 +223,17 @@ REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay
 REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
 <% end %>
 
+## Prefetch cache
+# set to True to fetch all metrics using a single http request per remote server
+# instead of one http request per target, per remote server.
+# Especially useful when generating graphs with more than 4-5 targets or if
+# there's significant latency between this server and the backends. (>20ms)
+<% if [:undef, nil].include? scope.lookupvar('graphite::gr_prefetch_cache') -%>
+#REMOTE_PREFETCH_DATA = False
+<% else %>
+REMOTE_PREFETCH_DATA = <%= scope.lookupvar('graphite::gr_prefetch_cache') %>
+<% end %>
+
 ## Remote rendering settings
 # Set to True to enable rendering of Graphs on a remote webapp
 #REMOTE_RENDERING = True
@@ -231,6 +242,11 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 # access to metric data or should have CLUSTER_SERVERS configured
 #RENDERING_HOSTS = []
 #REMOTE_RENDER_CONNECT_TIMEOUT = 1.0
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_rendering_hosts') -%>
+REMOTE_RENDERING = True
+RENDERING_HOSTS = ['<%= scope.lookupvar('graphite::gr_rendering_hosts').join("','") %>']
+REMOTE_RENDER_CONNECT_TIMEOUT = <%= scope.lookupvar('graphite::gr_rendering_hosts_timeout') %>
+<% end %>
 
 # If you are running multiple carbon-caches on this machine (typically behind a relay using
 # consistent hashing), you'll need to list the ip address, cache query port, and instance name of each carbon-cache
@@ -243,6 +259,15 @@ REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_dur
 #CARBONLINK_TIMEOUT = 1.0
 <% else -%>
 CARBONLINK_HOSTS = ['<%= scope.lookupvar('graphite::gr_carbonlink_hosts').join("','") %>']
+CARBONLINK_TIMEOUT = <%= scope.lookupvar('graphite::gr_carbonlink_hosts_timeout') %>
+<% end -%>
+
+# Using 'query-bulk' queries for carbon
+# It's more effective, but python-carbon 0.9.13 (or latest from 0.9.x branch) is required
+# See https://github.com/graphite-project/carbon/pull/132 for details
+#CARBONLINK_QUERY_BULK = False
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_carbonlink_query_bulk') -%>
+CARBONLINK_QUERY_BULK = <%= scope.lookupvar('graphite::gr_carbonlink_query_bulk') %>
 <% end -%>
 
 #####################################
