@@ -281,25 +281,25 @@ CARBONLINK_QUERY_BULK = <%= scope.lookupvar('graphite::gr_carbonlink_query_bulk'
 # NOTE - this has been moved to the bottom to gain access to app_settings.
 <%-
 if scope.lookupvar('graphite::gr_use_remote_user_auth') == 'True'
-	if [:undef, nil].include? scope.lookupvar('graphite::gr_remote_user_header_name')
+    if [:undef, nil].include? scope.lookupvar('graphite::gr_remote_user_header_name')
 -%>
 USE_REMOTE_USER_AUTHENTICATION = True
 <%-
-	else
+    else
 -%>
 # NOTE - This puppet module handles this slightly differently to the default Django approach
 # with local_settings.py / settings.py
 from graphite.app_settings import *
 # Primarily when a custom HTTP header is used instead of REMOTE_USER.
 MIDDLEWARE_CLASSES += (
-	'django.contrib.auth.middleware.RemoteUserMiddleware',
-	'graphite.custom_auth.CustomHeaderMiddleware'
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'graphite.custom_auth.CustomHeaderMiddleware'
 )
 AUTHENTICATION_BACKENDS.insert(0,'django.contrib.auth.backends.RemoteUserBackend')
 # Disable the logic in settings.py that does this in a non-custom way.
 USE_REMOTE_USER_AUTHENTICATION = False
 <%-
-	end
+    end
 else
 -%>
 USE_REMOTE_USER_AUTHENTICATION = False

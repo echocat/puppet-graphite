@@ -425,6 +425,11 @@ Default is 443. The HTTPS port apache will use.
 
 Template to use for Apache vhost config. Default is 'graphite/etc/apache2/sites-available/graphite.conf.erb'.
 
+#####`gr_apache_conf_prefix`
+
+Default is '' (String). Prefix of the Apache config file. Useful if you want to change the order of the virtual hosts to be loaded.
+For example: '000-'
+
 #####`gr_apache_24`
 
 Boolean to enable configuration parts for Apache 2.4 instead of 2.2
