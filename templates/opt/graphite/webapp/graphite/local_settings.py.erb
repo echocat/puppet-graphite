@@ -236,11 +236,7 @@ REMOTE_PREFETCH_DATA = <%= scope.lookupvar('graphite::gr_prefetch_cache') %>
 
 ## Remote rendering settings
 # Set to True to enable rendering of Graphs on a remote webapp
-<% if ! scope.lookupvar('graphite::gr_remote_rendering') -%>
 #REMOTE_RENDERING = True
-<% else -%>
-REMOTE_RENDERING = True
-<% end -%>
 # List of IP (and optionally port) of the webapp on each remote server that
 # will be used for rendering. Note that each rendering host should have local
 # access to metric data or should have CLUSTER_SERVERS configured

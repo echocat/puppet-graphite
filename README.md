@@ -755,18 +755,6 @@ Default is 'False' (string). Triggers the creation of rendering.log which logs t
 
 Default is 'False' (string). Trigges the creation of metricaccess.log which logs access to Whisper and RRD data files
 
-#####`gr_remote_rendering`
-
-Default is false (Boolean). Enable remote rendering of Graphs on a remote webapp
-
-#####`gr_rendering_hosts*]
-
-Default is undef. Array of IP (and optionally port) of the webapp on each remote server that will be used for rendering
-
-#####`gr_rendering_timeout*]
-
-Default is undef. Rendering timeout value
-
 #####`gr_django_tagging_pkg`
 
 Default is 'django-tagging' (string) The name of the django-tagging package that should be installed
