@@ -1,3 +1,18 @@
+## 2015-06-05 - 5.13.0 (Feature/Bugfix release)
+
+#### Features:
+
+- Issue #186 Add parameter `gr_apache_noproxy`  to establish exception for mod_clustering for the graphites virtual host
+- Issue #189 Add parameter `gr_apache_conf_prefix` to set apache conf file prefix for graphite
+- Issue #191 Add parameter `gr_carbonlink_hosts_timeout`, `gr_carbonlink_query_bulk`
+- Issue #191 Add parameter `gr_rendering_hosts`, `gr_rendering_hosts_timeout`, `gr_prefetch_cache`
+
+#### Bugfixes:
+
+- Fixed #185 RedHat add small sleep at restart of carbon
+- Fixed #194 logrotate script also looks for relay and aggregator logs now
+- Fixed #196 Debian correctly remove apache 2.2 000-default
+
 ## 2015-05-20 - 5.12.0 (Feature release)
 
 #### Features:
