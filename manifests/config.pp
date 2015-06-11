@@ -213,7 +213,7 @@ class graphite::config inherits graphite::params {
   # configure logrotate
   logrotate::rule { 'carbon':
     path          => '/opt/graphite/storage/log/carbon-cache/',
-    rotate        => 30,
+    rotate        => '30',
     rotate_every  => 'day',
     compress      => true,
     delaycompress => true,
