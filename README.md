@@ -737,7 +737,7 @@ Example: see gr_cache_instances
 
 #####`gr_whisper_autoflush`
 
-Default is false. Set autoflush for whisper
+Default is 'False'. Set autoflush for whisper
 
 #####`gr_whisper_lock_writes`
 
