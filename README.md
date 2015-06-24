@@ -236,6 +236,15 @@ If you're doing this you'll most likely have to override the default package nam
   }
 ```
 
+Additionally, the Django package is normally installed from a system package, but can be changed to install from pip instead.
+```puppet
+  class { '::graphite':
+    gr_django_pkg      => 'django',
+    gr_django_ver      => '1.5',
+    gr_django_provider => 'pip',
+  }
+```
+
 ##Usage
 
 ####Class: `graphite`
@@ -806,6 +815,18 @@ Default is 'whisper' (string) The name of the whisper package that should be ins
 #####`gr_whisper_ver`
 
 Default is '0.9.12' (string) The version of the whisper package that should be installed
+
+#####`gr_django_pkg`
+
+Default is a platform-specific name of the django package that should be installed (string).
+
+#####`gr_django_ver`
+
+Default is 'installed' (string) The version of the django package that should be installed.
+
+#####`gr_django_provider`
+
+Default is `undef` (string) The provider of the django package that should be installed.
 
 #####`gr_pip_install`
 
