@@ -137,7 +137,7 @@ CACHE_WRITE_STRATEGY = <%= scope.lookupvar('graphite::gr_cache_write_strategy') 
 # On some systems it is desirable for whisper to write synchronously.
 # Set this option to True if you'd like to try this. Basically it will
 # shift the onus of buffering writes from the kernel into carbon's cache.
-WHISPER_AUTOFLUSH = False
+WHISPER_AUTOFLUSH = <%= scope.lookupvar('graphite::gr_whisper_autoflush') %>
 
 # By default new Whisper files are created pre-allocated with the data region
 # filled with zeros to prevent fragmentation and speed up contiguous reads and

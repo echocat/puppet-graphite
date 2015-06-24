@@ -386,6 +386,9 @@
 #   Allow multiple additional aggregator instances. (beside the default one)
 #   Default = []
 #   Example: see gr_cache_instances
+# [*gr_whisper_autoflush*]
+#   Set autoflush for whisper
+#   Default is false
 # [*gr_whisper_lock_writes*]
 #   Set lock writes for whisper
 #   Default is false
@@ -622,6 +625,7 @@ class graphite (
   $gr_cache_instances                     = [],
   $gr_relay_instances                     = [],
   $gr_aggregator_instances                = [],
+  $gr_whisper_autoflush                   = 'False',
   $gr_whisper_lock_writes                 = 'False',
   $gr_whisper_fallocate_create            = 'False',
   $gr_log_cache_performance               = 'False',
