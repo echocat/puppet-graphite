@@ -735,6 +735,10 @@ Default is empty array. Allow multiple additional aggregator instances. (beside 
 
 Example: see gr_cache_instances
 
+#####`gr_whisper_autoflush`
+
+Default is false. Set autoflush for whisper
+
 #####`gr_whisper_lock_writes`
 
 Default is false. Set lock writes for whisper
