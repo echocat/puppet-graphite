@@ -48,6 +48,14 @@ class graphite::install inherits graphite::params {
     }
   }
 
+  if $::graphite::gr_django_pkg {
+    package { $::graphite::gr_django_pkg :
+      ensure   => $::graphite::gr_django_ver,
+      provider => $::graphite::gr_django_provider,
+      before   => Package[ $::graphite::params::graphitepkgs ],
+    }
+  }
+
   package { $::graphite::params::graphitepkgs :
     ensure   => 'installed',
     provider => undef, # default to package provider auto-discovery
