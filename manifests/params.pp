@@ -24,6 +24,9 @@ class graphite::params {
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.12'
 
+  $django_ver         = 'installed'
+  $django_provider    = undef
+
   $install_prefix     = '/opt/'
   $nginxconf_dir      = '/etc/nginx/sites-available'
 
@@ -42,10 +45,10 @@ class graphite::params {
 
       $python_dev_pkg = 'python-dev'
 
+      $django_pkg = 'python-django'
       $graphitepkgs = [
         'python-tz',
         'python-cairo',
-        'python-django',
         'python-ldap',
         'python-memcache',
         'python-mysqldb',
@@ -87,8 +90,8 @@ class graphite::params {
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
           $apache_24    = false
+          $django_pkg = 'Django14'
           $graphitepkgs = [
-            'Django14',
             'MySQL-python',
             'bitmap',
             'bitmap-fonts-compat',
@@ -106,8 +109,8 @@ class graphite::params {
 
         /^7\.\d+/: {
           $apache_24    = true
+          $django_pkg = 'python-django'
           $graphitepkgs = [
-            'python-django',
             'MySQL-python',
             'bitmap',
             'bitmap-fonts-compat',
