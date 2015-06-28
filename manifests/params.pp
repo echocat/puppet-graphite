@@ -133,7 +133,7 @@ class graphite::params {
     }
 
     default: {
-      fail('unsupported os.')
+      fail("unsupported os, ${::operatingsystem}.")
     }
   }
 

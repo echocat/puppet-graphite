@@ -666,8 +666,13 @@ class graphite (
   # implementation classes through a transitive relationship to
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
-  anchor { 'graphite::begin':}->
-  class { 'graphite::install':}~>
-  class { 'graphite::config':}->
+  Anchor['graphite::begin']->
+  Class['graphite::install']~>
+  Class['graphite::config']->
+  Anchor['graphite::end']
+
+  anchor { 'graphite::begin':}
+  include graphite::install
+  include graphite::config
   anchor { 'graphite::end':}
 }
