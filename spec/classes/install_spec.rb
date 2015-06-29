@@ -21,6 +21,7 @@ describe 'graphite::install', :type => 'class' do
 
   shared_context 'supported platforms' do
     it { should contain_class('graphite::params') }
+    it { should contain_package('python-pip').with_provider(nil) }
     it { should contain_package('python-ldap').with_provider(nil) }
     it { should contain_package('python-psycopg2').with_provider(nil) }
 
@@ -39,6 +40,10 @@ describe 'graphite::install', :type => 'class' do
     ].each do |pkg|
       it { should contain_package(pkg).with_provider(nil).that_requires(nil) }
     end
+    it { should_not contain_package('gcc') }
+    it { should_not contain_package('python-pip') }
+    it { should_not contain_package('python-dev') }
+    it { should_not contain_package('python-devel') }
     it { should_not contain_file('carbon_hack') }
     it { should_not contain_file('gweb_hack')   }
   end
@@ -53,10 +58,11 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('carbon').with_provider(
       'pip').that_requires('Package[gcc]') }
 
+    it { should contain_package('python-devel').with_provider(nil) }
+    it { should contain_package('gcc').with_provider(nil) }
     it { should contain_package('MySQL-python').with_provider(nil) }
     it { should contain_package('bitmap').with_provider(nil) }
     it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
-    it { should contain_package('gcc').with_provider(nil) }
     it { should contain_package('pyOpenSSL').with_provider(nil) }
     it { should contain_package('pycairo').with_provider(nil) }
     it { should contain_package('python-crypto').with_provider(nil) }
