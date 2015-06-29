@@ -24,10 +24,11 @@ class graphite::install inherits graphite::params {
   }
   $gr_pkg_require = $::graphite::gr_pip_install ? {
     default => undef,
-    true    => Package[
-      $::graphite::params::graphitepkgs,
-      $::graphite::params::python_pip_pkg,
-      $::graphite::params::python_dev_pkg],
+    true    => [
+      Package[$::graphite::params::graphitepkgs],
+      Package[$::graphite::params::python_pip_pkg],
+      Package[$::graphite::params::python_dev_pkg],
+    ],
   }
 
   # variables to workaround unusual graphite install target:
@@ -95,10 +96,10 @@ class graphite::install inherits graphite::params {
 
     # using the pip package provider requires python-pip
     # also install python headers and libs for pip
-    ensure_packages([
+    ensure_packages(flatten([
       $::graphite::params::python_pip_pkg,
       $::graphite::params::python_dev_pkg,
-    ])
+    ]))
 
     # hack unusual graphite install target
     create_resources('file',{

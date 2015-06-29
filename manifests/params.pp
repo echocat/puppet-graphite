@@ -84,46 +84,32 @@ class graphite::params {
       $web_group = 'apache'
       $web_user = 'apache'
 
-      $python_dev_pkg = 'python-devel'
+      $python_dev_pkg = ['python-devel','gcc']
+      $common_os_pkgs = [
+        'MySQL-python',
+        'bitmap',
+        'bitmap-fonts-compat',
+        'pyOpenSSL',
+        'pycairo',
+        'python-crypto',
+        'python-ldap',
+        'python-memcached',
+        'python-psycopg2',
+        'python-zope-interface',
+      ]
 
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
           $apache_24    = false
           $django_pkg = 'Django14'
-          $graphitepkgs = [
-            'MySQL-python',
-            'bitmap',
-            'bitmap-fonts-compat',
-            'gcc',
-            'pyOpenSSL',
-            'pycairo',
-            'python-crypto',
-            'python-ldap',
-            'python-memcached',
-            'python-psycopg2',
-            'python-sqlite2',
-            'python-zope-interface',
-          ]
+          $graphitepkgs = union($common_os_pkgs,['python-sqlite2'])
         }
 
         /^7\.\d+/: {
           $apache_24    = true
           $django_pkg = 'python-django'
-          $graphitepkgs = [
-            'MySQL-python',
-            'bitmap',
-            'bitmap-fonts-compat',
-            'gcc',
-            'pyOpenSSL',
-            'pycairo',
-            'python-crypto',
-            'python-ldap',
-            'python-memcached',
-            'python-psycopg2',
-            'python-sqlite3dbm',
-            'python-zope-interface',
-          ]
+          $graphitepkgs = union($common_os_pkgs,['python-sqlite3dbm'])
         }
 
         default: {
