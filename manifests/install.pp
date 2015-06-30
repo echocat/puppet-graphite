@@ -13,7 +13,7 @@ class graphite::install inherits graphite::params {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
   if $::graphite::gr_pip_install and $::osfamily == 'RedHat' {
-    validate_re($::operatingsystemrelease,'^[6-7]\.\d+$',
+    validate_re($::operatingsystemrelease,'^[6-7]\.\d+',
     "Unsupported RedHat release: '${::operatingsystemrelease}'")
   }
 
