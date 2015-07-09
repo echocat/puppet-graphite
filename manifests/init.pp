@@ -661,6 +661,18 @@ class graphite (
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
 
+  # validate bools
+  validate_bool($gr_enable_carbon_cache)
+  validate_bool($gr_web_cors_allow_from_all)
+  validate_bool($gr_use_ssl)
+  validate_bool($gr_django_1_4_or_less)
+  validate_bool($gr_enable_carbon_relay)
+  validate_bool($gr_enable_carbon_aggregator)
+  validate_bool($manage_ca_certificate)
+  validate_bool($gr_use_ldap)
+  validate_bool($gr_pip_install)
+  validate_bool($gr_disable_webapp_cache)
+
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
   # implementation classes through a transitive relationship to
