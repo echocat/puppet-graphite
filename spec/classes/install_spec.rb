@@ -110,13 +110,13 @@ describe 'graphite::install', :type => 'class' do
   end
 
   # Loop through various contexts
-  [ { :osfamily => 'Debian', :lsbdistcodename        => 'capybara'        },
-    { :osfamily => 'Debian', :lsbdistcodename        => 'squeeze'         },
-    { :osfamily => 'Debian', :lsbdistcodename        => 'trusty'          },
-    { :osfamily => 'FreeBSD',:operatingsystemrelease => '8.4-RELEASE-p27' },
-    { :osfamily => 'RedHat', :operatingsystemrelease => '5.0'             },
-    { :osfamily => 'RedHat', :operatingsystemrelease => '6.6'             },
-    { :osfamily => 'RedHat', :operatingsystemrelease => '7.1'             },
+  [ { :osfamily => 'Debian', :lsbdistcodename => 'capybara', :operatingsystem => 'Debian' },
+    { :osfamily => 'Debian', :lsbdistcodename => 'squeeze',  :operatingsystem => 'Debian' },
+    { :osfamily => 'Debian', :lsbdistcodename => 'trusty',   :operatingsystem => 'Debian' },
+    { :osfamily => 'FreeBSD', :operatingsystemrelease => '8.4-RELEASE-p27', :operatingsystem => 'FreeBSD' },
+    { :osfamily => 'RedHat', :operatingsystemrelease => '5.0', :operatingsystem => 'CentOS' },
+    { :osfamily => 'RedHat', :operatingsystemrelease => '6.6', :operatingsystem => 'CentOS' },
+    { :osfamily => 'RedHat', :operatingsystemrelease => '7.1', :operatingsystem => 'CentOS' },
   ].each do |myfacts|
 
     context 'OS %s %s' % myfacts.values do
