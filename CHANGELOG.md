@@ -1,3 +1,17 @@
+## 2015-07-08 - 5.14.0 (Feature/Bugfix release)
+
+#### Features:
+
+- Issue #201 Support configuring WHISPER_AUTOFLUSH in carbon.conf
+- Issue #202 Allow Django package name, version, and source to be overridden. Useful for Trusty clashing with Django 1.6
+- Issue #203 More usage of ensure_packages() and create_resources() to better predict installs
+- Issue #204 gcc and devlibs are only installed if needed
+- add validation of boolean parameters
+
+#### Bugfixes:
+
+- Fixed #205 Fix false negative RHEL7 not supported error, because of minor version number
+
 ## 2015-06-05 - 5.13.0 (Feature/Bugfix release)
 
 #### Features:
