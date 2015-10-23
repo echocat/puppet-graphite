@@ -619,6 +619,7 @@ class graphite (
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
   $gr_local_data_dir                      = '/opt/graphite/storage/whisper',
+  $gr_rrd_dir                             = '/opt/graphite/storage/rrd',
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,

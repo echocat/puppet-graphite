@@ -86,7 +86,7 @@ CACHES = {
 ## Data directories
 # NOTE: If any directory is unreadable in DATA_DIRS it will break metric browsing
 WHISPER_DIR = '<%= scope.lookupvar('graphite::gr_local_data_dir') %>'
-#RRD_DIR = '/opt/graphite/storage/rrd'
+RRD_DIR = '<%= scope.lookupvar('graphite::gr_rrd_dir') %>'
 #DATA_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
 #LOG_DIR = '/opt/graphite/storage/log/webapp'
 #INDEX_FILE = '/opt/graphite/storage/index'  # Search index file
