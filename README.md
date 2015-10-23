@@ -353,6 +353,10 @@ Default is 'GMT' (string). Timezone for graphite to be used.
 
 Default is '/opt/graphite/storage/whisper'. Set location of whisper files.
 
+#####`gr_rrd_dir`
+
+Default is '/opt/graphite/storage/rrd'. Set location of rrd data files.
+
 #####`gr_storage_schemas`
 
 Default is
