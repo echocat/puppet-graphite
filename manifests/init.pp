@@ -674,6 +674,10 @@ class graphite (
   validate_bool($gr_pip_install)
   validate_bool($gr_disable_webapp_cache)
 
+  # validate integers
+  validate_integer($gr_apache_port)
+  validate_integer($gr_apache_port_https)
+
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
   # implementation classes through a transitive relationship to
