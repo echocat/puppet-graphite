@@ -101,7 +101,7 @@ class graphite::config_apache inherits graphite::params {
     }
 
     'RedHat': {
-      if $::graphite::gr_apache_port != '80' {
+      if $::graphite::gr_apache_port != 80 {
         file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
           ensure  => link,
           notify  => Service[$::graphite::params::apache_service_name],
