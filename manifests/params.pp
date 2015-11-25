@@ -87,8 +87,6 @@ class graphite::params {
       $python_dev_pkg = ['python-devel','gcc']
       $common_os_pkgs = [
         'MySQL-python',
-        'bitmap',
-        'bitmap-fonts-compat',
         'pyOpenSSL',
         'pycairo',
         'python-crypto',
@@ -103,13 +101,13 @@ class graphite::params {
         /^6\.\d+$/: {
           $apache_24    = false
           $django_pkg = 'Django14'
-          $graphitepkgs = union($common_os_pkgs,['python-sqlite2'])
+          $graphitepkgs = union($common_os_pkgs,['python-sqlite2','bitmap-fonts-compat','bitmap'])
         }
 
         /^7\.\d+/: {
           $apache_24    = true
           $django_pkg = 'python-django'
-          $graphitepkgs = union($common_os_pkgs,['python-sqlite3dbm'])
+          $graphitepkgs = union($common_os_pkgs,['python-sqlite3dbm','dejavu-fonts-common','dejavu-sans-fonts'])
         }
 
         default: {
