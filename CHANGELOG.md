@@ -1,6 +1,10 @@
-## 2015-11-26 - 5.14.1 (Bugfix release for RedHat)
+## 2015-11-26 - 5.15.0 (Feature/Bugfix release)
 
 - !!! stdlib required version is raised from 3.2.0 to 4.6.0 !!!
+
+#### Features:
+
+- (350a522) #216 add `gr_rrd_dir` to set location of rrd files
 
 #### Bugfixes:
 
