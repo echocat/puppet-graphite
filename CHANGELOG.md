@@ -1,3 +1,12 @@
+## 2015-11-26 - 5.14.1 (Bugfix release for RedHat)
+
+- !!! stdlib required version is raised from 3.2.0 to 4.6.0 !!!
+
+#### Bugfixes:
+
+- (91f9d15) #220 fix font packages isntalled on RedHat/CentOS
+- (beba7ac) #219 #218 `gr_apache_port` and `gr_apache_port_https` are validated to integer
+
 ## 2015-07-08 - 5.14.0 (Feature/Bugfix release)
 
 #### Features:
