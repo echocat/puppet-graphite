@@ -61,8 +61,6 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('python-devel').with_provider(nil) }
     it { should contain_package('gcc').with_provider(nil) }
     it { should contain_package('MySQL-python').with_provider(nil) }
-    it { should contain_package('bitmap').with_provider(nil) }
-    it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
     it { should contain_package('pyOpenSSL').with_provider(nil) }
     it { should contain_package('pycairo').with_provider(nil) }
     it { should contain_package('python-crypto').with_provider(nil) }
@@ -73,6 +71,8 @@ describe 'graphite::install', :type => 'class' do
   shared_context 'RedHat 6 platforms' do
     it { should contain_package('Django14').with_provider(nil) }
     it { should contain_package('python-sqlite2').with_provider(nil) }
+    it { should contain_package('bitmap').with_provider(nil) }
+    it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.12-py2.6.egg-info',
@@ -87,6 +87,8 @@ describe 'graphite::install', :type => 'class' do
   shared_context 'RedHat 7 platforms' do
     it { should contain_package('python-django').with_provider(nil) }
     it { should contain_package('python-sqlite3dbm').with_provider(nil) }
+    it { should contain_package('dejavu-fonts-common').with_provider(nil) }
+    it { should contain_package('dejavu-sans-fonts').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.12-py2.7.egg-info',
