@@ -245,6 +245,16 @@ Additionally, the Django package is normally installed from a system package, bu
   }
 ```
 
+####Managing system pip and Python development packages
+If `gr_pip_install` is set to `true`, both `python-pip` and Python development packages will need to be installed. If you want to manage those packages separately, set `gr_manage_python_packages` to `false`.
+
+```puppet
+  class { '::graphite':
+    gr_pip_install            => true,
+    gr_manage_python_packages => false,
+  }
+```
+
 ##Usage
 
 ####Class: `graphite`
