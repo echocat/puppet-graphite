@@ -22,13 +22,23 @@ class graphite::install inherits graphite::params {
     default => undef,
     true    => 'pip',
   }
-  $gr_pkg_require = $::graphite::gr_pip_install ? {
-    default => undef,
-    true    => [
-      Package[$::graphite::params::graphitepkgs],
-      Package[$::graphite::params::python_pip_pkg],
-      Package[$::graphite::params::python_dev_pkg],
-    ],
+
+  if $::graphite::gr_manage_python_packages {
+    $gr_pkg_require = $::graphite::gr_pip_install ? {
+      default => undef,
+      true    => [
+        Package[$::graphite::params::graphitepkgs],
+        Package[$::graphite::params::python_pip_pkg],
+        Package[$::graphite::params::python_dev_pkg],
+      ],
+    }
+  } else {
+    $gr_pkg_require = $::graphite::gr_pip_install ? {
+      default => undef,
+      true    => [
+        Package[$::graphite::params::graphitepkgs],
+      ],
+    }
   }
 
   # variables to workaround unusual graphite install target:
@@ -96,10 +106,12 @@ class graphite::install inherits graphite::params {
 
     # using the pip package provider requires python-pip
     # also install python headers and libs for pip
-    ensure_packages(flatten([
-      $::graphite::params::python_pip_pkg,
-      $::graphite::params::python_dev_pkg,
-    ]))
+    if $::graphite::gr_manage_python_packages {
+      ensure_packages(flatten([
+        $::graphite::params::python_pip_pkg,
+        $::graphite::params::python_dev_pkg,
+      ]))
+    }
 
     # hack unusual graphite install target
     create_resources('file',{
