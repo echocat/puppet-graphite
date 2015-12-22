@@ -65,6 +65,10 @@ class graphite::install inherits graphite::params {
   ensure_packages($::graphite::params::graphitepkgs)
 
   create_resources('package',{
+    'twisted' => {
+      ensure => $::graphite::gr_twisted_ver,
+      name   => $::graphite::gr_twisted_pkg,
+    },
     'carbon' => {
       ensure => $::graphite::gr_carbon_ver,
       name   => $::graphite::gr_carbon_pkg,
@@ -76,10 +80,6 @@ class graphite::install inherits graphite::params {
     'graphite-web' => {
       ensure => $::graphite::gr_graphite_ver,
       name   => $::graphite::gr_graphite_pkg,
-    },
-    'twisted' => {
-      ensure => $::graphite::gr_twisted_ver,
-      name   => $::graphite::gr_twisted_pkg,
     },
     'txamqp' => {
       ensure => $::graphite::gr_txamqp_ver,
