@@ -96,10 +96,12 @@ class graphite::install inherits graphite::params {
 
     # using the pip package provider requires python-pip
     # also install python headers and libs for pip
-    ensure_packages(flatten([
-      $::graphite::params::python_pip_pkg,
-      $::graphite::params::python_dev_pkg,
-    ]))
+    if $::graphite::gr_manage_python_packages {
+      ensure_packages(flatten([
+        $::graphite::params::python_pip_pkg,
+        $::graphite::params::python_dev_pkg,
+      ]))
+    }
 
     # hack unusual graphite install target
     create_resources('file',{
