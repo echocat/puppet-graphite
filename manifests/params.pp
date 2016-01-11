@@ -94,6 +94,7 @@ class graphite::params {
         'python-memcached',
         'python-psycopg2',
         'python-zope-interface',
+        'python-tzlocal',
       ]
 
       # see https://github.com/graphite-project/carbon/issues/86
