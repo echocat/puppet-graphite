@@ -75,12 +75,12 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
-      :target => '/opt/graphite/lib/carbon-0.9.12-py2.6.egg-info',
-      :path   => '/usr/lib/python2.6/site-packages/carbon-0.9.12-py2.6.egg-info',
+      :target => '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info',
+      :path   => '/usr/lib/python2.6/site-packages/carbon-0.9.15-py2.6.egg-info',
     })) }
     it { should contain_file('gweb_hack').only_with(hack_defaults.merge({
-      :target => '/opt/graphite/webapp/graphite_web-0.9.12-py2.6.egg-info',
-      :path   => '/usr/lib/python2.6/site-packages/graphite_web-0.9.12-py2.6.egg-info',
+      :target => '/opt/graphite/webapp/graphite_web-0.9.15-py2.6.egg-info',
+      :path   => '/usr/lib/python2.6/site-packages/graphite_web-0.9.15-py2.6.egg-info',
     })) }
   end
 
@@ -91,12 +91,12 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('dejavu-sans-fonts').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
-      :target => '/opt/graphite/lib/carbon-0.9.12-py2.7.egg-info',
-      :path   => '/usr/lib/python2.7/site-packages/carbon-0.9.12-py2.7.egg-info',
+      :target => '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info',
+      :path   => '/usr/lib/python2.7/site-packages/carbon-0.9.15-py2.7.egg-info',
     })) }
     it { should contain_file('gweb_hack').only_with(hack_defaults.merge({
-      :target => '/opt/graphite/webapp/graphite_web-0.9.12-py2.7.egg-info',
-      :path   => '/usr/lib/python2.7/site-packages/graphite_web-0.9.12-py2.7.egg-info',
+      :target => '/opt/graphite/webapp/graphite_web-0.9.15-py2.7.egg-info',
+      :path   => '/usr/lib/python2.7/site-packages/graphite_web-0.9.15-py2.7.egg-info',
     })) }
   end
 
