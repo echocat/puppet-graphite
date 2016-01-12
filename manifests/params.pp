@@ -18,11 +18,11 @@ class graphite::params {
   $txamqp_pkg         = 'txAMQP'
   $txamqp_ver         = '0.4'
   $graphite_pkg       = 'graphite-web'
-  $graphite_ver       = '0.9.12'
+  $graphite_ver       = '0.9.15'
   $carbon_pkg         = 'carbon'
-  $carbon_ver         = '0.9.12'
+  $carbon_ver         = '0.9.15'
   $whisper_pkg        = 'whisper'
-  $whisper_ver        = '0.9.12'
+  $whisper_ver        = '0.9.15'
 
   $django_ver         = 'installed'
   $django_provider    = undef
@@ -94,6 +94,7 @@ class graphite::params {
         'python-memcached',
         'python-psycopg2',
         'python-zope-interface',
+        'python-tzlocal',
       ]
 
       # see https://github.com/graphite-project/carbon/issues/86

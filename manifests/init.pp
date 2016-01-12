@@ -454,6 +454,9 @@
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
+# [*gr_manage_python_packages*]
+#   Boolean. Should the pip and python dev packages be managed by this module.
+#   Default: true
 # [*gr_disable_webapp_cache*]
 #   Boolean. Should the caching of the webapp be disabled. This helps with some
 #   display issues in grafana.
@@ -651,6 +654,7 @@ class graphite (
   $gr_django_ver                          = $::graphite::params::django_ver,
   $gr_django_provider                     = $::graphite::params::django_provider,
   $gr_pip_install                         = true,
+  $gr_manage_python_packages              = true,
   $gr_disable_webapp_cache                = false,
   $gr_carbonlink_query_bulk               = undef,
   $gr_carbonlink_hosts_timeout            = '1.0',
@@ -672,6 +676,7 @@ class graphite (
   validate_bool($manage_ca_certificate)
   validate_bool($gr_use_ldap)
   validate_bool($gr_pip_install)
+  validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
 
   # validate integers
