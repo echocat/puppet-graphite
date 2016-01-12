@@ -1,5 +1,7 @@
 ## 2016-01-12 - 5.16.0 (Feature/Bugfix release)
 
+- !!! set default graphite version from 0.9.12 to 0.9.15 !!!
+
 #### Features:
 
 - (3c3f29d) #231 add new `gr_manage_python_packages` option
