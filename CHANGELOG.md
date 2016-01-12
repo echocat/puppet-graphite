@@ -1,3 +1,17 @@
+## 2016-01-12 - 5.16.0 (Feature/Bugfix release)
+
+- !!! set default graphite version from 0.9.12 to 0.9.15 !!!
+
+#### Features:
+
+- (3c3f29d) #231 add new `gr_manage_python_packages` option
+
+#### Bugfixes:
+
+- (5f05fc5) #232 RedHat 6: reorder package installtion to avoid error messages
+- (bdd7e2c) #233 Redhat: add package python-tzlocal, so timezone can be set
+- (a70b484) #228 short fix for future parser in nginx template
+
 ## 2015-11-26 - 5.15.0 (Feature/Bugfix release)
 
 - !!! stdlib required version is raised from 3.2.0 to 4.6.0 !!!

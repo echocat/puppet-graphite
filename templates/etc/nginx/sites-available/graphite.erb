@@ -22,7 +22,7 @@ server {
 	# proxy remaining requests to graphite
 
 	location / {
-<% unless scope.lookupvar('graphite::nginx_htpasswd') == :undef -%>
+<% unless [:undef, nil].include? scope.lookupvar('graphite::nginx_htpasswd') -%>
 		auth_basic "You shall not pass";
 		auth_basic_user_file /etc/nginx/graphite-htpasswd;
 <% end %>
