@@ -36,7 +36,7 @@ describe 'graphite' do
   end
 
   context 'Debian supported platforms' do
-    ['trusty','squeeze'].each do | lsbdistcodename |
+    ['trusty','squeeze', 'vivid', 'precise'].each do | lsbdistcodename |
       let(:facts) {{ :osfamily => 'Debian', :lsbdistcodename => lsbdistcodename}}
       describe "Lsbdistcodename #{lsbdistcodename}" do
         it_behaves_like 'supported'
