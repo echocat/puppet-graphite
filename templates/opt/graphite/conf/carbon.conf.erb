@@ -60,8 +60,8 @@ MAX_UPDATES_PER_SECOND = <%= scope.lookupvar('graphite::gr_max_updates_per_secon
 # relatively low and carbon has cached a lot of updates; it enables the carbon
 # daemon to shutdown more quickly.
 # MAX_UPDATES_PER_SECOND_ON_SHUTDOWN = 1000
-<% unless [:undef, nil].include? scope['graphite::gr_max_updates_per_second_on_shutdown'] -%>
-MAX_UPDATES_PER_SECOND_ON_SHUTDOWN = <%= scope['graphite::gr_max_updates_per_second_on_shutdown'] %>
+<% unless [:undef, nil].include? scope.lookupvar('graphite::gr_max_updates_per_second_on_shutdown') -%>
+MAX_UPDATES_PER_SECOND_ON_SHUTDOWN = <%= scope.lookupvar('graphite::gr_max_updates_per_second_on_shutdown') %>
 <% end -%>
 
 # Softly limits the number of whisper files that get created each minute.

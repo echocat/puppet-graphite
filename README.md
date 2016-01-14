@@ -400,7 +400,19 @@ The storage aggregation rules.
 
 #####`gr_web_server`
 
-Default is 'apache'. The web server to use. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 'nginx' is only supported on Debian-like systems. And 'none' means that you will manage the webserver yourself.
+Default is 'apache'. The web server to configure. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 
+
+Apache is configured with mod_wsgi, nginx is configured with gunicorn. 'wsgionly' configures only gunicorn.
+
+The value 'none' means that you will manage the webserver yourself.
+
+#####`gr_web_server_port`
+
+Default is 80. The HTTP port which the web server will use. Only used for $gr_web_server => 'apache' or 'nginx'.
+
+#####`gr_web_server_port_https`
+
+Default is 443. The HTTPS port which the web server will use. Only used for $gr_web_server => 'apache'.
 
 #####`gr_web_servername`
 
@@ -429,19 +441,11 @@ Path to SSL dir containing keys and certs. Default is undef.
 
 #####`gr_web_group`
 
-Default is undef. Group name to chgrp the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
+Group name to chgrp the files that will served by webserver. Only necessary for gr_web_server => 'wsgionly' or 'none'.
 
 #####`gr_web_user`
 
-Default is undef. Username to chown the files that will served by webserver.  Use only with gr_web_server => 'wsgionly' or 'none'.
-
-#####`gr_apache_port`
-
-Default is 80. The HTTP port apache will use.
-
-#####`gr_apache_port_https`
-
-Default is 443. The HTTPS port apache will use.
+Username to chown the files that will served by webserver. Only necessary for gr_web_server => 'wsgionly' or 'none'.
 
 #####`gr_apache_conf_template`
 
