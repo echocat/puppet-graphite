@@ -216,8 +216,8 @@ ones set for the principal instance.
 So in this case you would have 3 cache instances, the first one is `cache` (you can refer to it as `cache:a` too), `cache:b` and `cache:c`. cache:a will listen on ports 2003, 2004 and 7002 for line, pickle and query respectively. But, cache:b will do it on ports 2103, 2104, and 7102, and cache:c on 2203, 2204 and 7202. All other parameters from cache:a will be inherited by cache:b and c.
 
 ###Installing with something other than pip and specifying package names and versions
-If you need to install via something other pip, an internal apt repo with fpm converted packages for instance, you can set `gr_pip_install` to false.
-If you're doing this you'll most likely have to override the default package names and versions as well. 
+If you need to install via something other than pip, an internal apt repo with fpm converted packages for instance, you can set `gr_pip_install` to false.
+If you're doing this you'll most likely have to override the default package names and versions as well.
 ```puppet
   class { '::graphite':
     gr_pip_install        => false,
@@ -869,7 +869,7 @@ On Redhat distributions you need the EPEL or RPMforge repository, because Graphi
 
 ##Limitations
 
-This module is tested on CentOS 6.5 and Debian 7 (Wheezy) and should also run without problems on
+This module is tested on CentOS 6.5 and Debian 7 (Wheezy) and should also run on
 
 * RHEL/CentOS/Scientific 6+
 * Debian 6+
@@ -878,8 +878,17 @@ This module is tested on CentOS 6.5 and Debian 7 (Wheezy) and should also run wi
 Most settings of Graphite can be set by parameters. So their can be special configurations for you. In this case you should edit
 the file `templates/opt/graphite/webapp/graphite/local_settings.py.erb`.
 
-The nginx configs are only supported on Debian based systems at the moment.
+###Compatibility Notes
+* There is currently an [open ticket](https://tickets.puppetlabs.com/browse/PUP-3829) with Puppet about broken pip support in CentOS 6/7. The
+workaround for this bug is to create a symlink from `/usr/bin/pip-python` (which doesn't exist) to `/usr/bin/pip` (which does).
+* CentOS 7's default `nginx.conf` includes a `server` section listening on port 80. Thus, it is not possible to set up graphite without modifying 
+the package-provided configuration file. You will have to either manually remove the `server` section, or provide a `gr_web_server_port` other
+than port 80.
+* nginx/gunicorn requires a `systemctl restart gunicorn` after installing on Ubuntu 15.10
+* SELinux must be disabled
 
 ##Contributing
 
 Echocat modules are open projects. So if you want to make this module even better, you can contribute to this module on [Github](https://github.com/echocat/puppet-graphite).
+
+Make sure to read the repository's `DEVELOP.md` file first.

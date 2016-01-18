@@ -24,7 +24,7 @@ class graphite::params {
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.15'
   $django_pkg         = 'Django'
-  $django_ver         = '1.6'
+  $django_ver         = '1.5'
   $django_provider    = 'pip'
 
   $install_prefix     = '/opt/'

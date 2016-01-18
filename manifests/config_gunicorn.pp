@@ -10,70 +10,85 @@
 class graphite::config_gunicorn inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  if $::osfamily == 'Debian' {
-    $package_name = 'gunicorn'
-
-  } elsif $::osfamily == 'RedHat' {
-    $package_name = 'python-gunicorn'
-
-  } else {
-    fail("wsgi/gunicorn-based graphite is not supported on ${::operatingsystem} (only supported on Debian & RedHat)")
-  }
-
-  if $::service_provider == 'systemd' or ($::service_provider == 'debian' and $::operatingsystemmajrelease == '8') {
+  case $::osfamily {
     
-    file { '/etc/systemd/system/gunicorn.service':
-      ensure  => file,
-      content => template('graphite/etc/systemd/gunicorn.service.erb'),
-      mode    => '0644',
+    'Debian': {
+      $package_name = 'gunicorn'
+
+      # Debian has a wrapper script called `gunicorn-debian` for multiple gunicorn 
+      # configs. Each config is stored as a separate file in /etc/gunicorn.d/. 
+      # On debian 8 and Ubuntu 15.10, which use systemd, the gunicorn-debian
+      # config file has to be installed before the gunicorn package. 
+      file { '/etc/gunicorn.d/':
+        ensure => directory,
+      }
+      file { '/etc/gunicorn.d/graphite':
+        ensure  => file,
+        content => template('graphite/etc/gunicorn.d/graphite.erb'),
+        mode    => '0644',
+        before  => Package[$package_name],
+        require => File['/etc/gunicorn.d/'],
+      }
     }
 
-    file { '/etc/systemd/system/gunicorn.socket':
-      ensure  => file,
-      content => template('graphite/etc/systemd/gunicorn.socket.erb'),
-      mode    => '0755',
+    'RedHat': {
+      $package_name = 'python-gunicorn'
+
+      # RedHat package is missing initscript
+      if $::service_provider == 'systemd' {
+
+        file { '/etc/systemd/system/gunicorn.service':
+          ensure  => file,
+          content => template('graphite/etc/systemd/gunicorn.service.erb'),
+          mode    => '0644',
+        }
+
+        file { '/etc/systemd/system/gunicorn.socket':
+          ensure  => file,
+          content => template('graphite/etc/systemd/gunicorn.socket.erb'),
+          mode    => '0755',
+        }
+
+        file { '/etc/tmpfiles.d/gunicorn.conf':
+          ensure  => file,
+          content => template('graphite/etc/tmpfiles.d/gunicorn.conf.erb'),
+          mode    => '0644',
+        }
+
+        exec { 'gunicorn-reload-systemd':
+          command => 'systemctl daemon-reload',
+          path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+          require => [
+            File['/etc/systemd/system/gunicorn.service'],
+            File['/etc/systemd/system/gunicorn.socket'],
+            File['/etc/tmpfiles.d/gunicorn.conf'],
+          ],
+          before  => Service['gunicorn']
+        }
+
+      } elsif $::service_provider == 'redhat' {
+
+        file { '/etc/init.d/gunicorn':
+          ensure  => file,
+          content => template('graphite/etc/init.d/RedHat/gunicorn.erb'),
+          mode    => '0755',
+          before  => Service['gunicorn'],
+        }
+
+      }
+
     }
 
-    file { '/etc/tmpfiles.d/gunicorn.conf':
-      ensure  => file,
-      content => template('graphite/etc/tmpfiles.d/gunicorn.conf.erb'),
-      mode    => '0644',
-    }
-
-    exec { 'gunicorn-reload-systemd':
-      command => 'systemctl daemon-reload',
-      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-      require => [
-        File['/etc/systemd/system/gunicorn.service'],
-        File['/etc/systemd/system/gunicorn.socket'],
-        File['/etc/tmpfiles.d/gunicorn.conf'],
-      ],
-      before  => Service['gunicorn']
-    }
-    # These next two are needed for Debian for some reason
-    ->
-    exec { 'stop gunicorn-socket':
-      command => 'systemctl stop gunicorn.socket',
-      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-      before  => Service['gunicorn']
-    }
-    ->
-    exec { 'start gunicorn-socket':
-      command => 'systemctl start gunicorn.socket',
-      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-      before  => Service['gunicorn']
-    }
-
-  } elsif $::service_provider == 'redhat' {
-
-    file { '/etc/init.d/gunicorn':
-      ensure  => file,
-      content => template('graphite/etc/init.d/RedHat/gunicorn.erb'),
-      mode    => '0755',
+    default: {
+      fail("wsgi/gunicorn-based graphite is not supported on ${::operatingsystem} (only supported on Debian & RedHat)")
     }
 
   }
 
+  # The `gunicorn-debian` command doesn't require this, as it
+  # uses the deprecated `gunicorn_django` command. But, I hope
+  # that debian will eventually update their gunicorn package
+  # to use the non-deprecated version.
   file { '/opt/graphite/webapp/graphite/wsgi.py':
     ensure => link,
     target => '/opt/graphite/conf/graphite.wsgi',
@@ -92,21 +107,28 @@ class graphite::config_gunicorn inherits graphite::params {
       command     => 'python /tmp/fix-graphite-race-condition.py',
       cwd         => '/opt/graphite/webapp',
       environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
-      user        => $graphite::gr_web_user_REAL,
+      user        => $graphite::config::gr_web_user_REAL,
       logoutput   => true,
-      group       => $graphite::gr_web_group_REAL,
+      group       => $graphite::config::gr_web_group_REAL,
+      returns     => [0, 1],
       require     => [
         File['/tmp/fix-graphite-race-condition.py'],
         Exec['Initial django db creation'],
         Service['carbon-cache'],
       ],
-      before      => Service['gunicorn'],
+      before      => Package[$package_name],
     }
   }
 
+  # Only install gunicorn after graphite is ready to go
   package {
     $package_name:
-      ensure => installed;
+      ensure  => installed,
+      require => [
+        File['/opt/graphite/storage/run'],
+        File['/opt/graphite/storage/log'],
+        Exec['Initial django db creation'],
+      ];
   }
 
   service { 'gunicorn':
@@ -115,22 +137,9 @@ class graphite::config_gunicorn inherits graphite::params {
     hasrestart => true,
     hasstatus  => false,
     require    => [
-      File['/opt/graphite/storage/run'],
-      File['/opt/graphite/storage/log'],
-      Exec['Initial django db creation'],
       Package[$package_name],
     ],
     subscribe  => File['/opt/graphite/webapp/graphite/local_settings.py'],
   }
 
-  # Deploy configfiles
-  if $::osfamily == 'Debian' {
-    file { '/etc/gunicorn.d/graphite':
-      ensure  => file,
-      content => template('graphite/etc/gunicorn.d/graphite.erb'),
-      mode    => '0644',
-      before  => Service['gunicorn'],
-      require => Package[$package_name],
-    }
-  }
 }

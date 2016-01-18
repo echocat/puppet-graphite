@@ -709,24 +709,6 @@ class graphite (
   validate_integer($gr_web_server_port)
   validate_integer($gr_web_server_port_https)
 
-
-
-  # Set things
-  case $gr_web_server {
-    'apache': {
-      $gr_web_user_REAL = pick($gr_web_user, $::graphite::params::apache_web_user)
-      $gr_web_group_REAL = pick($gr_web_group, $::graphite::params::apache_web_group)
-    }
-    'nginx': {
-      $gr_web_user_REAL = pick($gr_web_user, $::graphite::params::nginx_web_user)
-      $gr_web_group_REAL = pick($gr_web_group, $::graphite::params::nginx_web_group)
-    }
-    'wsgionly': {
-      $gr_web_user_REAL = pick($gr_web_user)
-      $gr_web_group_REAL = pick($gr_web_group)
-    }
-  }
-
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
   # implementation classes through a transitive relationship to
