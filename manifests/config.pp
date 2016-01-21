@@ -8,7 +8,8 @@
 # None.
 #
 class graphite::config inherits graphite::params {
-  Exec { path => '/bin:/usr/bin:/usr/sbin' }
+  Exec {
+    path => '/bin:/usr/bin:/usr/sbin' }
 
   # for full functionality we need this packages:
   # mandatory: python-cairo, python-django, python-twisted,
@@ -17,27 +18,31 @@ class graphite::config inherits graphite::params {
 
   if $::service_provider == 'systemd' or ($::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
+
     exec { 'graphite-reload-systemd':
       command     => 'systemctl daemon-reload',
-      path        => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+      path        => [
+        '/usr/bin',
+        '/usr/sbin',
+        '/bin',
+        '/sbin'],
       refreshonly => true,
     }
-  }
-  else {
+  } else {
     $initscript_notify = []
   }
 
   # we need an web server with python support
   # apache with mod_wsgi or nginx with gunicorn
   case $graphite::gr_web_server {
-    'apache': {
+    'apache'   : {
       $gr_web_user_REAL  = pick($::graphite::gr_web_user, $::graphite::params::apache_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group, $::graphite::params::apache_web_group)
       include graphite::config_apache
       $web_server_package_require = [Package[$::graphite::params::apache_pkg]]
     }
 
-    'nginx': {
+    'nginx'    : {
       # Configure gunicorn and nginx.
       $gr_web_user_REAL  = pick($::graphite::gr_web_user, $::graphite::params::nginx_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group, $::graphite::params::nginx_web_group)
@@ -46,7 +51,7 @@ class graphite::config inherits graphite::params {
       $web_server_package_require = [Package['nginx']]
     }
 
-    'wsgionly': {
+    'wsgionly' : {
       # Configure gunicorn only without nginx.
       if !$::graphite::gr_web_user or !$::graphite::gr_web_group {
         fail('having $gr_web_server => \'wsgionly\' requires use of $gr_web_user and $gr_web_group')
@@ -57,46 +62,65 @@ class graphite::config inherits graphite::params {
       $web_server_package_require = undef
     }
 
-    'none': {
+    'none'     : {
       # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       if !$::graphite::gr_web_user or !$::graphite::gr_web_group {
         fail('having $gr_web_server => \'wsgionly\' requires use of $gr_web_user and $gr_web_group')
       }
-      $gr_web_user_REAL  = pick($::graphite::gr_web_user)
-      $gr_web_group_REAL = pick($::graphite::gr_web_group)
+      $gr_web_user_REAL           = pick($::graphite::gr_web_user)
+      $gr_web_group_REAL          = pick($::graphite::gr_web_group)
       $web_server_package_require = undef
     }
 
-    default: {
+    default    : {
       fail('The only supported web servers are \'apache\', \'nginx\', \'wsgionly\' and \'none\'')
     }
   }
 
-  # first init of user db for graphite
+  if $::graphite::gr_pip_install {
+    $local_settings_py_file = "${::graphite::gr_graphiteweb_install_lib_dir}/local_settings.py"
+    $syncdb_require         = File[$local_settings_py_file]
+  } else {
+    # using custom directories.
+    file { "${::graphite::gr_graphiteweb_conf_dir}/manage.py":
+      ensure => link,
+      target => "${::graphite::params::libpath}/graphite/manage.py"
+    }
+    $local_settings_py_file = "${::graphite::gr_graphiteweb_conf_dir}/local_settings.py"
+    $syncdb_require         = [
+      File[$local_settings_py_file],
+      File["${::graphite::gr_graphiteweb_conf_dir}/manage.py"]]
+  }
 
+  $carbon_conf_file               = "${::graphite::gr_carbon_conf_dir}/carbon.conf"
+  $graphite_web_managepy_location = $::graphite::gr_pip_install ? {
+    false   => $::graphite::gr_graphiteweb_conf_dir,
+    default => $::graphite::gr_graphiteweb_install_lib_dir,
+  }
+
+  # first init of user db for graphite
   exec { 'Initial django db creation':
     command     => 'python manage.py syncdb --noinput',
-    cwd         => '/opt/graphite/webapp/graphite',
+    cwd         => $graphite_web_managepy_location,
     refreshonly => true,
-    require     => File['/opt/graphite/webapp/graphite/local_settings.py'],
+    require     => $syncdb_require,
     subscribe   => Class['graphite::install'],
   }
+
   # change access permissions for web server
 
-  file {
-    [
-      '/opt/graphite/storage',
-      '/opt/graphite/storage/lists',
-      '/opt/graphite/storage/log',
-      '/opt/graphite/storage/log/webapp',
-      '/opt/graphite/storage/rrd',
-      '/opt/graphite/storage/run'
-    ]:
-      ensure    => directory,
-      group     => $gr_web_group_REAL,
-      mode      => '0755',
-      owner     => $gr_web_user_REAL,
-      subscribe => Exec['Initial django db creation'],
+  file { [
+    $::graphite::gr_storage_dir,
+    $::graphite::gr_rrd_dir,
+    $::graphite::gr_whitelists_dir,
+    $::graphite::gr_graphiteweb_log_dir,
+    $::graphite::gr_pid_dir,
+    "${::graphite::gr_base_dir}/bin"]:
+    ensure    => directory,
+    group     => $gr_web_group_REAL,
+    mode      => '0755',
+    owner     => $gr_web_user_REAL,
+    subscribe => Exec['Initial django db creation'],
   }
 
   # change access permissions for carbon-cache to align with gr_user
@@ -111,32 +135,31 @@ class graphite::config inherits graphite::params {
   }
 
   file {
-    '/opt/graphite/storage/whisper':
-      ensure  => directory,
-      group   => $carbon_group,
-      mode    => '0755',
-      owner   => $carbon_user,
-      path    => $::graphite::gr_local_data_dir;
+    $::graphite::gr_local_data_dir:
+      ensure => directory,
+      group  => $carbon_group,
+      mode   => '0755',
+      owner  => $carbon_user,
+      path   => $::graphite::gr_local_data_dir;
 
-    '/opt/graphite/storage/log/carbon-cache':
-      ensure  => directory,
-      group   => $carbon_group,
-      mode    => '0755',
-      owner   => $carbon_user;
+    $::graphite::gr_carbon_log_dir:
+      ensure => directory,
+      group  => $carbon_group,
+      mode   => '0755',
+      owner  => $carbon_user;
   }
 
   # Lets ensure graphite.db owner is the same as gr_web_user_REAL
-  file {
-    '/opt/graphite/storage/graphite.db':
-      ensure  => file,
-      group   => $gr_web_group_REAL,
-      mode    => '0644',
-      owner   => $gr_web_user_REAL;
+  file { "${::graphite::gr_storage_dir}/graphite.db":
+    ensure => file,
+    group  => $gr_web_group_REAL,
+    mode   => '0644',
+    owner  => $gr_web_user_REAL;
   }
 
   # Deploy configfiles
   file {
-    '/opt/graphite/webapp/graphite/local_settings.py':
+    $local_settings_py_file:
       ensure  => file,
       content => template('graphite/opt/graphite/webapp/graphite/local_settings.py.erb'),
       group   => $gr_web_group_REAL,
@@ -144,7 +167,7 @@ class graphite::config inherits graphite::params {
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
 
-    '/opt/graphite/conf/graphite_wsgi.py':
+    "${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
       group   => $gr_web_group_REAL,
@@ -152,14 +175,14 @@ class graphite::config inherits graphite::params {
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
 
-    '/opt/graphite/webapp/graphite/graphite_wsgi.py':
+    "${::graphite::gr_graphiteweb_install_lib_dir}/graphite_wsgi.py":
       ensure  => link,
-      target  => '/opt/graphite/conf/graphite_wsgi.py',
-      require => File['/opt/graphite/conf/graphite_wsgi.py'];
+      target  => "${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py",
+      require => File["${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py"];
   }
 
   if $::graphite::gr_remote_user_header_name {
-    file { '/opt/graphite/webapp/graphite/custom_auth.py':
+    file { "${::graphite::gr_graphiteweb_install_lib_dir}/custom_auth.py":
       ensure  => file,
       content => template('graphite/opt/graphite/webapp/graphite/custom_auth.py.erb'),
       group   => $gr_web_group_REAL,
@@ -171,31 +194,30 @@ class graphite::config inherits graphite::params {
 
   # configure carbon engines
   if $::graphite::gr_enable_carbon_cache {
-      $service_cache = Service['carbon-cache']
+    $service_cache = Service['carbon-cache']
   } else {
-      $service_cache = undef
+    $service_cache = undef
   }
 
   if $::graphite::gr_enable_carbon_relay {
-      $service_relay = Service['carbon-relay']
+    $service_relay = Service['carbon-relay']
   } else {
-      $service_relay = undef
+    $service_relay = undef
   }
 
   if $::graphite::gr_enable_carbon_aggregator {
-      $service_aggregator = Service['carbon-aggregator']
+    $service_aggregator = Service['carbon-aggregator']
   } else {
-      $service_aggregator = undef
+    $service_aggregator = undef
   }
 
   $notify_services = delete_undef_values([
-      $service_cache,
-      $service_relay,
-      $service_aggregator
-  ])
+    $service_cache,
+    $service_relay,
+    $service_aggregator])
 
   if $::graphite::gr_enable_carbon_relay {
-    file { '/opt/graphite/conf/relay-rules.conf':
+    file { "${::graphite::gr_carbon_conf_dir}/relay-rules.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
       mode    => '0644',
@@ -204,7 +226,7 @@ class graphite::config inherits graphite::params {
   }
 
   if $::graphite::gr_enable_carbon_aggregator {
-    file { '/opt/graphite/conf/aggregation-rules.conf':
+    file { "${::graphite::gr_carbon_conf_dir}/aggregation-rules.conf":
       ensure  => file,
       mode    => '0644',
       content => template('graphite/opt/graphite/conf/aggregation-rules.conf.erb'),
@@ -213,46 +235,46 @@ class graphite::config inherits graphite::params {
   }
 
   file {
-    '/opt/graphite/conf/storage-schemas.conf':
+    "${::graphite::gr_carbon_conf_dir}/storage-schemas.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-schemas.conf.erb'),
       mode    => '0644',
       notify  => $notify_services;
 
-    '/opt/graphite/conf/carbon.conf':
+    $carbon_conf_file:
       ensure  => file,
       content => template('graphite/opt/graphite/conf/carbon.conf.erb'),
       mode    => '0644',
       notify  => $notify_services;
 
-    '/opt/graphite/conf/storage-aggregation.conf':
+    "${::graphite::gr_carbon_conf_dir}/storage-aggregation.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-aggregation.conf.erb'),
       mode    => '0644';
 
-    '/opt/graphite/conf/whitelist.conf':
+    "${::graphite::gr_carbon_conf_dir}/whitelist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/whitelist.conf.erb'),
       mode    => '0644';
 
-    '/opt/graphite/conf/blacklist.conf':
+    "${::graphite::gr_carbon_conf_dir}/blacklist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/blacklist.conf.erb'),
       mode    => '0644';
   }
 
   # configure logrotate script for carbon
-  file { '/opt/graphite/bin/carbon-logrotate.sh':
+  file { "${::graphite::gr_base_dir}/bin/carbon-logrotate.sh":
     ensure  => file,
     mode    => '0544',
     content => template('graphite/opt/graphite/bin/carbon-logrotate.sh.erb'),
   }
 
   cron { 'Rotate carbon logs':
-    command => '/opt/graphite/bin/carbon-logrotate.sh',
+    command => "${::graphite::gr_base_dir}/bin/carbon-logrotate.sh",
     hour    => 1,
     minute  => 15,
-    require => File['/opt/graphite/bin/carbon-logrotate.sh'],
+    require => File["${::graphite::gr_base_dir}/bin/carbon-logrotate.sh"],
     user    => root,
   }
 
@@ -272,7 +294,7 @@ class graphite::config inherits graphite::params {
       ensure  => file,
       content => template("graphite/etc/init.d/${::osfamily}/carbon-cache.erb"),
       mode    => '0750',
-      require => File['/opt/graphite/conf/carbon.conf'],
+      require => File[$carbon_conf_file],
       notify  => $initscript_notify,
     }
   }
@@ -291,13 +313,13 @@ class graphite::config inherits graphite::params {
       ensure  => file,
       content => template("graphite/etc/init.d/${::osfamily}/carbon-relay.erb"),
       mode    => '0750',
-      require => File['/opt/graphite/conf/carbon.conf'],
+      require => File[$carbon_conf_file],
       notify  => $initscript_notify,
     }
   }
 
   if $graphite::gr_enable_carbon_aggregator {
-    service {'carbon-aggregator':
+    service { 'carbon-aggregator':
       ensure     => running,
       enable     => true,
       hasrestart => true,
@@ -310,7 +332,7 @@ class graphite::config inherits graphite::params {
       ensure  => file,
       content => template("graphite/etc/init.d/${::osfamily}/carbon-aggregator.erb"),
       mode    => '0750',
-      require => File['/opt/graphite/conf/carbon.conf'],
+      require => File[$carbon_conf_file],
       notify  => $initscript_notify,
     }
   }

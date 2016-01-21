@@ -89,9 +89,9 @@ class graphite::config_gunicorn inherits graphite::params {
   # uses the deprecated `gunicorn_django` command. But, I hope
   # that debian will eventually update their gunicorn package
   # to use the non-deprecated version.
-  file { '/opt/graphite/webapp/graphite/wsgi.py':
+  file { "${graphite::gr_graphiteweb_install_lib_dir}/wsgi.py":
     ensure => link,
-    target => '/opt/graphite/conf/graphite.wsgi',
+    target => "${graphite::gr_graphiteweb_conf_dir}/graphite.wsgi",
     before => Service['gunicorn'],
   }
 
@@ -105,7 +105,7 @@ class graphite::config_gunicorn inherits graphite::params {
     }
     exec { 'fix graphite race condition':
       command     => 'python /tmp/fix-graphite-race-condition.py',
-      cwd         => '/opt/graphite/webapp',
+      cwd         => $graphite::gr_graphiteweb_webapp_dir,
       environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
       user        => $graphite::config::gr_web_user_REAL,
       logoutput   => true,
@@ -125,8 +125,8 @@ class graphite::config_gunicorn inherits graphite::params {
     $package_name:
       ensure  => installed,
       require => [
-        File['/opt/graphite/storage/run'],
-        File['/opt/graphite/storage/log'],
+        File[$graphite::gr_pid_dir],
+        File[$graphite::gr_graphiteweb_log_dir],
         Exec['Initial django db creation'],
       ];
   }
@@ -139,7 +139,7 @@ class graphite::config_gunicorn inherits graphite::params {
     require    => [
       Package[$package_name],
     ],
-    subscribe  => File['/opt/graphite/webapp/graphite/local_settings.py'],
+    subscribe  => File["${graphite::gr_graphiteweb_conf_dir}/local_settings.py"],
   }
 
 }

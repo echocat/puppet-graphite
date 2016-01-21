@@ -29,6 +29,15 @@ class graphite::params {
 
   $install_prefix     = '/opt/'
 
+  # variables to workaround unusual graphite install target:
+  # https://github.com/graphite-project/carbon/issues/86
+  $pyver              = $::osfamily ? {
+    default  => '2.7',
+    'RedHat' => $::operatingsystemrelease ? {
+      /^6/    => '2.6',
+      default => '2.7'
+    },
+  }
   case $::osfamily {
     'Debian': {
       $apache_dir                = '/etc/apache2'
@@ -74,6 +83,7 @@ class graphite::params {
           fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/dist-packages"
     }
 
     'RedHat': {
@@ -120,6 +130,7 @@ class graphite::params {
           fail("Unsupported RedHat release: '${::operatingsystemrelease}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/site-packages"
     }
 
     default: {

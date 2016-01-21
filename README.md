@@ -363,13 +363,54 @@ Default is 7002. Self explaining.
 
 Default is 'GMT' (string). Timezone for graphite to be used.
 
+#####`gr_base_dir`
+
+Default is '/opt/graphite'. Set base install location of Graphite. This forms the base location for installs, predominantly appropriate for pip installations. When not installing using pip a typical location for this may be '/opt/carbon'.
+
+#####`gr_storage_dir`
+
+Default is '${gr_base_dir}/storage'. Set location of base storage files.  When not installing using pip a typical location for this may be '/opt/carbon'.
+
 #####`gr_local_data_dir`
 
-Default is '/opt/graphite/storage/whisper'. Set location of whisper files.
+Default is '${gr_storage_dir}/whisper'. Set location of whisper files.
 
 #####`gr_rrd_dir`
 
-Default is '/opt/graphite/storage/rrd'. Set location of rrd data files.
+Default is '${gr_storage_dir}/rrd'. Set location of rrd data files.
+
+#####`gr_whitelists_dir`
+
+Default is '${gr_storage_dir}/rrd'. Set location of whitelist configuration files.
+
+#####`gr_carbon_conf_dir`
+
+Default is '${gr_base_dir}/conf'. Set location of Carbon's configuration files. Most relevant when not using pip for installation. A typical location for this may be '/etc/carbon'.
+
+#####`gr_carbon_log_dir`
+
+Default is '${gr_storage_dir}/log/carbon-cache'. Set location of carbon cache log files.
+
+#####`gr_graphiteweb_log_dir`
+
+Default is '${gr_storage_dir}/log'. Set location of graphite web log files.
+
+#####`gr_graphiteweb_conf_dir`
+
+Default is '${gr_base_dir}/conf'. Set location of graphite web configuration.
+
+#####`gr_graphiteweb_webapp_dir`
+
+Default is '${gr_base_dir}/webapp'. Set location of graphite web's webapp files.
+
+#####`gr_graphiteweb_storage_dir`
+
+Default is '/var/lib/graphite-web'. Set location of graphite web's storage, used for graphite.db file.
+
+#####`gr_graphiteweb_install_lib_dir`
+
+Default is '${gr_graphiteweb_webapp_dir}/graphite'. Set location of libraries directory for graphite web.
+
 
 #####`gr_storage_schemas`
 
