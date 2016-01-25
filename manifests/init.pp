@@ -656,7 +656,7 @@ class graphite (
   $gr_rendering_hosts                     = undef,
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
-  $gr_enable_logrotation                  = 'True',
+  $gr_enable_logrotation                  = 'True'
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
