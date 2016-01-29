@@ -1,3 +1,9 @@
+## 2016-01-29 - 5.16.1 (Bugfix release)
+
+#### Bugfixes:
+
+(9636c9c) (e0807a1) add documented but missing parameter `gr_rrd_dir`
+
 ## 2016-01-12 - 5.16.0 (Feature/Bugfix release)
 
 - !!! set default graphite version from 0.9.12 to 0.9.15 !!!
