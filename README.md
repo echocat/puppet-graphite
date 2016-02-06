@@ -298,7 +298,7 @@ The prefix to be applied to internal performance metrics. Defaults to 'carbon'.
 
 Default is 60. Set the interval between sending internal performance metrics; affects all carbon daemons.
 
-#####`gr_carbon_relay_debian_ulimit`
+#####`gr_carbon_relay_ulimit`
 
 Default is undef. Set the maximum number of file descriptors for
 carbon-relay process.

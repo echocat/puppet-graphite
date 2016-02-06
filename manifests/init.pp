@@ -36,7 +36,7 @@
 # [*gr_carbon_metric_interval*]
 #   The interval (in seconds) between sending internal performance metrics.
 #   Default is 60; 0 to disable instrumentation
-# [*gr_carbon_relay_debian_ulimit*]
+# [*gr_carbon_relay_ulimit*]
 #   The maximum number of file descriptors available to carbon-relay process
 #   Default is undef
 # [*gr_line_receiver_interface*]
@@ -501,7 +501,7 @@ class graphite (
   $gr_max_creates_per_minute              = 50,
   $gr_carbon_metric_prefix                = 'carbon',
   $gr_carbon_metric_interval              = 60,
-  $gr_carbon_relay_debian_ulimit          = undef,
+  $gr_carbon_relay_ulimit          = undef,
   $gr_line_receiver_interface             = '0.0.0.0',
   $gr_line_receiver_port                  = 2003,
   $gr_enable_udp_listener                 = 'False',
