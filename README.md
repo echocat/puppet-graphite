@@ -195,9 +195,9 @@ ones set for the principal instance.
 ```puppet
    class {'graphite':
       gr_line_receiver_port => 2003,
-      gr_pickle_receiver_port => 2004, 
+      gr_pickle_receiver_port => 2004,
       gr_cache_query_port => 7002,
-      
+
       gr_cache_instances => {
          'cache:b' => {
             'LINE_RECEIVER_PORT' => 2103,
@@ -297,6 +297,11 @@ The prefix to be applied to internal performance metrics. Defaults to 'carbon'.
 #####`gr_carbon_metric_interval`
 
 Default is 60. Set the interval between sending internal performance metrics; affects all carbon daemons.
+
+#####`gr_carbon_relay_debian_ulimit`
+
+Default is undef. Set the maximum number of file descriptors for
+carbon-relay process.
 
 #####`gr_line_receiver_interface`
 
@@ -400,7 +405,7 @@ The storage aggregation rules.
 
 #####`gr_web_server`
 
-Default is 'apache'. The web server to configure. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'. 
+Default is 'apache'. The web server to configure. Valid values are 'apache', 'nginx', 'wsgionly' or 'none'.
 
 Apache is configured with mod_wsgi, nginx is configured with gunicorn. 'wsgionly' configures only gunicorn.
 
@@ -728,7 +733,7 @@ Default is 30.  value to pass to gunicorns --timeout arg.
 Default is 'unix:/var/run/graphite.sock'.  value to pass to gunicorns --bind arg.
 
 #####`gunicorn_workers`
-  
+
 Default is 2. value to pass to gunicorn's --worker arg.
 
 #####`gr_cache_instances`    
@@ -881,7 +886,7 @@ the file `templates/opt/graphite/webapp/graphite/local_settings.py.erb`.
 ###Compatibility Notes
 * There is currently an [open ticket](https://tickets.puppetlabs.com/browse/PUP-3829) with Puppet about broken pip support in CentOS 6/7. The
 workaround for this bug is to create a symlink from `/usr/bin/pip-python` (which doesn't exist) to `/usr/bin/pip` (which does).
-* CentOS 7's default `nginx.conf` includes a `server` section listening on port 80. Thus, it is not possible to set up graphite without modifying 
+* CentOS 7's default `nginx.conf` includes a `server` section listening on port 80. Thus, it is not possible to set up graphite without modifying
 the package-provided configuration file. You will have to either manually remove the `server` section, or provide a `gr_web_server_port` other
 than port 80.
 * nginx/gunicorn requires a `systemctl restart gunicorn` after installing on Ubuntu 15.10
