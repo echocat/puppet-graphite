@@ -63,7 +63,6 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('MySQL-python').with_provider(nil) }
     it { should contain_package('pyOpenSSL').with_provider(nil) }
     it { should contain_package('pycairo').with_provider(nil) }
-    it { should contain_package('python-crypto').with_provider(nil) }
     it { should contain_package('python-memcached').with_provider(nil) }
     it { should contain_package('python-zope-interface').with_provider(nil) }
   end
@@ -73,6 +72,7 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('python-sqlite2').with_provider(nil) }
     it { should contain_package('bitmap').with_provider(nil) }
     it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
+    it { should contain_package('python-crypto').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info',
@@ -89,6 +89,7 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('python-sqlite3dbm').with_provider(nil) }
     it { should contain_package('dejavu-fonts-common').with_provider(nil) }
     it { should contain_package('dejavu-sans-fonts').with_provider(nil) }
+    it { should contain_package('python2-crypto').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info',
