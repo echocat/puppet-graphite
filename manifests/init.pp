@@ -501,7 +501,7 @@ class graphite (
   $gr_max_creates_per_minute              = 50,
   $gr_carbon_metric_prefix                = 'carbon',
   $gr_carbon_metric_interval              = 60,
-  $gr_carbon_relay_ulimit          = undef,
+  $gr_carbon_relay_ulimit                 = undef,
   $gr_line_receiver_interface             = '0.0.0.0',
   $gr_line_receiver_port                  = 2003,
   $gr_enable_udp_listener                 = 'False',
