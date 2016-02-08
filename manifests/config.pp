@@ -233,6 +233,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
+      provider   => $service_provider,
       require    => File['/etc/init.d/carbon-cache'],
     }
 
@@ -250,6 +251,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
+      provider   => $service_provider,
       require    => File['/etc/init.d/carbon-relay'],
     }
 
@@ -267,6 +269,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
+      provider   => $service_provider,
       require    => File['/etc/init.d/carbon-aggregator'],
     }
 
