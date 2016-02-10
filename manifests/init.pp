@@ -36,6 +36,9 @@
 # [*gr_carbon_metric_interval*]
 #   The interval (in seconds) between sending internal performance metrics.
 #   Default is 60; 0 to disable instrumentation
+# [*gr_carbon_relay_ulimit*]
+#   The maximum number of file descriptors available to carbon-relay process
+#   Default is undef
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
@@ -118,8 +121,7 @@
 #   (matches the exammple configuration from graphite 0.9.12)
 # [*gr_web_server*]
 #   The web server to use.
-#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'. 'nginx' is only
-#   supported on Debian-like systems.
+#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'.
 #   'wsgionly' will omit apache and nginx, allowing you to run your own
 #   webserver and communicate via wsgi to the unix socket. Handy for servers
 #   with multiple vhosts/purposes etc.
@@ -127,6 +129,14 @@
 #   apache and gunicorn/nginx. All other webserver settings below are
 #   irrelevant if this is 'wsgionly' or 'none'.
 #   Default is 'apache'.
+# [*gr_web_server_port*]
+#   The port which the web server will bind to for the graphite web server. Only
+#   applicable for $gr_web_server => 'apache' or 'nginx'.
+#   Default is 80.
+# [*gr_web_server_port_https*]
+#   The port to run SSL web server on if you have an existing web server on
+#   the default port 443. Only applicable for $gr_web_server => 'apache'.
+#   Default is 443.
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
 #   Default is FQDN.
@@ -137,6 +147,9 @@
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
+# [*gr_web_server_remove_default*]
+#   Remove the default configuration for apache or nginx.
+#   Default is undef, which removes the default configuration only if the server is running on port 80.
 # [*gr_use_ssl*]
 #   If true, alter web server config to enable SSL.
 #   Default is false.
@@ -149,13 +162,6 @@
 # [*gr_ssl_dir]
 #   Path to SSL dir containing keys and certs.
 #   Default is undef
-# [*gr_apache_port*]
-#   The port to run graphite web server on.
-#   Default is 80.
-# [*gr_apache_port_https*]
-#   The port to run SSL web server on if you have an existing web server on
-#   the default port 443.
-#   Default is 443.
 # [*gr_apache_conf_template*]
 #   Template to use for Apache vhost config.
 #   Default is graphite/etc/apache2/sites-available/graphite.conf.erb
@@ -438,19 +444,28 @@
 #   Default: graphite-web
 # [*gr_graphite_ver*]
 #   String. The version of the graphite package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
 # [*gr_carbon_pkg*]
 #   String. The name of the carbon package to install
 #   Default: carbon
 # [*gr_carbon_ver*]
 #   String. The version of the carbon package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
 # [*gr_whisper_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
 # [*gr_whisper_ver*]
 #   String. The version of the whisper package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
+# [*gr_django_pkg*]
+#   String. The name of the whisper package to install
+#   Default: whisper
+# [*gr_django_ver*]
+#   String. The version of the whisper package to install
+#   Default: 0.9.15
+# [*gr_django_provider*]
+#   String. The provider to use for installing django.
+#   Default: pip
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
@@ -461,6 +476,12 @@
 #   Boolean. Should the caching of the webapp be disabled. This helps with some
 #   display issues in grafana.
 #   Default: false
+# [*gr_apache_port*]
+#   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
+#   cause puppet to fail.
+# [*gr_apache_port_https*]
+#   DEPRECATED. Use `gr_web_server_port_https` now. Trying to set this variable will
+#   cause puppet to fail.
 #
 # === Examples
 #
@@ -480,6 +501,7 @@ class graphite (
   $gr_max_creates_per_minute              = 50,
   $gr_carbon_metric_prefix                = 'carbon',
   $gr_carbon_metric_interval              = 60,
+  $gr_carbon_relay_ulimit                 = undef,
   $gr_line_receiver_interface             = '0.0.0.0',
   $gr_line_receiver_port                  = 2003,
   $gr_enable_udp_listener                 = 'False',
@@ -531,16 +553,17 @@ class graphite (
     }
   },
   $gr_web_server                          = 'apache',
+  $gr_web_server_port                     = 80,
+  $gr_web_server_port_https               = 443,
   $gr_web_servername                      = $::fqdn,
-  $gr_web_group                           = $graphite::params::web_group,
-  $gr_web_user                            = $graphite::params::web_user,
+  $gr_web_group                           = undef,
+  $gr_web_user                            = undef,
   $gr_web_cors_allow_from_all             = false,
+  $gr_web_server_remove_default           = undef,
   $gr_use_ssl                             = false,
   $gr_ssl_cert                            = undef,
   $gr_ssl_key                             = undef,
   $gr_ssl_dir                             = undef,
-  $gr_apache_port                         = 80,
-  $gr_apache_port_https                   = 443,
   $gr_apache_conf_template                = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
   $gr_apache_conf_prefix                  = '',
   $gr_apache_24                           = $::graphite::params::apache_24,
@@ -621,8 +644,8 @@ class graphite (
   $gr_ldap_options                        = {},
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
-  $gr_local_data_dir                      = '/opt/graphite/storage/whisper',
   $gr_rrd_dir                             = '/opt/graphite/storage/rrd',
+  $gr_local_data_dir                      = '/opt/graphite/storage/whisper',
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,
@@ -660,7 +683,9 @@ class graphite (
   $gr_carbonlink_hosts_timeout            = '1.0',
   $gr_rendering_hosts                     = undef,
   $gr_rendering_hosts_timeout             = '1.0',
-  $gr_prefetch_cache                      = undef
+  $gr_prefetch_cache                      = undef,
+  $gr_apache_port                         = undef,
+  $gr_apache_port_https                   = undef,
 ) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
@@ -679,9 +704,14 @@ class graphite (
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
 
+  if $gr_apache_port or $gr_apache_port_https {
+    fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
+  }
+
+
   # validate integers
-  validate_integer($gr_apache_port)
-  validate_integer($gr_apache_port_https)
+  validate_integer($gr_web_server_port)
+  validate_integer($gr_web_server_port_https)
 
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the

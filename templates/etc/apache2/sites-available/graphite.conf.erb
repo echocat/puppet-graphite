@@ -17,7 +17,7 @@
 # Read http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGISocketPrefix
 WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefix') %>
 
-<VirtualHost *:<%= scope.lookupvar('graphite::gr_apache_port') %>>
+<VirtualHost *:<%= scope.lookupvar('graphite::gr_web_server_port') %>>
 	ServerName <%= scope.lookupvar('graphite::gr_web_servername') %>
 	DocumentRoot "/opt/graphite/webapp"
 <% if ![nil, '', :undef].include?(scope.lookupvar('graphite::gr_apache_noproxy')) %>  NoProxy <%= scope.lookupvar('graphite::gr_apache_noproxy') %><% end %>

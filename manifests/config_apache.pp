@@ -36,25 +36,52 @@ class graphite::config_apache inherits graphite::params {
         }
       }
 
-      exec { 'Disable default apache site':
-        command => 'a2dissite 000-default',
-        notify  => Service[$::graphite::params::apache_service_name],
-        onlyif  => 'test -f /etc/apache2/sites-enabled/000-default -o -f /etc/apache2/sites-enabled/000-default.conf',
-        require => Package[$::graphite::params::apache_wsgi_pkg],
+      if ($::graphite::gr_web_server_port == 80 and $::graphite::gr_web_server_remove_default == undef) or ($::graphite::gr_web_server_remove_default == true) {
+        exec { 'Disable default apache site':
+          command => 'a2dissite 000-default',
+          notify  => Service[$::graphite::params::apache_service_name],
+          onlyif  => 'test -f /etc/apache2/sites-enabled/000-default -o -f /etc/apache2/sites-enabled/000-default.conf',
+          require => Package[$::graphite::params::apache_wsgi_pkg],
+        }
       }
     }
 
     'RedHat': {
-      file { "${::graphite::params::apacheconf_dir}/welcome.conf":
-        ensure  => absent,
-        notify  => Service[$::graphite::params::apache_service_name],
-        require => Package[$::graphite::params::apache_wsgi_pkg],
+      if ($::graphite::gr_web_server_port == 80 and $::graphite::gr_web_server_remove_default == undef) or ($::graphite::gr_web_server_remove_default == true) {
+        file { "${::graphite::params::apacheconf_dir}/welcome.conf":
+          ensure  => absent,
+          notify  => Service[$::graphite::params::apache_service_name],
+          require => Package[$::graphite::params::apache_wsgi_pkg],
+        }
       }
     }
 
     default: {
       fail("Module graphite is not supported on ${::operatingsystem}")
     }
+  }
+
+  # fix graphite's race condition on start
+  # if the exec fails, assume we're using a version of graphite that doesn't need it
+  file { '/tmp/fix-graphite-race-condition.py':
+    ensure => file,
+    source => 'puppet:///modules/graphite/fix-graphite-race-condition.py',
+    mode   => '0755',
+  }
+  exec { 'fix graphite race condition':
+    command     => 'python /tmp/fix-graphite-race-condition.py',
+    cwd         => '/opt/graphite/webapp',
+    environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
+    user        => $graphite::config::gr_web_user_REAL,
+    logoutput   => true,
+    group       => $graphite::config::gr_web_group_REAL,
+    returns     => [0, 1],
+    require     => [
+      File['/tmp/fix-graphite-race-condition.py'],
+      Exec['Initial django db creation'],
+      Service['carbon-cache'],
+    ],
+    before      => Service[$::graphite::params::apache_service_name],
   }
 
   service { $::graphite::params::apache_service_name:
@@ -69,9 +96,9 @@ class graphite::config_apache inherits graphite::params {
     "${::graphite::params::apache_dir}/ports.conf":
       ensure  => file,
       content => template('graphite/etc/apache2/ports.conf.erb'),
-      group   => $::graphite::params::web_group,
+      group   => $::graphite::config::gr_web_group_REAL,
       mode    => '0644',
-      owner   => $::graphite::params::web_user,
+      owner   => $::graphite::config::gr_web_user_REAL,
       require => [
         Exec['Initial django db creation'],
         Package[$::graphite::params::apache_wsgi_pkg],
@@ -80,9 +107,9 @@ class graphite::config_apache inherits graphite::params {
     "${::graphite::params::apacheconf_dir}/graphite.conf":
       ensure  => file,
       content => template($::graphite::gr_apache_conf_template),
-      group   => $::graphite::params::web_group,
+      group   => $::graphite::config::gr_web_group_REAL,
       mode    => '0644',
-      owner   => $::graphite::params::web_user,
+      owner   => $::graphite::config::gr_web_user_REAL,
       require => [
         File['/opt/graphite/storage'],
         File["${::graphite::params::apache_dir}/ports.conf"],
@@ -101,7 +128,7 @@ class graphite::config_apache inherits graphite::params {
     }
 
     'RedHat': {
-      if $::graphite::gr_apache_port != 80 {
+      if $::graphite::gr_web_server_port != 80 {
         file { "${::graphite::params::apacheconf_dir}/${::graphite::params::apacheports_file}":
           ensure  => link,
           notify  => Service[$::graphite::params::apache_service_name],
