@@ -38,6 +38,7 @@ class graphite::params {
       $apache_wsgi_socket_prefix = '/var/run/apache2/wsgi'
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
+      $service_provider          = undef
 
       $nginxconf_dir    = '/etc/nginx/sites-available'
 
@@ -83,6 +84,7 @@ class graphite::params {
       $apache_wsgi_socket_prefix = 'run/wsgi'
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
+      $service_provider          = 'redhat'
 
       $nginxconf_dir    = '/etc/nginx/conf.d'
 
