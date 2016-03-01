@@ -1,5 +1,4 @@
 CONFIG = {
-    'mode': 'django',
     'working_dir': '/opt/graphite/webapp/graphite',
     'user': '<%= scope.lookupvar('graphite::config::gr_web_user_REAL') %>',
     'group': '<%= scope.lookupvar('graphite::config::gr_web_group_REAL') %>',
@@ -7,5 +6,6 @@ CONFIG = {
         '--timeout=<%= scope.lookupvar('graphite::gunicorn_arg_timeout') %>',
         '--bind=<%= scope.lookupvar('graphite::gunicorn_bind') %>',
         '--workers=<%= scope.lookupvar('graphite::gunicorn_workers') %>',
-    ),
+        'graphite_wsgi:application',
+        ),
 }

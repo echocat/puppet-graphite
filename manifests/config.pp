@@ -144,13 +144,18 @@ class graphite::config inherits graphite::params {
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
 
-    '/opt/graphite/conf/graphite.wsgi':
+    '/opt/graphite/conf/graphite_wsgi.py':
       ensure  => file,
       content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
+
+    '/opt/graphite/webapp/graphite/graphite_wsgi.py':
+      ensure  => link,
+      target  => '/opt/graphite/conf/graphite_wsgi.py',
+      require => File['/opt/graphite/conf/graphite_wsgi.py'];
   }
 
   if $::graphite::gr_remote_user_header_name {
