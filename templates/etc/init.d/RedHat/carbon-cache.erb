@@ -4,7 +4,7 @@
 # chkconfig: 345 80 20
 # description: Start/Stop carbon-cache
 # processname: carbon-cache
-# config: /opt/graphite/conf/carbon.conf
+# config: '<%= scope.lookupvar('graphite::gr_carbon_conf_dir') %>/carbon.conf'
 
 ### BEGIN INIT INFO
 # Provides: carbon-cache
@@ -21,14 +21,14 @@
 
 PYTHON_CMD='python -W ignore'
 CARBON_DAEMON="cache"
-GRAPHITE_DIR="/opt/graphite"
+GRAPHITE_DIR="<%= scope.lookupvar('graphite::gr_base_dir') %>"
 pidfile=""
 OPERATION="$1"
 if [ $# -gt 1 ]; then
     shift
     INSTANCES=$*
 else
-    INSTANCES=$(grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
+    INSTANCES=$(grep "^\[${CARBON_DAEMON}" <%= scope.lookupvar('graphite::gr_carbon_conf_dir') %>/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
 fi
 
 start()
@@ -37,12 +37,16 @@ start()
         if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
-        pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+        pidfile=<%= scope.lookupvar('graphite::gr_pid_dir') %>/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         # check if instance is already running
         rh_status_q && continue
         
-        ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
+        # If installed from source use this
+        CARBON_PY=${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py
+        # else use /user/bin/carbon-cache
+        
+        ${PYTHON_CMD} ${CARBON_PY} --instance=${INSTANCE} start;
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."

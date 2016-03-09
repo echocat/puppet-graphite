@@ -70,7 +70,7 @@ class graphite::config_apache inherits graphite::params {
   }
   exec { 'fix graphite race condition':
     command     => 'python /tmp/fix-graphite-race-condition.py',
-    cwd         => '/opt/graphite/webapp',
+    cwd         => $graphite::gr_graphiteweb_webapp_dir,
     environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
     user        => $graphite::config::gr_web_user_REAL,
     logoutput   => true,
@@ -111,7 +111,7 @@ class graphite::config_apache inherits graphite::params {
       mode    => '0644',
       owner   => $::graphite::config::gr_web_user_REAL,
       require => [
-        File['/opt/graphite/storage'],
+        File[$::graphite::gr_storage_dir],
         File["${::graphite::params::apache_dir}/ports.conf"],
       ],
       notify  => Service[$::graphite::params::apache_service_name];

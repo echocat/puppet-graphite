@@ -75,6 +75,9 @@ CACHES = {
 #CONF_DIR = '/opt/graphite/conf'
 #STORAGE_DIR = '/opt/graphite/storage'
 #CONTENT_DIR = '/opt/graphite/webapp/content'
+CONF_DIR = '<%= scope.lookupvar('graphite::gr_graphiteweb_conf_dir') %>'
+STORAGE_DIR = '<%= scope.lookupvar('graphite::gr_graphiteweb_storage_dir') %>'
+CONTENT_DIR = '<%= scope.lookupvar('graphite::gr_graphiteweb_webapp_dir') %>/content'
 
 # To further or fully customize the paths, modify the following. Note that the
 # default settings for each of these are relative to CONF_DIR and STORAGE_DIR
@@ -88,7 +91,7 @@ CACHES = {
 WHISPER_DIR = '<%= scope.lookupvar('graphite::gr_local_data_dir') %>'
 RRD_DIR = '<%= scope.lookupvar('graphite::gr_rrd_dir') %>'
 #DATA_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
-#LOG_DIR = '/opt/graphite/storage/log/webapp'
+LOG_DIR = '<%= scope.lookupvar('graphite::gr_graphiteweb_log_dir') %>'
 #INDEX_FILE = '/opt/graphite/storage/index'  # Search index file
 
 

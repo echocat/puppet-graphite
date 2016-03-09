@@ -2,7 +2,8 @@
 
 import os
 import sys
-sys.path.append('/opt/graphite/webapp')
+#sys.path.append('/opt/graphite/webapp')
+sys.path.append('<%= scope.lookupvar('graphite::gr_graphiteweb_webapp_dir') %>')
 
 try:
     from importlib import import_module

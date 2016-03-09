@@ -66,13 +66,13 @@
 # [*gr_use_insecure_unpickler*]
 #   Set this to 'True' to revert to the old-fashioned insecure unpickler.
 #   Default is 'False' (String).
-#[*gr_use_whitelist*]
+# [*gr_use_whitelist*]
 #   Set this to 'True' to allow for using whitelists and blacklists.
 #   Default is 'False' (String).
-#[*gr_whitelist*]
+# [*gr_whitelist*]
 #   List of patterns to be included in whitelist.conf.
 #   Default is [ '.*' ]
-#[*gr_blacklist*]
+# [*gr_blacklist*]
 #   List of patterns to be included in blacklist.conf.
 #   Default is [ ]
 # [*gr_cache_query_interface*]
@@ -489,7 +489,7 @@
 #   gr_max_cache_size      => 256,
 #   gr_enable_udp_listener => True,
 #   gr_timezone            => 'Europe/Berlin'
-# }
+#}
 #
 class graphite (
   $gr_group                               = '',
@@ -512,8 +512,8 @@ class graphite (
   $gr_log_listener_connections            = 'True',
   $gr_use_insecure_unpickler              = 'False',
   $gr_use_whitelist                       = 'False',
-  $gr_whitelist                           = [ '.*' ],
-  $gr_blacklist                           = [ ],
+  $gr_whitelist                           = ['.*'],
+  $gr_blacklist                           = [],
   $gr_cache_query_interface               = '0.0.0.0',
   $gr_cache_query_port                    = 7002,
   $gr_cache_write_strategy                = 'sorted',
@@ -523,35 +523,40 @@ class graphite (
       name       => 'carbon',
       pattern    => '^carbon\.',
       retentions => '1m:90d'
-    },
+    }
+    ,
     {
       name       => 'default',
       pattern    => '.*',
       retentions => '1s:30m,1m:1d,5m:2y'
     }
-  ],
+    ],
   $gr_storage_aggregation_rules           = {
-    '00_min' => {
+    '00_min'         => {
       pattern => '\.min$',
-      factor => '0.1',
-      method => 'min'
-    },
-    '01_max' => {
+      factor  => '0.1',
+      method  => 'min'
+    }
+    ,
+    '01_max'         => {
       pattern => '\.max$',
-      factor => '0.1',
-      method => 'max'
-    },
-    '02_sum' => {
+      factor  => '0.1',
+      method  => 'max'
+    }
+    ,
+    '02_sum'         => {
       pattern => '\.count$',
-      factor => '0.1',
-      method => 'sum'
-    },
+      factor  => '0.1',
+      method  => 'sum'
+    }
+    ,
     '99_default_avg' => {
       pattern => '.*',
-      factor => '0.5',
-      method => 'average'
+      factor  => '0.5',
+      method  => 'average'
     }
-  },
+  }
+  ,
   $gr_web_server                          = 'apache',
   $gr_web_server_port                     = 80,
   $gr_web_server_port_https               = 443,
@@ -583,19 +588,22 @@ class graphite (
   $gr_relay_log_listener_connections      = 'True',
   $gr_relay_method                        = 'rules',
   $gr_relay_replication_factor            = 1,
-  $gr_relay_destinations                  = [ '127.0.0.1:2004' ],
+  $gr_relay_destinations                  = ['127.0.0.1:2004'],
   $gr_relay_max_queue_size                = 10000,
   $gr_relay_use_flow_control              = 'True',
   $gr_relay_rules                         = {
-    all => {
+    all          => {
       pattern      => '.*',
-      destinations => [ '127.0.0.1:2004' ]
-    },
-    'default' => {
+      destinations => ['127.0.0.1:2004']
+    }
+    ,
+    'default'    => {
       'default'    => true,
-      destinations => [ '127.0.0.1:2004:a' ]
-    },
-  },
+      destinations => ['127.0.0.1:2004:a']
+    }
+    ,
+  }
+  ,
   $gr_enable_carbon_aggregator            = false,
   $gr_aggregator_line_interface           = '0.0.0.0',
   $gr_aggregator_line_port                = 2023,
@@ -606,7 +614,7 @@ class graphite (
   $gr_aggregator_pickle_port              = 2024,
   $gr_aggregator_log_listener_connections = 'True',
   $gr_aggregator_forward_all              = 'True',
-  $gr_aggregator_destinations             = [ '127.0.0.1:2004' ],
+  $gr_aggregator_destinations             = ['127.0.0.1:2004'],
   $gr_aggregator_replication_factor       = 1,
   $gr_aggregator_max_queue_size           = 10000,
   $gr_aggregator_use_flow_control         = 'True',
@@ -614,7 +622,8 @@ class graphite (
   $gr_aggregator_rules                    = {
     'carbon-all-mem'   => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
     'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-    },
+  }
+  ,
   $gr_amqp_enable                         = 'False',
   $gr_amqp_verbose                        = 'False',
   $gr_amqp_host                           = 'localhost',
@@ -641,11 +650,25 @@ class graphite (
   $gr_ldap_base_user                      = '',
   $gr_ldap_base_pass                      = '',
   $gr_ldap_user_query                     = '(username=%s)',
-  $gr_ldap_options                        = {},
+  $gr_ldap_options                        = {
+  }
+  ,
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
-  $gr_rrd_dir                             = '/opt/graphite/storage/rrd',
-  $gr_local_data_dir                      = '/opt/graphite/storage/whisper',
+  $gr_base_dir                            = '/opt/graphite',
+  $gr_storage_dir                         = "${gr_base_dir}/storage",
+  $gr_local_data_dir                      = "${gr_storage_dir}/whisper",
+  $gr_rrd_dir                             = "${gr_storage_dir}/rrd",
+  $gr_whitelists_dir                      = "${gr_storage_dir}/lists",
+  $gr_carbon_conf_dir                     = "${gr_base_dir}/conf",
+  $gr_carbon_log_dir                      = "${gr_storage_dir}/log/carbon-cache",
+  $gr_graphiteweb_log_dir                 = "${gr_storage_dir}/log",
+  $gr_graphiteweb_conf_dir                = "${gr_base_dir}/conf",
+  $gr_graphiteweb_webapp_dir              = "${gr_base_dir}/webapp",
+  $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
+  $gr_graphiteweb_install_lib_dir         = "${gr_graphiteweb_webapp_dir}/graphite",
+  $gr_pid_dir                             = '/var/run',
+  $gr_apache_logdir                       = '/var/log/httpd/graphite-web',
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,
@@ -658,9 +681,9 @@ class graphite (
   $gr_log_cache_performance               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
-  $wsgi_processes                         =  5,
-  $wsgi_threads                           =  5,
-  $wsgi_inactivity_timeout                =  120,
+  $wsgi_processes                         = 5,
+  $wsgi_threads                           = 5,
+  $wsgi_inactivity_timeout                = 120,
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
   $gr_twisted_pkg                         = $::graphite::params::twisted_pkg,
@@ -685,8 +708,7 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
   $gr_apache_port                         = undef,
-  $gr_apache_port_https                   = undef,
-) inherits graphite::params {
+  $gr_apache_port_https                   = undef,) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -708,7 +730,6 @@ class graphite (
     fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
   }
 
-
   # validate integers
   validate_integer($gr_web_server_port)
   validate_integer($gr_web_server_port_https)
@@ -718,13 +739,14 @@ class graphite (
   # implementation classes through a transitive relationship to
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
-  Anchor['graphite::begin']->
-  Class['graphite::install']~>
-  Class['graphite::config']->
+  Anchor['graphite::begin'] ->
+  Class['graphite::install'] ~>
+  Class['graphite::config'] ->
   Anchor['graphite::end']
 
-  anchor { 'graphite::begin':}
+  anchor { 'graphite::begin': }
   include graphite::install
   include graphite::config
-  anchor { 'graphite::end':}
+
+  anchor { 'graphite::end': }
 }
