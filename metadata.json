@@ -1,7 +1,7 @@
 {
   "name": "dwerder-graphite",
   "version": "5.16.1",
-  "source": "git clone https://github.com/echocat/puppet-graphite.git",
+  "source": "https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Apache-2.0",
   "summary": "Installs and configures graphite, carbon (caches,relays,aggregators) and whisper",
