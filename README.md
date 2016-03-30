@@ -21,6 +21,10 @@
 
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/echocat/graphite.svg)](https://forge.puppetlabs.com/dwerder/graphite)
+[![Build Status](https://secure.travis-ci.org/echocat/puppet-graphite.png?branch=master)](https://travis-ci.org/echocat/puppet-graphite)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/dwerder/graphite.svg)](https://forge.puppetlabs.com/dwerder/graphite)
+
 ##Module Description
 
 [Graphite](http://graphite.readthedocs.org/en/latest/overview.html), and its components Carbon and Whisper, is an enterprise-scale monitoring tool. This module sets up a simple graphite server with all its components. Furthermore it can be used to set up more complex graphite environments with metric aggregation, clustering and so on.
@@ -586,6 +590,10 @@ Default is 'rules'
 #####`gr_relay_replication_factor`
 
 Default is 1 (integer). Add redundancy by replicating every datapoint to more than one machine.
+
+#####`gr_relay_diverse_replicas`
+
+Default is 'True' (string). Add to guarantee replicas across distributed hosts.
 
 #####`gr_relay_destinations`
 

@@ -198,6 +198,9 @@
 # [*gr_relay_replication_factor*]
 #   add redundancy by replicating every datapoint to more than one machine.
 #   Default is 1.
+# [*gr_relay_diverse_replicas*]
+#   add to guarantee replicas across distributed hosts.
+#   Default is True.
 # [*gr_relay_destinations*]
 #   Array of backend carbons for relay.
 #   Default  is [ '127.0.0.1:2004' ]
@@ -588,6 +591,7 @@ class graphite (
   $gr_relay_log_listener_connections      = 'True',
   $gr_relay_method                        = 'rules',
   $gr_relay_replication_factor            = 1,
+  $gr_relay_diverse_replicas              = 'True',
   $gr_relay_destinations                  = ['127.0.0.1:2004'],
   $gr_relay_max_queue_size                = 10000,
   $gr_relay_use_flow_control              = 'True',
