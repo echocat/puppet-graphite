@@ -23,13 +23,21 @@ class graphite::params {
   $carbon_ver         = '0.9.15'
   $whisper_pkg        = 'whisper'
   $whisper_ver        = '0.9.15'
-
-  $django_ver         = 'installed'
-  $django_provider    = undef
+  $django_pkg         = 'Django'
+  $django_ver         = '1.5'
+  $django_provider    = 'pip'
 
   $install_prefix     = '/opt/'
-  $nginxconf_dir      = '/etc/nginx/sites-available'
 
+  # variables to workaround unusual graphite install target:
+  # https://github.com/graphite-project/carbon/issues/86
+  $pyver              = $::osfamily ? {
+    default  => '2.7',
+    'RedHat' => $::operatingsystemrelease ? {
+      /^6/    => '2.6',
+      default => '2.7'
+    },
+  }
   case $::osfamily {
     'Debian': {
       $apache_dir                = '/etc/apache2'
@@ -39,16 +47,19 @@ class graphite::params {
       $apache_wsgi_socket_prefix = '/var/run/apache2/wsgi'
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
+      $service_provider          = undef
 
-      $web_group = 'www-data'
-      $web_user = 'www-data'
+      $nginxconf_dir    = '/etc/nginx/sites-available'
+
+      $apache_web_group = 'www-data'
+      $apache_web_user  = 'www-data'
+      $nginx_web_group  = 'www-data'
+      $nginx_web_user   = 'www-data'
 
       $python_dev_pkg = 'python-dev'
 
-      $django_pkg = 'python-django'
-      $graphitepkgs = [
+      $common_os_pkgs = [
         'python-tz',
-        'python-cairo',
         'python-ldap',
         'python-memcache',
         'python-mysqldb',
@@ -59,17 +70,20 @@ class graphite::params {
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
-          $apache_24               = false
+          $apache_24          = false
+          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
 
-        /jessie|trusty|utopic|vivid/: {
-          $apache_24               = true
+        /jessie|trusty|utopic|vivid|wily/: {
+          $apache_24          = true
+          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
 
         default: {
           fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/dist-packages"
     }
 
     'RedHat': {
@@ -80,16 +94,19 @@ class graphite::params {
       $apache_wsgi_socket_prefix = 'run/wsgi'
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
+      $service_provider          = 'redhat'
 
-      $web_group = 'apache'
-      $web_user = 'apache'
+      $nginxconf_dir    = '/etc/nginx/conf.d'
+
+      $apache_web_group = 'apache'
+      $apache_web_user  = 'apache'
+      $nginx_web_group  = 'nginx'
+      $nginx_web_user   = 'nginx'
 
       $python_dev_pkg = ['python-devel','gcc']
       $common_os_pkgs = [
         'MySQL-python',
         'pyOpenSSL',
-        'pycairo',
-        'python-crypto',
         'python-ldap',
         'python-memcached',
         'python-psycopg2',
@@ -100,21 +117,20 @@ class graphite::params {
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $apache_24    = false
-          $django_pkg = 'Django14'
-          $graphitepkgs = union($common_os_pkgs,['python-sqlite2','bitmap-fonts-compat','bitmap'])
+          $apache_24           = false
+          $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
         }
 
         /^7\.\d+/: {
-          $apache_24    = true
-          $django_pkg = 'python-django'
-          $graphitepkgs = union($common_os_pkgs,['python-sqlite3dbm','dejavu-fonts-common','dejavu-sans-fonts'])
+          $apache_24           = true
+          $graphitepkgs        = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
         }
 
         default: {
           fail("Unsupported RedHat release: '${::operatingsystemrelease}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/site-packages"
     }
 
     default: {

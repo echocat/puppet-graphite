@@ -36,6 +36,9 @@
 # [*gr_carbon_metric_interval*]
 #   The interval (in seconds) between sending internal performance metrics.
 #   Default is 60; 0 to disable instrumentation
+# [*gr_carbon_relay_ulimit*]
+#   The maximum number of file descriptors available to carbon-relay process
+#   Default is undef
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
@@ -63,13 +66,13 @@
 # [*gr_use_insecure_unpickler*]
 #   Set this to 'True' to revert to the old-fashioned insecure unpickler.
 #   Default is 'False' (String).
-#[*gr_use_whitelist*]
+# [*gr_use_whitelist*]
 #   Set this to 'True' to allow for using whitelists and blacklists.
 #   Default is 'False' (String).
-#[*gr_whitelist*]
+# [*gr_whitelist*]
 #   List of patterns to be included in whitelist.conf.
 #   Default is [ '.*' ]
-#[*gr_blacklist*]
+# [*gr_blacklist*]
 #   List of patterns to be included in blacklist.conf.
 #   Default is [ ]
 # [*gr_cache_query_interface*]
@@ -118,8 +121,7 @@
 #   (matches the exammple configuration from graphite 0.9.12)
 # [*gr_web_server*]
 #   The web server to use.
-#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'. 'nginx' is only
-#   supported on Debian-like systems.
+#   Valid values are 'apache', 'nginx', 'wsgionly' and 'none'.
 #   'wsgionly' will omit apache and nginx, allowing you to run your own
 #   webserver and communicate via wsgi to the unix socket. Handy for servers
 #   with multiple vhosts/purposes etc.
@@ -127,6 +129,14 @@
 #   apache and gunicorn/nginx. All other webserver settings below are
 #   irrelevant if this is 'wsgionly' or 'none'.
 #   Default is 'apache'.
+# [*gr_web_server_port*]
+#   The port which the web server will bind to for the graphite web server. Only
+#   applicable for $gr_web_server => 'apache' or 'nginx'.
+#   Default is 80.
+# [*gr_web_server_port_https*]
+#   The port to run SSL web server on if you have an existing web server on
+#   the default port 443. Only applicable for $gr_web_server => 'apache'.
+#   Default is 443.
 # [*gr_web_servername*]
 #   Virtualhostname of Graphite webgui.
 #   Default is FQDN.
@@ -137,6 +147,9 @@
 # [*gr_web_cors_allow_from_all*]
 #   Include CORS Headers for all hosts (*) in web server config
 #   Default is false.
+# [*gr_web_server_remove_default*]
+#   Remove the default configuration for apache or nginx.
+#   Default is undef, which removes the default configuration only if the server is running on port 80.
 # [*gr_use_ssl*]
 #   If true, alter web server config to enable SSL.
 #   Default is false.
@@ -149,13 +162,6 @@
 # [*gr_ssl_dir]
 #   Path to SSL dir containing keys and certs.
 #   Default is undef
-# [*gr_apache_port*]
-#   The port to run graphite web server on.
-#   Default is 80.
-# [*gr_apache_port_https*]
-#   The port to run SSL web server on if you have an existing web server on
-#   the default port 443.
-#   Default is 443.
 # [*gr_apache_conf_template*]
 #   Template to use for Apache vhost config.
 #   Default is graphite/etc/apache2/sites-available/graphite.conf.erb
@@ -192,6 +198,9 @@
 # [*gr_relay_replication_factor*]
 #   add redundancy by replicating every datapoint to more than one machine.
 #   Default is 1.
+# [*gr_relay_diverse_replicas*]
+#   add to guarantee replicas across distributed hosts.
+#   Default is True.
 # [*gr_relay_destinations*]
 #   Array of backend carbons for relay.
 #   Default  is [ '127.0.0.1:2004' ]
@@ -438,19 +447,28 @@
 #   Default: graphite-web
 # [*gr_graphite_ver*]
 #   String. The version of the graphite package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
 # [*gr_carbon_pkg*]
 #   String. The name of the carbon package to install
 #   Default: carbon
 # [*gr_carbon_ver*]
 #   String. The version of the carbon package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
 # [*gr_whisper_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
 # [*gr_whisper_ver*]
 #   String. The version of the whisper package to install
-#   Default: 0.9.12
+#   Default: 0.9.15
+# [*gr_django_pkg*]
+#   String. The name of the whisper package to install
+#   Default: whisper
+# [*gr_django_ver*]
+#   String. The version of the whisper package to install
+#   Default: 0.9.15
+# [*gr_django_provider*]
+#   String. The provider to use for installing django.
+#   Default: pip
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
@@ -461,6 +479,12 @@
 #   Boolean. Should the caching of the webapp be disabled. This helps with some
 #   display issues in grafana.
 #   Default: false
+# [*gr_apache_port*]
+#   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
+#   cause puppet to fail.
+# [*gr_apache_port_https*]
+#   DEPRECATED. Use `gr_web_server_port_https` now. Trying to set this variable will
+#   cause puppet to fail.
 #
 # === Examples
 #
@@ -468,7 +492,7 @@
 #   gr_max_cache_size      => 256,
 #   gr_enable_udp_listener => True,
 #   gr_timezone            => 'Europe/Berlin'
-# }
+#}
 #
 class graphite (
   $gr_group                               = '',
@@ -480,6 +504,7 @@ class graphite (
   $gr_max_creates_per_minute              = 50,
   $gr_carbon_metric_prefix                = 'carbon',
   $gr_carbon_metric_interval              = 60,
+  $gr_carbon_relay_ulimit                 = undef,
   $gr_line_receiver_interface             = '0.0.0.0',
   $gr_line_receiver_port                  = 2003,
   $gr_enable_udp_listener                 = 'False',
@@ -490,8 +515,8 @@ class graphite (
   $gr_log_listener_connections            = 'True',
   $gr_use_insecure_unpickler              = 'False',
   $gr_use_whitelist                       = 'False',
-  $gr_whitelist                           = [ '.*' ],
-  $gr_blacklist                           = [ ],
+  $gr_whitelist                           = ['.*'],
+  $gr_blacklist                           = [],
   $gr_cache_query_interface               = '0.0.0.0',
   $gr_cache_query_port                    = 7002,
   $gr_cache_write_strategy                = 'sorted',
@@ -501,46 +526,52 @@ class graphite (
       name       => 'carbon',
       pattern    => '^carbon\.',
       retentions => '1m:90d'
-    },
+    }
+    ,
     {
       name       => 'default',
       pattern    => '.*',
       retentions => '1s:30m,1m:1d,5m:2y'
     }
-  ],
+    ],
   $gr_storage_aggregation_rules           = {
-    '00_min' => {
+    '00_min'         => {
       pattern => '\.min$',
-      factor => '0.1',
-      method => 'min'
-    },
-    '01_max' => {
+      factor  => '0.1',
+      method  => 'min'
+    }
+    ,
+    '01_max'         => {
       pattern => '\.max$',
-      factor => '0.1',
-      method => 'max'
-    },
-    '02_sum' => {
+      factor  => '0.1',
+      method  => 'max'
+    }
+    ,
+    '02_sum'         => {
       pattern => '\.count$',
-      factor => '0.1',
-      method => 'sum'
-    },
+      factor  => '0.1',
+      method  => 'sum'
+    }
+    ,
     '99_default_avg' => {
       pattern => '.*',
-      factor => '0.5',
-      method => 'average'
+      factor  => '0.5',
+      method  => 'average'
     }
-  },
+  }
+  ,
   $gr_web_server                          = 'apache',
+  $gr_web_server_port                     = 80,
+  $gr_web_server_port_https               = 443,
   $gr_web_servername                      = $::fqdn,
-  $gr_web_group                           = $graphite::params::web_group,
-  $gr_web_user                            = $graphite::params::web_user,
+  $gr_web_group                           = undef,
+  $gr_web_user                            = undef,
   $gr_web_cors_allow_from_all             = false,
+  $gr_web_server_remove_default           = undef,
   $gr_use_ssl                             = false,
   $gr_ssl_cert                            = undef,
   $gr_ssl_key                             = undef,
   $gr_ssl_dir                             = undef,
-  $gr_apache_port                         = 80,
-  $gr_apache_port_https                   = 443,
   $gr_apache_conf_template                = 'graphite/etc/apache2/sites-available/graphite.conf.erb',
   $gr_apache_conf_prefix                  = '',
   $gr_apache_24                           = $::graphite::params::apache_24,
@@ -560,19 +591,23 @@ class graphite (
   $gr_relay_log_listener_connections      = 'True',
   $gr_relay_method                        = 'rules',
   $gr_relay_replication_factor            = 1,
-  $gr_relay_destinations                  = [ '127.0.0.1:2004' ],
+  $gr_relay_diverse_replicas              = 'True',
+  $gr_relay_destinations                  = ['127.0.0.1:2004'],
   $gr_relay_max_queue_size                = 10000,
   $gr_relay_use_flow_control              = 'True',
   $gr_relay_rules                         = {
-    all => {
+    all          => {
       pattern      => '.*',
-      destinations => [ '127.0.0.1:2004' ]
-    },
-    'default' => {
+      destinations => ['127.0.0.1:2004']
+    }
+    ,
+    'default'    => {
       'default'    => true,
-      destinations => [ '127.0.0.1:2004:a' ]
-    },
-  },
+      destinations => ['127.0.0.1:2004:a']
+    }
+    ,
+  }
+  ,
   $gr_enable_carbon_aggregator            = false,
   $gr_aggregator_line_interface           = '0.0.0.0',
   $gr_aggregator_line_port                = 2023,
@@ -583,7 +618,7 @@ class graphite (
   $gr_aggregator_pickle_port              = 2024,
   $gr_aggregator_log_listener_connections = 'True',
   $gr_aggregator_forward_all              = 'True',
-  $gr_aggregator_destinations             = [ '127.0.0.1:2004' ],
+  $gr_aggregator_destinations             = ['127.0.0.1:2004'],
   $gr_aggregator_replication_factor       = 1,
   $gr_aggregator_max_queue_size           = 10000,
   $gr_aggregator_use_flow_control         = 'True',
@@ -591,7 +626,8 @@ class graphite (
   $gr_aggregator_rules                    = {
     'carbon-all-mem'   => 'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
     'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
-    },
+  }
+  ,
   $gr_amqp_enable                         = 'False',
   $gr_amqp_verbose                        = 'False',
   $gr_amqp_host                           = 'localhost',
@@ -618,11 +654,25 @@ class graphite (
   $gr_ldap_base_user                      = '',
   $gr_ldap_base_pass                      = '',
   $gr_ldap_user_query                     = '(username=%s)',
-  $gr_ldap_options                        = {},
+  $gr_ldap_options                        = {
+  }
+  ,
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
-  $gr_local_data_dir                      = '/opt/graphite/storage/whisper',
-  $gr_rrd_dir                             = '/opt/graphite/storage/rrd',
+  $gr_base_dir                            = '/opt/graphite',
+  $gr_storage_dir                         = "${gr_base_dir}/storage",
+  $gr_local_data_dir                      = "${gr_storage_dir}/whisper",
+  $gr_rrd_dir                             = "${gr_storage_dir}/rrd",
+  $gr_whitelists_dir                      = "${gr_storage_dir}/lists",
+  $gr_carbon_conf_dir                     = "${gr_base_dir}/conf",
+  $gr_carbon_log_dir                      = "${gr_storage_dir}/log/carbon-cache",
+  $gr_graphiteweb_log_dir                 = "${gr_storage_dir}/log",
+  $gr_graphiteweb_conf_dir                = "${gr_base_dir}/conf",
+  $gr_graphiteweb_webapp_dir              = "${gr_base_dir}/webapp",
+  $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
+  $gr_graphiteweb_install_lib_dir         = "${gr_graphiteweb_webapp_dir}/graphite",
+  $gr_pid_dir                             = '/var/run',
+  $gr_apache_logdir                       = '/var/log/httpd/graphite-web',
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,
@@ -635,9 +685,9 @@ class graphite (
   $gr_log_cache_performance               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
-  $wsgi_processes                         =  5,
-  $wsgi_threads                           =  5,
-  $wsgi_inactivity_timeout                =  120,
+  $wsgi_processes                         = 5,
+  $wsgi_threads                           = 5,
+  $wsgi_inactivity_timeout                = 120,
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
   $gr_twisted_pkg                         = $::graphite::params::twisted_pkg,
@@ -660,8 +710,9 @@ class graphite (
   $gr_carbonlink_hosts_timeout            = '1.0',
   $gr_rendering_hosts                     = undef,
   $gr_rendering_hosts_timeout             = '1.0',
-  $gr_prefetch_cache                      = undef
-) inherits graphite::params {
+  $gr_prefetch_cache                      = undef,
+  $gr_apache_port                         = undef,
+  $gr_apache_port_https                   = undef,) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -679,22 +730,27 @@ class graphite (
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
 
+  if $gr_apache_port or $gr_apache_port_https {
+    fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
+  }
+
   # validate integers
-  validate_integer($gr_apache_port)
-  validate_integer($gr_apache_port_https)
+  validate_integer($gr_web_server_port)
+  validate_integer($gr_web_server_port_https)
 
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
   # implementation classes through a transitive relationship to
   # the composite class.
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
-  Anchor['graphite::begin']->
-  Class['graphite::install']~>
-  Class['graphite::config']->
+  Anchor['graphite::begin'] ->
+  Class['graphite::install'] ~>
+  Class['graphite::config'] ->
   Anchor['graphite::end']
 
-  anchor { 'graphite::begin':}
+  anchor { 'graphite::begin': }
   include graphite::install
   include graphite::config
-  anchor { 'graphite::end':}
+
+  anchor { 'graphite::end': }
 }

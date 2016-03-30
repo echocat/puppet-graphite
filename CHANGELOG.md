@@ -1,3 +1,23 @@
+## 2016-03-30 - 6.0.0 (Major release)
+
+#### Features:
+
+- Nginx/Gunicorn is now fully supported on both Debian and RedHat-like systems
+- The correct username/group is now used across apache/nginx for both Debian and RedHat
+- Pip is now the default provider for Django to ensure mutually-working package versions are installed.
+- Added systemd scripts for when `$service_provider == 'systemd'`
+- Added workaround for [race condition bug in graphite](graphite-project/graphite-web#403)
+- Added configuration variable `gr_web_server_remove_default` -- default config is only wiped when the variable is true, or when it is `undef` and `gr_web_server_port` == 80
+- Renamed `gr_apache_port` and `gr_apache_port_https` to `gr_web_server_port` and `gr_web_server_port` respectively. If the old configuration values are used, puppet fails telling you to use the new ones.
+- Add param for carbon-relay init.d ulimit `gr_carbon_relay_ulimit`
+- Add support for custom directory locations , see `gr_base_dir` and `gr_*_dir`
+- Add `gr_relay_diverse_replicas` option, default to true
+
+#### Bugfixes:
+
+- python-crypto is obsoleted on RHEL7, replaced by python2-crypto
+- Redhat: avoid raise condition on initd restart
+
 ## 2016-01-29 - 5.16.1 (Bugfix release)
 
 #### Bugfixes:

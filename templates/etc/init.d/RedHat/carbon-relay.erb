@@ -37,11 +37,14 @@ start()
         if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
+        <% if @gr_carbon_relay_ulimit -%>
+          ulimit -n <%= @gr_carbon_relay_ulimit %>
+        <% end -%>
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         # check if instance is already running
         rh_status_q && continue
-        
+
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
@@ -70,7 +73,7 @@ stop()
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
         # check if instance is already stopped
         rh_status_q || continue
-        
+
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
         sleep 3
         while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
@@ -95,7 +98,7 @@ restart() {
         fi;
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
-        
+
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
         sleep 3
         while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
@@ -107,11 +110,12 @@ restart() {
         echo -n $"Stopping carbon-${CARBON_DAEMON}:${INSTANCE}..."
         echo_success
         echo
-        
+
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
         retval=$?
         pidfile=${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
+        sleep 1
         if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
             echo_success

@@ -49,7 +49,7 @@ describe 'graphite::install', :type => 'class' do
   end
 
   shared_context 'no django' do
-    ['python-django','Django14'].each do |pkg|
+    ['Django', 'python-django','Django14'].each do |pkg|
       it { should_not contain_package(pkg) }
     end
   end
@@ -62,17 +62,17 @@ describe 'graphite::install', :type => 'class' do
     it { should contain_package('gcc').with_provider(nil) }
     it { should contain_package('MySQL-python').with_provider(nil) }
     it { should contain_package('pyOpenSSL').with_provider(nil) }
-    it { should contain_package('pycairo').with_provider(nil) }
-    it { should contain_package('python-crypto').with_provider(nil) }
     it { should contain_package('python-memcached').with_provider(nil) }
     it { should contain_package('python-zope-interface').with_provider(nil) }
   end
 
   shared_context 'RedHat 6 platforms' do
-    it { should contain_package('Django14').with_provider(nil) }
+    it { should contain_package('pycairo').with_provider(nil) }
+    it { should contain_package('Django').with_provider('pip') }
     it { should contain_package('python-sqlite2').with_provider(nil) }
     it { should contain_package('bitmap').with_provider(nil) }
     it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
+    it { should contain_package('python-crypto').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info',
@@ -85,10 +85,12 @@ describe 'graphite::install', :type => 'class' do
   end
 
   shared_context 'RedHat 7 platforms' do
-    it { should contain_package('python-django').with_provider(nil) }
+    it { should contain_package('python-cairocffi').with_provider(nil) }
+    it { should contain_package('Django').with_provider('pip') }
     it { should contain_package('python-sqlite3dbm').with_provider(nil) }
     it { should contain_package('dejavu-fonts-common').with_provider(nil) }
     it { should contain_package('dejavu-sans-fonts').with_provider(nil) }
+    it { should contain_package('python2-crypto').with_provider(nil) }
 
     it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info',
@@ -101,8 +103,7 @@ describe 'graphite::install', :type => 'class' do
   end
 
   shared_context 'Debian supported platforms' do
-    it { should contain_package('python-django').with_provider(nil) }
-
+    it { should contain_package('Django').with_provider('pip') }
     it { should contain_package('python-cairo').with_provider(nil) }
     it { should contain_package('python-memcache').with_provider(nil) }
     it { should contain_package('python-mysqldb').with_provider(nil) }
