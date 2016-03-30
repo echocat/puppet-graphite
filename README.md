@@ -21,7 +21,7 @@
 
 This module installs and makes basic configs for graphite, with carbon and whisper.
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/echocat/graphite.svg)](https://forge.puppetlabs.com/dwerder/graphite)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/dwerder/graphite.svg)](https://forge.puppetlabs.com/dwerder/graphite)
 [![Build Status](https://secure.travis-ci.org/echocat/puppet-graphite.png?branch=master)](https://travis-ci.org/echocat/puppet-graphite)
 [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/dwerder/graphite.svg)](https://forge.puppetlabs.com/dwerder/graphite)
 
