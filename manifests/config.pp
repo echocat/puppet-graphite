@@ -32,6 +32,21 @@ class graphite::config inherits graphite::params {
     $initscript_notify = []
   }
 
+  if $::graphite::gr_pip_install {
+    $local_settings_py_file = "${::graphite::gr_graphiteweb_install_lib_dir}/local_settings.py"
+    $syncdb_require         = File[$local_settings_py_file]
+  } else {
+    # using custom directories.
+    file { "${::graphite::gr_graphiteweb_conf_dir}/manage.py":
+      ensure => link,
+      target => "${::graphite::params::libpath}/graphite/manage.py"
+    }
+    $local_settings_py_file = "${::graphite::gr_graphiteweb_conf_dir}/local_settings.py"
+    $syncdb_require         = [
+      File[$local_settings_py_file],
+      File["${::graphite::gr_graphiteweb_conf_dir}/manage.py"]]
+  }
+
   # we need an web server with python support
   # apache with mod_wsgi or nginx with gunicorn
   case $graphite::gr_web_server {
@@ -75,21 +90,6 @@ class graphite::config inherits graphite::params {
     default    : {
       fail('The only supported web servers are \'apache\', \'nginx\', \'wsgionly\' and \'none\'')
     }
-  }
-
-  if $::graphite::gr_pip_install {
-    $local_settings_py_file = "${::graphite::gr_graphiteweb_install_lib_dir}/local_settings.py"
-    $syncdb_require         = File[$local_settings_py_file]
-  } else {
-    # using custom directories.
-    file { "${::graphite::gr_graphiteweb_conf_dir}/manage.py":
-      ensure => link,
-      target => "${::graphite::params::libpath}/graphite/manage.py"
-    }
-    $local_settings_py_file = "${::graphite::gr_graphiteweb_conf_dir}/local_settings.py"
-    $syncdb_require         = [
-      File[$local_settings_py_file],
-      File["${::graphite::gr_graphiteweb_conf_dir}/manage.py"]]
   }
 
   $carbon_conf_file               = "${::graphite::gr_carbon_conf_dir}/carbon.conf"

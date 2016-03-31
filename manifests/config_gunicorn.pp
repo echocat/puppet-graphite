@@ -139,7 +139,7 @@ class graphite::config_gunicorn inherits graphite::params {
     require    => [
       Package[$package_name],
     ],
-    subscribe  => File["${graphite::gr_graphiteweb_conf_dir}/local_settings.py"],
+    subscribe  => File[$::graphite::config::local_settings_py_file],
   }
 
 }
