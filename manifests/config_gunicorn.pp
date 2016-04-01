@@ -11,14 +11,14 @@ class graphite::config_gunicorn inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   case $::osfamily {
-    
+
     'Debian': {
       $package_name = 'gunicorn'
 
-      # Debian has a wrapper script called `gunicorn-debian` for multiple gunicorn 
-      # configs. Each config is stored as a separate file in /etc/gunicorn.d/. 
+      # Debian has a wrapper script called `gunicorn-debian` for multiple gunicorn
+      # configs. Each config is stored as a separate file in /etc/gunicorn.d/.
       # On debian 8 and Ubuntu 15.10, which use systemd, the gunicorn-debian
-      # config file has to be installed before the gunicorn package. 
+      # config file has to be installed before the gunicorn package.
       file { '/etc/gunicorn.d/':
         ensure => directory,
       }
@@ -35,7 +35,7 @@ class graphite::config_gunicorn inherits graphite::params {
       $package_name = 'python-gunicorn'
 
       # RedHat package is missing initscript
-      if $::service_provider == 'systemd' {
+      if $::graphite::params::service_provider == 'systemd' {
 
         file { '/etc/systemd/system/gunicorn.service':
           ensure  => file,
@@ -66,7 +66,7 @@ class graphite::config_gunicorn inherits graphite::params {
           before  => Service['gunicorn']
         }
 
-      } elsif $::service_provider == 'redhat' {
+      } elsif $::graphite::params::service_provider == 'redhat' {
 
         file { '/etc/init.d/gunicorn':
           ensure  => file,
@@ -89,9 +89,9 @@ class graphite::config_gunicorn inherits graphite::params {
   # uses the deprecated `gunicorn_django` command. But, I hope
   # that debian will eventually update their gunicorn package
   # to use the non-deprecated version.
-  file { "${graphite::gr_graphiteweb_install_lib_dir}/wsgi.py":
+  file { "${graphite::graphiteweb_install_lib_dir_REAL}/wsgi.py":
     ensure => link,
-    target => "${graphite::gr_graphiteweb_conf_dir}/graphite.wsgi",
+    target => "${graphite::graphiteweb_conf_dir_REAL}/graphite.wsgi",
     before => Service['gunicorn'],
   }
 
@@ -105,7 +105,7 @@ class graphite::config_gunicorn inherits graphite::params {
     }
     exec { 'fix graphite race condition':
       command     => 'python /tmp/fix-graphite-race-condition.py',
-      cwd         => $graphite::gr_graphiteweb_webapp_dir,
+      cwd         => $graphite::graphiteweb_webapp_dir_REAL,
       environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
       user        => $graphite::config::gr_web_user_REAL,
       logoutput   => true,
@@ -126,7 +126,7 @@ class graphite::config_gunicorn inherits graphite::params {
       ensure  => installed,
       require => [
         File[$graphite::gr_pid_dir],
-        File[$graphite::gr_graphiteweb_log_dir],
+        File[$graphite::graphiteweb_log_dir_REAL],
         Exec['Initial django db creation'],
       ];
   }
@@ -138,8 +138,9 @@ class graphite::config_gunicorn inherits graphite::params {
     hasstatus  => false,
     require    => [
       Package[$package_name],
+      File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"]
     ],
-    subscribe  => File["${graphite::gr_graphiteweb_conf_dir}/local_settings.py"],
+    subscribe  => File[$::graphite::config::local_settings_py_file],
   }
 
 }

@@ -8,73 +8,73 @@ describe 'graphite::install', :type => 'class' do
   }
 
   shared_context 'Unsupported OS' do
-    it { should raise_error(Puppet::Error,/unsupported os,.+\./ )}
+    it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
   end
 
   shared_context 'Debian unsupported platforms' do
-    it { should raise_error(Puppet::Error,/Unsupported Debian release/) }
+    it { is_expected.to raise_error(Puppet::Error,/Unsupported Debian release/) }
   end
 
   shared_context 'RedHat unsupported platforms' do
-    it { should raise_error(Puppet::Error,/Unsupported RedHat release/) }
+    it { is_expected.to raise_error(Puppet::Error,/Unsupported RedHat release/) }
   end
 
   shared_context 'supported platforms' do
-    it { should contain_class('graphite::params') }
-    it { should contain_package('python-pip').with_provider(nil) }
-    it { should contain_package('python-ldap').with_provider(nil) }
-    it { should contain_package('python-psycopg2').with_provider(nil) }
+    it { is_expected.to contain_class('graphite::params') }
+    it { is_expected.to contain_package('python-pip').with_provider(nil) }
+    it { is_expected.to contain_package('python-ldap').with_provider(nil) }
+    it { is_expected.to contain_package('python-psycopg2').with_provider(nil) }
 
     ['carbon','django-tagging','graphite-web','twisted','txamqp','whisper'
     ].each do |pkg|
-      it { should contain_package(pkg).with_provider('pip').that_requires(
+      it { is_expected.to contain_package(pkg).with_provider('pip').that_requires(
         'Package[python-ldap]').that_requires(
         'Package[python-psycopg2]') }
     end
-    it { should contain_file('carbon_hack').with(hack_defaults) }
-    it { should contain_file('gweb_hack').with(hack_defaults) }
+    it { is_expected.to contain_file('carbon_hack').with(hack_defaults) }
+    it { is_expected.to contain_file('gweb_hack').with(hack_defaults) }
   end
 
   shared_context 'no pip' do
     ['carbon','django-tagging','graphite-web','twisted','txamqp','whisper'
     ].each do |pkg|
-      it { should contain_package(pkg).with_provider(nil).that_requires(nil) }
+      it { is_expected.to contain_package(pkg).with_provider(nil).that_requires(nil) }
     end
-    it { should_not contain_package('gcc') }
-    it { should_not contain_package('python-pip') }
-    it { should_not contain_package('python-dev') }
-    it { should_not contain_package('python-devel') }
-    it { should_not contain_file('carbon_hack') }
-    it { should_not contain_file('gweb_hack')   }
+    it { is_expected.not_to contain_package('gcc') }
+    it { is_expected.not_to contain_package('python-pip') }
+    it { is_expected.not_to contain_package('python-dev') }
+    it { is_expected.not_to contain_package('python-devel') }
+    it { is_expected.not_to contain_file('carbon_hack') }
+    it { is_expected.not_to contain_file('gweb_hack')   }
   end
 
   shared_context 'no django' do
     ['Django', 'python-django','Django14'].each do |pkg|
-      it { should_not contain_package(pkg) }
+      it { is_expected.not_to contain_package(pkg) }
     end
   end
 
   shared_context 'RedHat supported platforms' do
-    it { should contain_package('carbon').with_provider(
+    it { is_expected.to contain_package('carbon').with_provider(
       'pip').that_requires('Package[gcc]') }
 
-    it { should contain_package('python-devel').with_provider(nil) }
-    it { should contain_package('gcc').with_provider(nil) }
-    it { should contain_package('MySQL-python').with_provider(nil) }
-    it { should contain_package('pyOpenSSL').with_provider(nil) }
-    it { should contain_package('python-memcached').with_provider(nil) }
-    it { should contain_package('python-zope-interface').with_provider(nil) }
+    it { is_expected.to contain_package('python-devel').with_provider(nil) }
+    it { is_expected.to contain_package('gcc').with_provider(nil) }
+    it { is_expected.to contain_package('MySQL-python').with_provider(nil) }
+    it { is_expected.to contain_package('pyOpenSSL').with_provider(nil) }
+    it { is_expected.to contain_package('python-memcached').with_provider(nil) }
+    it { is_expected.to contain_package('python-zope-interface').with_provider(nil) }
   end
 
   shared_context 'RedHat 6 platforms' do
-    it { should contain_package('pycairo').with_provider(nil) }
-    it { should contain_package('Django').with_provider('pip') }
-    it { should contain_package('python-sqlite2').with_provider(nil) }
-    it { should contain_package('bitmap').with_provider(nil) }
-    it { should contain_package('bitmap-fonts-compat').with_provider(nil) }
-    it { should contain_package('python-crypto').with_provider(nil) }
+    it { is_expected.to contain_package('pycairo').with_provider(nil) }
+    it { is_expected.to contain_package('Django').with_provider('pip') }
+    it { is_expected.to contain_package('python-sqlite2').with_provider(nil) }
+    it { is_expected.to contain_package('bitmap').with_provider(nil) }
+    it { is_expected.to contain_package('bitmap-fonts-compat').with_provider(nil) }
+    it { is_expected.to contain_package('python-crypto').with_provider(nil) }
 
-    it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
+    it { is_expected.to contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info',
       :path   => '/usr/lib/python2.6/site-packages/carbon-0.9.15-py2.6.egg-info',
     })) }
@@ -85,31 +85,31 @@ describe 'graphite::install', :type => 'class' do
   end
 
   shared_context 'RedHat 7 platforms' do
-    it { should contain_package('python-cairocffi').with_provider(nil) }
-    it { should contain_package('Django').with_provider('pip') }
-    it { should contain_package('python-sqlite3dbm').with_provider(nil) }
-    it { should contain_package('dejavu-fonts-common').with_provider(nil) }
-    it { should contain_package('dejavu-sans-fonts').with_provider(nil) }
-    it { should contain_package('python2-crypto').with_provider(nil) }
+    it { is_expected.to contain_package('python-cairocffi').with_provider(nil) }
+    it { is_expected.to contain_package('Django').with_provider('pip') }
+    it { is_expected.to contain_package('python-sqlite3dbm').with_provider(nil) }
+    it { is_expected.to contain_package('dejavu-fonts-common').with_provider(nil) }
+    it { is_expected.to contain_package('dejavu-sans-fonts').with_provider(nil) }
+    it { is_expected.to contain_package('python2-crypto').with_provider(nil) }
 
-    it { should contain_file('carbon_hack').only_with(hack_defaults.merge({
+    it { is_expected.to contain_file('carbon_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info',
       :path   => '/usr/lib/python2.7/site-packages/carbon-0.9.15-py2.7.egg-info',
     })) }
-    it { should contain_file('gweb_hack').only_with(hack_defaults.merge({
+    it { is_expected.to contain_file('gweb_hack').only_with(hack_defaults.merge({
       :target => '/opt/graphite/webapp/graphite_web-0.9.15-py2.7.egg-info',
       :path   => '/usr/lib/python2.7/site-packages/graphite_web-0.9.15-py2.7.egg-info',
     })) }
   end
 
   shared_context 'Debian supported platforms' do
-    it { should contain_package('Django').with_provider('pip') }
-    it { should contain_package('python-cairo').with_provider(nil) }
-    it { should contain_package('python-memcache').with_provider(nil) }
-    it { should contain_package('python-mysqldb').with_provider(nil) }
-    it { should contain_package('python-simplejson').with_provider(nil) }
-    it { should contain_package('python-sqlite').with_provider(nil) }
-    it { should contain_package('python-tz').with_provider(nil) }
+    it { is_expected.to contain_package('Django').with_provider('pip') }
+    it { is_expected.to contain_package('python-cairo').with_provider(nil) }
+    it { is_expected.to contain_package('python-memcache').with_provider(nil) }
+    it { is_expected.to contain_package('python-mysqldb').with_provider(nil) }
+    it { is_expected.to contain_package('python-simplejson').with_provider(nil) }
+    it { is_expected.to contain_package('python-sqlite').with_provider(nil) }
+    it { is_expected.to contain_package('python-tz').with_provider(nil) }
   end
 
   # Loop through various contexts

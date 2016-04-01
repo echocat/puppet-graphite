@@ -1,6 +1,6 @@
 {
   "name": "dwerder-graphite",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "source": "https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
   "project_page": "https://github.com/echocat/puppet-graphite",
   "issues_url": "https://github.com/echocat/puppet-graphite/issues",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 5.0.0"}
   ],
     "operatingsystem_support": [
     {
@@ -58,11 +58,12 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": "3.x"
+      "version_requirement": ">= 3.0.0 < 2015.4.0"
     },
     {
       "name": "puppet",
-      "version_requirement": ">=2.7.20 <5.0.0"
+      "version_requirement": ">= 3.0.0 < 5.0.0"
     }
-  ]
+  ],
+  "description": "Graphite module"
 }

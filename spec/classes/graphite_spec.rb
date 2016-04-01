@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe 'graphite' do
+describe 'graphite', :type => 'class' do
 
   shared_context 'supported' do
-    it { should contain_anchor('graphite::begin').that_comes_before(
+    it { is_expected.to contain_anchor('graphite::begin').that_comes_before(
       'Class[graphite::install]') }
-    it { should contain_class('graphite::install').that_notifies(
+    it { is_expected.to contain_class('graphite::install').that_notifies(
       'Class[graphite::config]') }
-    it { should contain_class('graphite::config').that_comes_before(
+    it { is_expected.to contain_class('graphite::config').that_comes_before(
       'Anchor[graphite::end]') }
-    it { should contain_anchor('graphite::end') }
+    it { is_expected.to contain_anchor('graphite::end') }
   end
 
   context 'Unsupported OS' do
-    let(:facts) {{ :osfamily => 'unsupported' }}
-    it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /unsupported os./ )}
+    let(:facts) {{ :osfamily => 'unsupported', :operatingsystem => 'UnknownOS' }}
+    it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
   end
 
   context 'RedHat supported platforms' do
@@ -30,7 +30,7 @@ describe 'graphite' do
     ['5.0'].each do | operatingsystemrelease |
       let(:facts) {{ :osfamily => 'RedHat', :operatingsystemrelease => operatingsystemrelease}}
       describe "Redhat #{operatingsystemrelease} fails" do
-        it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /Unsupported RedHat release/) }
+        it { expect { is_expected.to contain_class('graphite')}.to raise_error(Puppet::Error, /Unsupported RedHat release/) }
       end
     end
   end
@@ -48,7 +48,7 @@ describe 'graphite' do
     ['capybara'].each do | lsbdistcodename |
       let(:facts) {{ :osfamily => 'Debian', :lsbdistcodename => lsbdistcodename}}
       describe "Debian #{lsbdistcodename} fails" do
-        it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /Unsupported Debian release/) }
+        it { expect { is_expected.to contain_class('graphite')}.to raise_error(Puppet::Error, /Unsupported Debian release/) }
       end
     end
   end
