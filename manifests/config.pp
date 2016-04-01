@@ -139,8 +139,7 @@ class graphite::config inherits graphite::params {
       ensure => directory,
       group  => $carbon_group,
       mode   => '0755',
-      owner  => $carbon_user,
-      path   => $::graphite::gr_local_data_dir;
+      owner  => $carbon_user;
 
     $::graphite::carbon_log_dir_REAL:
       ensure => directory,
