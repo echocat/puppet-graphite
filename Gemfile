@@ -10,8 +10,6 @@ def location_for(place, fake_version = nil)
   end
 end
 
-gemspec
-
 puppetversion = ENV.key?('PUPPET_GEM_VERSION') ? "#{ENV['PUPPET_GEM_VERSION']}" : ['>= 3.3']
 facterversion = ENV.key?('FACTER_GEM_VERSION') ? "#{ENV['FACTER_GEM_VERSION']}" : ['>= 1.7']
 
