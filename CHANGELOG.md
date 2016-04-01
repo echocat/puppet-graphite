@@ -1,3 +1,16 @@
+## 2016-04-01 - 6.0.1 (Bugfix release)
+
+#### Features:
+
+- Add alot more unit tests
+- Add code coverage analysis
+
+#### Bugfixes:
+
+- Fix/remove parameter interpolation for `gr_base_dir`. It set correct now.
+- Fix some hardcoded paths in templates, like logrotate or init scripts
+- Fix location of local_settings.py in some cases
+
 ## 2016-03-30 - 6.0.0 (Major release)
 
 #### Features:
