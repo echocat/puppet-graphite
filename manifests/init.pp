@@ -749,7 +749,7 @@ class graphite (
   $graphiteweb_conf_dir_REAL        = pick($gr_graphiteweb_conf_dir,   "${base_dir_REAL}/conf")
   $graphiteweb_webapp_dir_REAL      = pick($gr_graphiteweb_webapp_dir, "${base_dir_REAL}/webapp")
   $graphiteweb_storage_dir_REAL     = $gr_graphiteweb_storage_dir
-  $graphiteweb_install_lib_dir_REAL = pick($gr_graphiteweb_install_lib, "${graphiteweb_webapp_dir_REAL}/graphite")
+  $graphiteweb_install_lib_dir_REAL = pick($gr_graphiteweb_install_lib_dir, "${graphiteweb_webapp_dir_REAL}/graphite")
 
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
