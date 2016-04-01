@@ -1,62 +1,22 @@
 ---
+sudo: false
 language: ruby
-bundler_args: --without system_tests
 cache: bundler
+bundler_args: --without system_tests
 before_install: rm Gemfile.lock || true
 script: bundle exec rake validate lint spec 
-
-rvm:
-  - 2.1
-  - 1.9.3
-  - 2.0.0
-
-sudo: false
-
-env:
-  - PUPPET_GEM_VERSION='~> 4.3.0' COVERAGE=yes STRICT_VARIABLES=yes
-  - PUPPET_GEM_VERSION='~> 2.7.0'
-  - PUPPET_GEM_VERSION='~> 3.7.0'
-  - PUPPET_GEM_VERSION='~> 3.8.0'
-  - PUPPET_GEM_VERSION='~> 4.0.0'
-  - PUPPET_GEM_VERSION='~> 4.1.0'
-  - PUPPET_GEM_VERSION='~> 4.2.0'
-  - PUPPET_GEM_VERSION='~> 4.3.0'
-  - PUPPET_GEM_VERSION='https://github.com/puppetlabs/puppet.git#master'
-  - PUPPET_GEM_VERSION='https://github.com/puppetlabs/puppet.git#stable'
-  - PUPPET_GEM_VERSION='https://github.com/puppetlabs/puppet.git#3.x'
-
 matrix:
   fast_finish: true
   include:
-    # these versions are explicitly needed for ruby 1.8.7 support
-    - rvm: 1.8.7
-      env: PUPPET_GEM_VERSION='~> 3.8.0' RSPEC_GEM_VERSION='= 3.1.0'
-    - rvm: 1.8.7
-      env: PUPPET_GEM_VERSION='~> 2.7.0' RSPEC_GEM_VERSION='~> 2.14.0'
-
-  exclude:
-    # newer puppet versions don't run on 1.8.7
-    - rvm: 1.8.7
-      env: PUPPET_GEM_VERSION='~> 4.0.0'
-    - rvm: 1.8.7
-      env: PUPPET_GEM_VERSION='~> 4.1.0'
-    - rvm: 2.1
-      env: PUPPET_GEM_VERSION='~> 4.1.0'
-    # puppet 2.7 doesn't run on newer rubies
+    - rvm: 2.1.6
+      env: PUPPET_GEM_VERSION='~> 4.0' COVERAGE=yes STRICT_VARIABLES=yes
+    - rvm: 2.1.6
+      env: PUPPET_GEM_VERSION='https://github.com/puppetlabs/puppet.git#stable
+    - rvm: 2.1.5
+      env: PUPPET_GEM_VERSION='~> 3.0' FUTURE_PARSER=yes
+    - rvm: 2.1.5
+      env: PUPPET_GEM_VERSION='~> 3.0'
     - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION='~> 2.7.0'
-    - rvm: 2.0.0
-      env: PUPPET_GEM_VERSION='~> 2.7.0'
-    - rvm: 2.1
-      env: PUPPET_GEM_VERSION='~> 2.7.0'
-    # run Coveralls exactly once
-    - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION='~> 4.3.0' COVERAGE=yes STRICT_VARIABLES=yes
-    - rvm: 2.0.0
-      env: PUPPET_GEM_VERSION='~> 4.3.0' COVERAGE=yes STRICT_VARIABLES=yes
-
-  allowed_failures:
-    - env: PUPPET_GEM_VERSION='git:https://github.com/puppetlabs/puppet.git#master'
-
+      env: PUPPET_GEM_VERSION='~> 3.0'
 notifications:
   email: false
