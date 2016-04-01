@@ -660,17 +660,17 @@ class graphite (
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
   $gr_base_dir                            = '/opt/graphite',
-  $gr_storage_dir                         = "${gr_base_dir}/storage",
-  $gr_local_data_dir                      = "${gr_storage_dir}/whisper",
-  $gr_rrd_dir                             = "${gr_storage_dir}/rrd",
-  $gr_whitelists_dir                      = "${gr_storage_dir}/lists",
-  $gr_carbon_conf_dir                     = "${gr_base_dir}/conf",
-  $gr_carbon_log_dir                      = "${gr_storage_dir}/log/carbon-cache",
-  $gr_graphiteweb_log_dir                 = "${gr_storage_dir}/log",
-  $gr_graphiteweb_conf_dir                = "${gr_base_dir}/conf",
-  $gr_graphiteweb_webapp_dir              = "${gr_base_dir}/webapp",
+  $gr_storage_dir                         = undef,
+  $gr_local_data_dir                      = undef,
+  $gr_rrd_dir                             = undef,
+  $gr_whitelists_dir                      = undef,
+  $gr_carbon_conf_dir                     = undef,
+  $gr_carbon_log_dir                      = undef,
+  $gr_graphiteweb_log_dir                 = undef,
+  $gr_graphiteweb_conf_dir                = undef,
+  $gr_graphiteweb_webapp_dir              = undef,
   $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
-  $gr_graphiteweb_install_lib_dir         = "${gr_graphiteweb_webapp_dir}/graphite",
+  $gr_graphiteweb_install_lib_dir         = undef,
   $gr_pid_dir                             = '/var/run',
   $gr_apache_logdir                       = '/var/log/httpd/graphite-web',
   $gunicorn_arg_timeout                   = 30,
@@ -737,6 +737,19 @@ class graphite (
   # validate integers
   validate_integer($gr_web_server_port)
   validate_integer($gr_web_server_port_https)
+
+  $base_dir_REAL                    = $gr_base_dir
+  $storage_dir_REAL                 = pick($gr_storage_dir,            "${base_dir_REAL}/storage")
+  $local_data_dir_REAL              = pick($gr_local_data_dir,         "${storage_dir_REAL}/whisper")
+  $rrd_dir_REAL                     = pick($gr_rrd_dir,                "${storage_dir_REAL}/rrd")
+  $whitelists_dir_REAL              = pick($gr_whitelists_dir,         "${storage_dir_REAL}/lists")
+  $carbon_conf_dir_REAL             = pick($gr_carbon_conf_dir,        "${base_dir_REAL}/conf")
+  $carbon_log_dir_REAL              = pick($gr_carbon_log_dir,         "${storage_dir_REAL}/log/carbon-cache")
+  $graphiteweb_log_dir_REAL         = pick($gr_graphiteweb_log_dir,    "${storage_dir_REAL}/log")
+  $graphiteweb_conf_dir_REAL        = pick($gr_graphiteweb_conf_dir,   "${base_dir_REAL}/conf")
+  $graphiteweb_webapp_dir_REAL      = pick($gr_graphiteweb_webapp_dir, "${base_dir_REAL}/webapp")
+  $graphiteweb_storage_dir_REAL     = $gr_graphiteweb_storage_dir
+  $graphiteweb_install_lib_dir_REAL = pick($gr_graphiteweb_install_lib_dir, "${graphiteweb_webapp_dir_REAL}/graphite")
 
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the

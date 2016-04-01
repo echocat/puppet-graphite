@@ -32,11 +32,11 @@ class graphite::params {
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
   $pyver              = $::osfamily ? {
-    default  => '2.7',
     'RedHat' => $::operatingsystemrelease ? {
       /^6/    => '2.6',
       default => '2.7'
     },
+    default  => '2.7',
   }
   case $::osfamily {
     'Debian': {

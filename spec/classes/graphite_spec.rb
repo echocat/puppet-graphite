@@ -13,8 +13,8 @@ describe 'graphite' do
   end
 
   context 'Unsupported OS' do
-    let(:facts) {{ :osfamily => 'unsupported' }}
-    it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /unsupported os./ )}
+    let(:facts) {{ :osfamily => 'unsupported', :operatingsystem => 'UnknownOS' }}
+    it { expect { should contain_class('graphite')}.to raise_error(Puppet::Error, /unsupported os,/ )}
   end
 
   context 'RedHat supported platforms' do

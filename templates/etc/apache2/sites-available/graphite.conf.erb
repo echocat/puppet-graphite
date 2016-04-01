@@ -19,7 +19,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 
 <VirtualHost *:<%= scope.lookupvar('graphite::gr_web_server_port') %>>
 	ServerName <%= scope.lookupvar('graphite::gr_web_servername') %>
-	DocumentRoot "<%= scope.lookupvar('graphite::gr_graphiteweb_webapp_dir') %>"
+	DocumentRoot "<%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>"
 <% if ![nil, '', :undef].include?(scope.lookupvar('graphite::gr_apache_noproxy')) %>  NoProxy <%= scope.lookupvar('graphite::gr_apache_noproxy') %><% end %>
 
 	ErrorLog <%= scope.lookupvar('graphite::gr_apache_logdir') %>/graphite-web-error.log
@@ -30,13 +30,13 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	WSGIDaemonProcess graphite processes=<%= scope.lookupvar('graphite::wsgi_processes') -%> threads=<%= scope.lookupvar('graphite::wsgi_threads') -%> display-name='%{GROUP}' inactivity-timeout=<%= scope.lookupvar('graphite::wsgi_inactivity_timeout') %>
 	WSGIProcessGroup graphite
 	WSGIApplicationGroup %{GLOBAL}
-	WSGIImportScript <%= scope.lookupvar('graphite::gr_graphiteweb_conf_dir') %>/graphite.wsgi process-group=graphite application-group=%{GLOBAL}
+	WSGIImportScript <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite.wsgi process-group=graphite application-group=%{GLOBAL}
 
 	# XXX You will need to create this file! There is a graphite.wsgi.example
 	# file in this directory that you can safely use, just copy it to graphite.wgsi
-	WSGIScriptAlias / <%= scope.lookupvar('graphite::gr_graphiteweb_conf_dir') %>/graphite.wsgi
+	WSGIScriptAlias / <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite.wsgi
 
-	Alias /content/ <%= scope.lookupvar('graphite::gr_graphiteweb_webapp_dir') %>/content/
+	Alias /content/ <%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>/content/
 	<Location "/content/">
 			SetHandler None
 <% if scope.lookupvar('graphite::gr_apache_24') %>
@@ -62,7 +62,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 
 	# The graphite.wsgi file has to be accessible by apache. It won't
 	# be visible to clients because of the DocumentRoot though.
-	<Directory <%= scope.lookupvar('graphite::gr_graphiteweb_conf_dir') %> >
+	<Directory <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %> >
 <% if scope.lookupvar('graphite::gr_apache_24') %>
 			Options All
 			AllowOverride All
