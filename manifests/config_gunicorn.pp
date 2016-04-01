@@ -85,16 +85,6 @@ class graphite::config_gunicorn inherits graphite::params {
 
   }
 
-  # The `gunicorn-debian` command doesn't require this, as it
-  # uses the deprecated `gunicorn_django` command. But, I hope
-  # that debian will eventually update their gunicorn package
-  # to use the non-deprecated version.
-  file { "${graphite::gr_graphiteweb_install_lib_dir}/wsgi.py":
-    ensure => link,
-    target => "${graphite::gr_graphiteweb_conf_dir}/graphite.wsgi",
-    before => Service['gunicorn'],
-  }
-
   # fix graphite's race condition on start
   # if the exec fails, assume we're using a version of graphite that doesn't need it
   if $graphite::gunicorn_workers > 1 {
@@ -138,8 +128,9 @@ class graphite::config_gunicorn inherits graphite::params {
     hasstatus  => false,
     require    => [
       Package[$package_name],
+      File["${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py"],
     ],
-    subscribe  => File["${graphite::gr_graphiteweb_conf_dir}/local_settings.py"],
+    subscribe  => File[$::graphite::config::local_settings_py_file],
   }
 
 }

@@ -27,6 +27,19 @@ class graphite::params {
   $django_ver         = '1.5'
   $django_provider    = 'pip'
 
+  $base_dir                    = '/opt/graphite'
+  $storage_dir                 = "${base_dir}/storage"
+  $local_data_dir              = "${storage_dir}/whisper"
+  $rrd_dir                     = "${storage_dir}/rrd"
+  $whitelists_dir              = "${storage_dir}/lists"
+  $carbon_conf_dir             = "${base_dir}/conf"
+  $carbon_log_dir              = "${storage_dir}/log/carbon-cache"
+  $graphiteweb_log_dir         = "${storage_dir}/log"
+  $graphiteweb_conf_dir        = "${base_dir}/conf"
+  $graphiteweb_webapp_dir      = "${base_dir}/webapp"
+  $graphiteweb_storage_dir     = '/var/lib/graphite-web'
+  $graphiteweb_install_lib_dir = "${graphiteweb_webapp_dir}/graphite"
+
   $install_prefix     = '/opt/'
 
   # variables to workaround unusual graphite install target:
