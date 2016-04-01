@@ -11,14 +11,14 @@ class graphite::config_gunicorn inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
   case $::osfamily {
-    
+
     'Debian': {
       $package_name = 'gunicorn'
 
-      # Debian has a wrapper script called `gunicorn-debian` for multiple gunicorn 
-      # configs. Each config is stored as a separate file in /etc/gunicorn.d/. 
+      # Debian has a wrapper script called `gunicorn-debian` for multiple gunicorn
+      # configs. Each config is stored as a separate file in /etc/gunicorn.d/.
       # On debian 8 and Ubuntu 15.10, which use systemd, the gunicorn-debian
-      # config file has to be installed before the gunicorn package. 
+      # config file has to be installed before the gunicorn package.
       file { '/etc/gunicorn.d/':
         ensure => directory,
       }
@@ -139,7 +139,7 @@ class graphite::config_gunicorn inherits graphite::params {
     require    => [
       Package[$package_name],
     ],
-    subscribe  => File["${graphite::gr_graphiteweb_conf_dir}/local_settings.py"],
+    subscribe  => File[$graphite::config::local_settings_py_file],
   }
 
 }
