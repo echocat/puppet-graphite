@@ -3,23 +3,37 @@ require 'spec_helper'
 describe 'graphite::config', :type => 'class' do
 
   shared_context 'Unsupported OS' do
-    it { should raise_error(Puppet::Error,/unsupported os,.+\./ )}
+    it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
   end
 
   shared_context 'Debian unsupported platforms' do
-    it { should raise_error(Puppet::Error,/Unsupported Debian release/) }
+    it { is_expected.to raise_error(Puppet::Error,/Unsupported Debian release/) }
   end
 
   shared_context 'RedHat unsupported platforms' do
-    it { should raise_error(Puppet::Error,/Unsupported RedHat release/) }
+    it { is_expected.to raise_error(Puppet::Error,/Unsupported RedHat release/) }
   end
 
   shared_context 'supported platforms' do
-    it { should contain_class('graphite::params') }
-    it { should contain_file('/opt/graphite/bin/carbon-logrotate.sh')}
+    it { is_expected.to contain_class('graphite::params') }
+    it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with_content(/^CARBON_LOGS_PATH="\/opt\/graphite\/storage\/log"$/)}
+    it { is_expected.to contain_exec('Initial django db creation') }
+    it { is_expected.to contain_class('graphite::config_apache') }
   end
 
   shared_context 'RedHat supported platforms' do
+    it { is_expected.to contain_file('/opt/graphite/storage/whisper').with({
+      'ensure' => 'directory',
+      'owner'  => 'apache',
+      'group'  => 'apache',
+      'mode'   => '0755', })
+    }
+    it { is_expected.to contain_file('/opt/graphite/storage/log/carbon-cache').with({
+      'ensure' => 'directory',
+      'owner'  => 'apache',
+      'group'  => 'apache',
+      'mode'   => '0755', })
+    }
   end
 
   shared_context 'RedHat 6 platforms' do
@@ -29,6 +43,12 @@ describe 'graphite::config', :type => 'class' do
   end
 
   shared_context 'Debian supported platforms' do
+    it { is_expected.to contain_file('/opt/graphite/storage/log/carbon-cache').with({
+      'ensure' => 'directory',
+      'owner'  => 'www-data',
+      'group'  => 'www-data',
+      'mode'   => '0755', })
+    }
   end
 
   # Loop through various contexts
