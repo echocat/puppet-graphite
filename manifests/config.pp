@@ -16,7 +16,7 @@ class graphite::config inherits graphite::params {
   #            python-django-tagging, python-simplejson
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
-  if $::service_provider == 'systemd' or ($::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
+  if $::graphite::params::service_provider == 'systemd' or ($::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
     exec { 'graphite-reload-systemd':
@@ -34,7 +34,7 @@ class graphite::config inherits graphite::params {
 
   # we need an web server with python support
   # apache with mod_wsgi or nginx with gunicorn
-  case $graphite::gr_web_server {
+  case $::graphite::gr_web_server {
     'apache'   : {
       $gr_web_user_REAL  = pick($::graphite::gr_web_user, $::graphite::params::apache_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group, $::graphite::params::apache_web_group)
