@@ -16,39 +16,57 @@ describe 'graphite::config', :type => 'class' do
 
   shared_context 'supported platforms' do
     it { is_expected.to contain_class('graphite::params') }
-    it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with_content(/^CARBON_LOGS_PATH="\/opt\/graphite\/storage\/log"$/)}
     it { is_expected.to contain_exec('Initial django db creation') }
     it { is_expected.to contain_class('graphite::config_apache') }
+    
+    # cron check
+    it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with({
+      'ensure' => 'file', 'mode' => '0544', 'content' => /^CARBON_LOGS_PATH="\/opt\/graphite\/storage\/log"$/ }) }    
+    it { is_expected.to contain_cron('Rotate carbon logs').with({
+      'command' => '/opt/graphite/bin/carbon-logrotate.sh',
+      'hour'    => '3',
+      'minute'  => '15',
+      'require' => 'File[/opt/graphite/bin/carbon-logrotate.sh]',
+      'user'    => 'root',}) }
   end
 
   shared_context 'RedHat supported platforms' do
     it { is_expected.to contain_file('/opt/graphite/storage/whisper').with({
-      'ensure' => 'directory',
-      'owner'  => 'apache',
-      'group'  => 'apache',
-      'mode'   => '0755', })
-    }
+      'ensure' => 'directory', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
     it { is_expected.to contain_file('/opt/graphite/storage/log/carbon-cache').with({
-      'ensure' => 'directory',
-      'owner'  => 'apache',
-      'group'  => 'apache',
-      'mode'   => '0755', })
-    }
+      'ensure' => 'directory', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
+    it { is_expected.to contain_file('/opt/graphite/storage/graphite.db').with({
+      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', }) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with({
+      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', 'require' => '[Package[httpd]{:name=>"httpd"}]',
+      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/graphite_wsgi.py').with({
+      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', 'require' => '[Package[httpd]{:name=>"httpd"}]' }) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/graphite_wsgi.py').with({
+      'ensure' => 'link', 'target' => '/opt/graphite/conf/graphite_wsgi.py', 'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]' }) }
   end
 
   shared_context 'RedHat 6 platforms' do
   end
 
   shared_context 'RedHat 7 platforms' do
+    it { is_expected.to contain_exec('graphite-reload-systemd') }
   end
 
   shared_context 'Debian supported platforms' do
+    it { is_expected.to contain_file('/opt/graphite/storage/whisper').with({
+      'ensure' => 'directory', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0755', }) }
     it { is_expected.to contain_file('/opt/graphite/storage/log/carbon-cache').with({
-      'ensure' => 'directory',
-      'owner'  => 'www-data',
-      'group'  => 'www-data',
-      'mode'   => '0755', })
-    }
+      'ensure' => 'directory', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0755', }) }
+    it { is_expected.to contain_file('/opt/graphite/storage/graphite.db').with({
+      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', }) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with({
+      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', 'require' => '[Package[apache2]{:name=>"apache2"}]',
+      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/graphite_wsgi.py').with({
+      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', 'require' => '[Package[apache2]{:name=>"apache2"}]' }) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/graphite_wsgi.py').with({
+      'ensure' => 'link', 'target' => '/opt/graphite/conf/graphite_wsgi.py', 'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]' }) }
   end
 
   # Loop through various contexts
