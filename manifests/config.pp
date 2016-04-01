@@ -78,24 +78,24 @@ class graphite::config inherits graphite::params {
   }
 
   if $::graphite::gr_pip_install {
-    $local_settings_py_file = "${::graphite::gr_graphiteweb_install_lib_dir}/local_settings.py"
+    $local_settings_py_file = "${::graphite::graphiteweb_install_lib_dir_REAL}/local_settings.py"
     $syncdb_require         = File[$local_settings_py_file]
   } else {
     # using custom directories.
-    file { "${::graphite::gr_graphiteweb_conf_dir}/manage.py":
+    file { "${::graphite::graphiteweb_conf_dir_REAL}/manage.py":
       ensure => link,
       target => "${::graphite::params::libpath}/graphite/manage.py"
     }
-    $local_settings_py_file = "${::graphite::gr_graphiteweb_conf_dir}/local_settings.py"
+    $local_settings_py_file = "${::graphite::graphiteweb_conf_dir_REAL}/local_settings.py"
     $syncdb_require         = [
       File[$local_settings_py_file],
-      File["${::graphite::gr_graphiteweb_conf_dir}/manage.py"]]
+      File["${::graphite::graphiteweb_conf_dir_REAL}/manage.py"]]
   }
 
-  $carbon_conf_file               = "${::graphite::gr_carbon_conf_dir}/carbon.conf"
+  $carbon_conf_file               = "${::graphite::carbon_conf_dir_REAL}/carbon.conf"
   $graphite_web_managepy_location = $::graphite::gr_pip_install ? {
-    false   => $::graphite::gr_graphiteweb_conf_dir,
-    default => $::graphite::gr_graphiteweb_install_lib_dir,
+    false   => $::graphite::graphiteweb_conf_dir_REAL,
+    default => $::graphite::graphiteweb_install_lib_dir_REAL,
   }
 
   # first init of user db for graphite
@@ -110,12 +110,12 @@ class graphite::config inherits graphite::params {
   # change access permissions for web server
 
   file { [
-    $::graphite::gr_storage_dir,
-    $::graphite::gr_rrd_dir,
-    $::graphite::gr_whitelists_dir,
-    $::graphite::gr_graphiteweb_log_dir,
+    $::graphite::storage_dir_REAL,
+    $::graphite::rrd_dir_REAL,
+    $::graphite::whitelists_dir_REAL,
+    $::graphite::graphiteweb_log_dir_REAL,
     $::graphite::gr_pid_dir,
-    "${::graphite::gr_base_dir}/bin"]:
+    "${::graphite::base_dir_REAL}/bin"]:
     ensure    => directory,
     group     => $gr_web_group_REAL,
     mode      => '0755',
@@ -135,14 +135,14 @@ class graphite::config inherits graphite::params {
   }
 
   file {
-    $::graphite::gr_local_data_dir:
+    $::graphite::local_data_dir_REAL:
       ensure => directory,
       group  => $carbon_group,
       mode   => '0755',
       owner  => $carbon_user,
       path   => $::graphite::gr_local_data_dir;
 
-    $::graphite::gr_carbon_log_dir:
+    $::graphite::carbon_log_dir_REAL:
       ensure => directory,
       group  => $carbon_group,
       mode   => '0755',
@@ -150,7 +150,7 @@ class graphite::config inherits graphite::params {
   }
 
   # Lets ensure graphite.db owner is the same as gr_web_user_REAL
-  file { "${::graphite::gr_storage_dir}/graphite.db":
+  file { "${::graphite::storage_dir_REAL}/graphite.db":
     ensure => file,
     group  => $gr_web_group_REAL,
     mode   => '0644',
@@ -167,7 +167,7 @@ class graphite::config inherits graphite::params {
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
 
-    "${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py":
+    "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/graphite.wsgi.erb'),
       group   => $gr_web_group_REAL,
@@ -175,14 +175,14 @@ class graphite::config inherits graphite::params {
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require;
 
-    "${::graphite::gr_graphiteweb_install_lib_dir}/graphite_wsgi.py":
+    "${::graphite::graphiteweb_install_lib_dir_REAL}/graphite_wsgi.py":
       ensure  => link,
-      target  => "${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py",
-      require => File["${::graphite::gr_graphiteweb_conf_dir}/graphite_wsgi.py"];
+      target  => "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py",
+      require => File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"];
   }
 
   if $::graphite::gr_remote_user_header_name {
-    file { "${::graphite::gr_graphiteweb_install_lib_dir}/custom_auth.py":
+    file { "${::graphite::graphiteweb_install_lib_dir_REAL}/custom_auth.py":
       ensure  => file,
       content => template('graphite/opt/graphite/webapp/graphite/custom_auth.py.erb'),
       group   => $gr_web_group_REAL,
@@ -217,7 +217,7 @@ class graphite::config inherits graphite::params {
     $service_aggregator])
 
   if $::graphite::gr_enable_carbon_relay {
-    file { "${::graphite::gr_carbon_conf_dir}/relay-rules.conf":
+    file { "${::graphite::carbon_conf_dir_REAL}/relay-rules.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
       mode    => '0644',
@@ -226,7 +226,7 @@ class graphite::config inherits graphite::params {
   }
 
   if $::graphite::gr_enable_carbon_aggregator {
-    file { "${::graphite::gr_carbon_conf_dir}/aggregation-rules.conf":
+    file { "${::graphite::carbon_conf_dir_REAL}/aggregation-rules.conf":
       ensure  => file,
       mode    => '0644',
       content => template('graphite/opt/graphite/conf/aggregation-rules.conf.erb'),
@@ -235,7 +235,7 @@ class graphite::config inherits graphite::params {
   }
 
   file {
-    "${::graphite::gr_carbon_conf_dir}/storage-schemas.conf":
+    "${::graphite::carbon_conf_dir_REAL}/storage-schemas.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-schemas.conf.erb'),
       mode    => '0644',
@@ -247,34 +247,34 @@ class graphite::config inherits graphite::params {
       mode    => '0644',
       notify  => $notify_services;
 
-    "${::graphite::gr_carbon_conf_dir}/storage-aggregation.conf":
+    "${::graphite::carbon_conf_dir_REAL}/storage-aggregation.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-aggregation.conf.erb'),
       mode    => '0644';
 
-    "${::graphite::gr_carbon_conf_dir}/whitelist.conf":
+    "${::graphite::carbon_conf_dir_REAL}/whitelist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/whitelist.conf.erb'),
       mode    => '0644';
 
-    "${::graphite::gr_carbon_conf_dir}/blacklist.conf":
+    "${::graphite::carbon_conf_dir_REAL}/blacklist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/blacklist.conf.erb'),
       mode    => '0644';
   }
 
   # configure logrotate script for carbon
-  file { "${::graphite::gr_base_dir}/bin/carbon-logrotate.sh":
+  file { "${::graphite::base_dir_REAL}/bin/carbon-logrotate.sh":
     ensure  => file,
     mode    => '0544',
     content => template('graphite/opt/graphite/bin/carbon-logrotate.sh.erb'),
   }
 
   cron { 'Rotate carbon logs':
-    command => "${::graphite::gr_base_dir}/bin/carbon-logrotate.sh",
+    command => "${::graphite::base_dir_REAL}/bin/carbon-logrotate.sh",
     hour    => 1,
     minute  => 15,
-    require => File["${::graphite::gr_base_dir}/bin/carbon-logrotate.sh"],
+    require => File["${::graphite::base_dir_REAL}/bin/carbon-logrotate.sh"],
     user    => root,
   }
 

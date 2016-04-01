@@ -111,12 +111,12 @@ class graphite::install inherits graphite::params {
     create_resources('file', {
       'carbon_hack' => {
         path   => "${::graphite::params::libpath}/${carbon}",
-        target => "${::graphite::gr_base_dir}/lib/${carbon}"
+        target => "${::graphite::base_dir_REAL}/lib/${carbon}"
       }
       ,
       'gweb_hack'   => {
         path   => "${::graphite::params::libpath}/${gweb}",
-        target => "${::graphite::gr_base_dir}/webapp/${gweb}"
+        target => "${::graphite::base_dir_REAL}/webapp/${gweb}"
       }
       ,
     }

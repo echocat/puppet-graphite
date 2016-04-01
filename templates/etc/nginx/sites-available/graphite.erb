@@ -14,7 +14,7 @@ server {
 	}
 
 	location ^~ /content/ {
-		root /opt/graphite/webapp;
+		root <%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>;
 		access_log off;
 		expires 30d;
 	}
