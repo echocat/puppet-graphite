@@ -38,10 +38,10 @@ describe 'graphite::config', :type => 'class' do
     it { is_expected.to contain_file('/opt/graphite/storage/graphite.db').with({
       'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', }) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with({
-      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', 'require' => '[Package[httpd]{:name=>"httpd"}]',
-      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }) }
+      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644',
+      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }).that_requires('Package[httpd]') }
     it { is_expected.to contain_file('/opt/graphite/conf/graphite_wsgi.py').with({
-      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', 'require' => '[Package[httpd]{:name=>"httpd"}]' }) }
+      'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644' }).that_requires('Package[httpd]') }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/graphite_wsgi.py').with({
       'ensure' => 'link', 'target' => '/opt/graphite/conf/graphite_wsgi.py', 'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]' }) }
   end
@@ -61,10 +61,10 @@ describe 'graphite::config', :type => 'class' do
     it { is_expected.to contain_file('/opt/graphite/storage/graphite.db').with({
       'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', }) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with({
-      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', 'require' => '[Package[apache2]{:name=>"apache2"}]',
-      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }) }
+      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644',
+      'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/ }).that_requires('Package[apache2]') }
     it { is_expected.to contain_file('/opt/graphite/conf/graphite_wsgi.py').with({
-      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644', 'require' => '[Package[apache2]{:name=>"apache2"}]' }) }
+      'ensure' => 'file', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => '0644' }).that_requires('Package[apache2]') }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/graphite_wsgi.py').with({
       'ensure' => 'link', 'target' => '/opt/graphite/conf/graphite_wsgi.py', 'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]' }) }
   end
