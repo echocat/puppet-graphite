@@ -22,5 +22,6 @@ gem 'rspec', '< 3.2.0'
 gem 'rake', '< 11.0.0'
 
 if ENV['COVERAGE'] == 'yes'
+  gem 'simplecov', :require => false
   gem 'coveralls', :require => false
 end

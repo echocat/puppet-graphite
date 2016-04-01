@@ -3,8 +3,17 @@ require 'puppetlabs_spec_helper/module_spec_helper'
 # for code coverage
 
 if ENV['COVERAGE'] == 'yes'
+  require 'simplecov'
   require 'coveralls'
-  Coveralls.wear!
+  
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ]
+  #Coveralls.wear!
+  SimpleCov.start do
+    add_filter 'spec/fixtures/modules/'
+  end
 end
 
 RSpec.configure do |c|
