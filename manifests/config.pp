@@ -109,6 +109,7 @@ class graphite::config inherits graphite::params {
     $::graphite::rrd_dir_REAL,
     $::graphite::whitelists_dir_REAL,
     $::graphite::graphiteweb_log_dir_REAL,
+    $::graphite::graphiteweb_storage_dir_REAL,
     $::graphite::gr_pid_dir,
     "${::graphite::base_dir_REAL}/bin"]:
     ensure    => directory,
