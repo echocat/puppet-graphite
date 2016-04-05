@@ -120,7 +120,7 @@ class graphite::config_apache inherits graphite::params {
       mode    => '0644',
       owner   => $::graphite::config::gr_web_user_REAL,
       require => [
-        File[$::graphite::gr_storage_dir],
+        File[$::graphite::storage_dir_REAL],
         File["${::graphite::params::apache_dir}/ports.conf"],
       ],
       notify  => Service[$::graphite::params::apache_service_name];
