@@ -48,7 +48,7 @@ class graphite::params {
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
       $apache_logdir_graphite    = '/var/log/apache2/graphite-web'
-      $service_provider          = undef
+      $service_provider          = $::service_provider
 
       $nginxconf_dir    = '/etc/nginx/sites-available'
 
