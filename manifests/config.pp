@@ -17,7 +17,8 @@ class graphite::config inherits graphite::params {
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
   if ($::graphite::params::service_provider == 'redhat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
-  $::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
+  $::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) or (
+  $::graphite::params::service_provider == 'systemd') {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
     exec { 'graphite-reload-systemd':
@@ -37,6 +38,7 @@ class graphite::config inherits graphite::params {
       $gr_web_group_REAL = pick($::graphite::gr_web_group, $::graphite::params::apache_web_group)
       include graphite::config_apache
       $web_server_package_require = [Package[$::graphite::params::apache_pkg]]
+      $web_server_service_notify  = Service[$::graphite::params::apache_service_name]
     }
 
     'nginx'    : {
@@ -46,6 +48,7 @@ class graphite::config inherits graphite::params {
       include graphite::config_gunicorn
       include graphite::config_nginx
       $web_server_package_require = [Package['nginx']]
+      $web_server_service_notify  = Service['gunicorn']
     }
 
     'wsgionly' : {
@@ -57,6 +60,7 @@ class graphite::config inherits graphite::params {
       $gr_web_group_REAL = pick($::graphite::gr_web_group)
       include graphite::config_gunicorn
       $web_server_package_require = undef
+      $web_server_service_notify  = Service['gunicorn']
     }
 
     'none'     : {
@@ -67,6 +71,7 @@ class graphite::config inherits graphite::params {
       $gr_web_user_REAL = pick($::graphite::gr_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group)
       $web_server_package_require = undef
+      $web_server_service_notify  = undef
     }
 
     default    : {
@@ -109,6 +114,7 @@ class graphite::config inherits graphite::params {
     $::graphite::rrd_dir_REAL,
     $::graphite::whitelists_dir_REAL,
     $::graphite::graphiteweb_log_dir_REAL,
+    $::graphite::graphiteweb_storage_dir_REAL,
     $::graphite::gr_pid_dir,
     "${::graphite::base_dir_REAL}/bin"]:
     ensure    => directory,
@@ -159,7 +165,8 @@ class graphite::config inherits graphite::params {
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
-      require => $web_server_package_require;
+      require => $web_server_package_require,
+      notify  => $web_server_service_notify;
 
     "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py":
       ensure  => file,
@@ -167,7 +174,8 @@ class graphite::config inherits graphite::params {
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
-      require => $web_server_package_require;
+      require => $web_server_package_require,
+      notify  => $web_server_service_notify;
 
     "${::graphite::graphiteweb_install_lib_dir_REAL}/graphite_wsgi.py":
       ensure  => link,

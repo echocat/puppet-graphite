@@ -98,14 +98,14 @@ apache::vhost { graphite.my.domain:
     display-name       => '%{GROUP}',
     inactivity-timeout => '120',
   },
-  wsgi_import_script          => '/opt/graphite/conf/graphite.wsgi',
+  wsgi_import_script          => '/opt/graphite/conf/graphite_wsgi.py',
   wsgi_import_script_options  => {
     process-group     => 'graphite',
     application-group => '%{GLOBAL}'
   },
   wsgi_process_group          => 'graphite',
   wsgi_script_aliases         => {
-    '/' => '/opt/graphite/conf/graphite.wsgi'
+    '/' => '/opt/graphite/conf/graphite_wsgi.py'
   },
   headers => [
     'set Access-Control-Allow-Origin "*"',
