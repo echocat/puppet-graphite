@@ -373,7 +373,7 @@ Default is '/opt/graphite'. Set base install location of Graphite. This forms th
 
 #####`gr_storage_dir`
 
-Default is '${gr_base_dir}/storage'. Set location of base storage files.  When not installing using pip a typical location for this may be '/opt/carbon'.
+Default is '${gr_base_dir}/storage'. Set location of base storage files.  When not installing using pip a typical location for this may be '/opt/carbon'. This dir is also used as pid dir on RedHat.
 
 #####`gr_local_data_dir`
 

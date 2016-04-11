@@ -1,3 +1,10 @@
+## 2016-04-11 - 6.0.2 (Bugfix release)
+
+#### Bugfixes:
+
+- (debfe5d) remove parameter `gr_pid_dir` and use `gr_storage_dir` instead.
+- RedHat init scripts use correct `gr_base_dir` for graphite.
+
 ## 2016-04-01 - 6.0.1 (Bugfix release)
 
 #### Features:

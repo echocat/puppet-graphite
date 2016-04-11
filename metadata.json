@@ -1,6 +1,6 @@
 {
   "name": "dwerder-graphite",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "source": "https://github.com/echocat/puppet-graphite.git",
   "author": "Daniel Werdermann",
   "license": "Apache-2.0",
@@ -64,6 +64,5 @@
       "name": "puppet",
       "version_requirement": ">= 3.0.0 < 5.0.0"
     }
-  ],
-  "description": "Graphite module"
+  ]
 }
