@@ -172,19 +172,19 @@ CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') 
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
 
 # Enable AMQP if you want to receve metrics using an amqp broker
-ENABLE_AMQP = <%= scope.lookupvar('graphite::gr_amqp_enable') %>
+ENABLE_AMQP = <%= scope.lookupvar('graphite::cache_amqp_enable_REAL') %>
 
 # Verbose means a line will be logged for every metric received
 # useful for testing
-AMQP_VERBOSE = <%= scope.lookupvar('graphite::gr_amqp_verbose') %>
+AMQP_VERBOSE = <%= scope.lookupvar('graphite::cache_amqp_verbose_REAL') %>
 
-AMQP_HOST = <%= scope.lookupvar('graphite::gr_amqp_host') %>
-AMQP_PORT = <%= scope.lookupvar('graphite::gr_amqp_port') %>
-AMQP_VHOST = <%= scope.lookupvar('graphite::gr_amqp_vhost') %>
-AMQP_USER = <%= scope.lookupvar('graphite::gr_amqp_user') %>
-AMQP_PASSWORD = <%= scope.lookupvar('graphite::gr_amqp_password') %>
-AMQP_EXCHANGE = <%= scope.lookupvar('graphite::gr_amqp_exchange') %>
-AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in_body') %>
+AMQP_HOST = <%= scope.lookupvar('graphite::cache_amqp_host_REAL') %>
+AMQP_PORT = <%= scope.lookupvar('graphite::cache_amqp_port_REAL') %>
+AMQP_VHOST = <%= scope.lookupvar('graphite::cache_amqp_vhost_REAL') %>
+AMQP_USER = <%= scope.lookupvar('graphite::cache_amqp_user_REAL') %>
+AMQP_PASSWORD = <%= scope.lookupvar('graphite::cache_amqp_password_REAL') %>
+AMQP_EXCHANGE = <%= scope.lookupvar('graphite::cache_amqp_exchange_REAL') %>
+AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::cache_amqp_metric_name_in_body_REAL') %>
 
 # The manhole interface allows you to SSH into the carbon daemon
 # and get a python interpreter. BE CAREFUL WITH THIS! If you do
@@ -310,6 +310,21 @@ USE_WHITELIST = <%= scope.lookupvar('graphite::gr_use_whitelist') %>
 # seconds. Set CARBON_METRIC_INTERVAL to 0 to disable instrumentation
 CARBON_METRIC_PREFIX = <%= scope.lookupvar('graphite::gr_carbon_metric_prefix') %>
 CARBON_METRIC_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_metric_interval') %>
+
+# Enable AMQP if you want to receve metrics using an amqp broker
+ENABLE_AMQP = <%= scope.lookupvar('graphite::gr_relay_amqp_enable') %>
+
+# Verbose means a line will be logged for every metric received
+# useful for testing
+AMQP_VERBOSE = <%= scope.lookupvar('graphite::gr_relay_amqp_verbose') %>
+
+AMQP_HOST = <%= scope.lookupvar('graphite::gr_relay_amqp_host') %>
+AMQP_PORT = <%= scope.lookupvar('graphite::gr_relay_amqp_port') %>
+AMQP_VHOST = <%= scope.lookupvar('graphite::gr_relay_amqp_vhost') %>
+AMQP_USER = <%= scope.lookupvar('graphite::gr_relay_amqp_user') %>
+AMQP_PASSWORD = <%= scope.lookupvar('graphite::gr_relay_amqp_password') %>
+AMQP_EXCHANGE = <%= scope.lookupvar('graphite::gr_relay_amqp_exchange') %>
+AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_relay_amqp_metric_name_in_body') %>
 
 # Relay Instances
 <%
