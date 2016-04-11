@@ -41,7 +41,7 @@ describe 'graphite::config', :type => 'class' do
       'content' => /^GRAPHITE_DIR="\/opt\/graphite"$/,
       'mode'    => '0750',
       'require' => 'File[/opt/graphite/conf/carbon.conf]',
-      'notify'  => '[Exec[graphite-reload-systemd]{:command=>"graphite-reload-systemd"}]' }) }
+      'notify'  => /graphite-reload-systemd/ }) }
   end
 
   shared_context 'Debian supported platforms' do
@@ -92,20 +92,6 @@ describe 'graphite::config', :type => 'class' do
       it { is_expected.to contain_class('graphite::params') }
       it { is_expected.to contain_exec('Initial django db creation') }
       it { is_expected.to contain_class('graphite::config_apache') }     
-
-
-
-
-#    file { '/etc/init.d/carbon-cache':
-#      ensure  => file,
-#      content => template("graphite/etc/init.d/${::osfamily}/carbon-cache.erb"),
-#      mode    => '0750',
-#      require => File[$carbon_conf_file],
-#      notify  => $initscript_notify,
-#    }
-
-
-
 
       # cron check
       it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with({
