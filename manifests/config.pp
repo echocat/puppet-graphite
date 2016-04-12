@@ -62,7 +62,7 @@ class graphite::config inherits graphite::params {
     'none'     : {
       # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       if !$::graphite::gr_web_user or !$::graphite::gr_web_group {
-        fail('having $gr_web_server => \'wsgionly\' requires use of $gr_web_user and $gr_web_group')
+        fail('Having $gr_web_server => \'none\' requires use of $gr_web_user and $gr_web_group to set correct file owner for your own webserver setup.')
       }
       $gr_web_user_REAL = pick($::graphite::gr_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group)
