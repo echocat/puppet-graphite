@@ -262,32 +262,60 @@
 #    'carbon-all-mem' =>
 #       'carbon.all.memUsage (60) = sum carbon.*.*.memUsage',
 #    }
-# [*gr_amqp_enable*]
+# [*gr_cache_amqp_enable*]
 #   Set this to 'True' to enable the AMQP.
 #   Default is 'False' (String).
-# [*gr_amqp_verbose*]
+# [*gr_cache_amqp_verbose*]
 #   Set this to 'True' to enable. Verbose means a line will be logged for
 #   every metric received useful for testing.
 #   Default is 'False' (String).
-# [*gr_amqp_host*]
+# [*gr_cache_amqp_host*]
 #   Self explaining.
 #   Default is localhost.
-# [*gr_amqp_port*]
+# [*gr_cache_amqp_port*]
 #   Self explaining.
 #   Default is 5672.
-# [*gr_amqp_vhost*]
+# [*gr_cache_amqp_vhost*]
 #   Virtual host of AMQP. Set the name without the slash, eg. 'graphite'.
 #   Default is '/'.
-# [*gr_amqp_user*]
+# [*gr_cache_amqp_user*]
 #   Self explaining.
 #   Default is guest.
-# [*gr_amqp_password*]
+# [*gr_cache_amqp_password*]
 #   Self explaining.
 #   Default is guest.
-# [*gr_amqp_exchange*]
+# [*gr_cache_amqp_exchange*]
 #   Self explaining.
 #   Default is graphite.
-# [*gr_amqp_metric_name_in_body*]
+# [*gr_cache_amqp_metric_name_in_body*]
+#   Self explaining.
+#   Default is 'False' (String).
+# [*gr_relay_amqp_enable*]
+#   Set this to 'True' to enable the AMQP.
+#   Default is 'False' (String).
+# [*gr_relay_amqp_verbose*]
+#   Set this to 'True' to enable. Verbose means a line will be logged for
+#   every metric received useful for testing.
+#   Default is 'False' (String).
+# [*gr_relay_amqp_host*]
+#   Self explaining.
+#   Default is localhost.
+# [*gr_relay_amqp_port*]
+#   Self explaining.
+#   Default is 5672.
+# [*gr_relay_amqp_vhost*]
+#   Virtual host of AMQP. Set the name without the slash, eg. 'graphite'.
+#   Default is '/'.
+# [*gr_relay_amqp_user*]
+#   Self explaining.
+#   Default is guest.
+# [*gr_relay_amqp_password*]
+#   Self explaining.
+#   Default is guest.
+# [*gr_relay_amqp_exchange*]
+#   Self explaining.
+#   Default is graphite.
+# [*gr_relay_amqp_metric_name_in_body*]
 #   Self explaining.
 #   Default is 'False' (String).
 # [*gr_memcache_hosts*]
@@ -485,6 +513,24 @@
 # [*gr_apache_port_https*]
 #   DEPRECATED. Use `gr_web_server_port_https` now. Trying to set this variable will
 #   cause puppet to fail.
+# [*gr_amqp_enable*]
+#   DEPRECATED. Use gr_cache_amqp_enable now.
+# [*gr_amqp_verbose*]
+#   DEPRECATED. Use gr_cache_amqp_verbose now.
+# [*gr_amqp_host*]
+#   DEPRECATED. Use gr_cache_amqp_host now.
+# [*gr_amqp_port*]
+#   DEPRECATED. Use gr_cache_amqp_port now.
+# [*gr_amqp_vhost*]
+#   DEPRECATED. Use gr_cache_amqp_vhost now.
+# [*gr_amqp_user*]
+#   DEPRECATED. Use gr_cache_amqp_user now.
+# [*gr_amqp_password*]
+#   DEPRECATED. Use gr_cache_amqp_password now.
+# [*gr_amqp_exchange*]
+#   DEPRECATED. Use gr_cache_amqp_exchange now.
+# [*gr_amqp_metric_name_in_body*]
+#   DEPRECATED. Use gr_cache_amqp_metric_name_in_body now.
 #
 # === Examples
 #
@@ -628,15 +674,33 @@ class graphite (
     'carbon-class-mem' => 'carbon.all.<class>.memUsage (60) = sum carbon.<class>.*.memUsage',
   }
   ,
-  $gr_amqp_enable                         = 'False',
-  $gr_amqp_verbose                        = 'False',
-  $gr_amqp_host                           = 'localhost',
-  $gr_amqp_port                           = 5672,
-  $gr_amqp_vhost                          = '/',
-  $gr_amqp_user                           = 'guest',
-  $gr_amqp_password                       = 'guest',
-  $gr_amqp_exchange                       = 'graphite',
-  $gr_amqp_metric_name_in_body            = 'False',
+  $gr_amqp_enable                         = undef,
+  $gr_amqp_verbose                        = undef,
+  $gr_amqp_host                           = undef,
+  $gr_amqp_port                           = undef,
+  $gr_amqp_vhost                          = undef,
+  $gr_amqp_user                           = undef,
+  $gr_amqp_password                       = undef,
+  $gr_amqp_exchange                       = undef,
+  $gr_amqp_metric_name_in_body            = undef,
+  $gr_cache_amqp_enable                   = 'False',
+  $gr_cache_amqp_verbose                  = 'False',
+  $gr_cache_amqp_host                     = 'localhost',
+  $gr_cache_amqp_port                     = 5672,
+  $gr_cache_amqp_vhost                    = '/',
+  $gr_cache_amqp_user                     = 'guest',
+  $gr_cache_amqp_password                 = 'guest',
+  $gr_cache_amqp_exchange                 = 'graphite',
+  $gr_cache_amqp_metric_name_in_body      = 'False',
+  $gr_relay_amqp_enable                   = 'False',
+  $gr_relay_amqp_verbose                  = 'False',
+  $gr_relay_amqp_host                     = 'localhost',
+  $gr_relay_amqp_port                     = 5672,
+  $gr_relay_amqp_vhost                    = '/',
+  $gr_relay_amqp_user                     = 'guest',
+  $gr_relay_amqp_password                 = 'guest',
+  $gr_relay_amqp_exchange                 = 'graphite',
+  $gr_relay_amqp_metric_name_in_body      = 'False',
   $gr_memcache_hosts                      = undef,
   $secret_key                             = 'UNSAFE_DEFAULT',
   $gr_cluster_servers                     = undef,
@@ -711,7 +775,40 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
   $gr_apache_port                         = undef,
-  $gr_apache_port_https                   = undef,) inherits graphite::params {
+  $gr_apache_port_https                   = undef,
+) inherits graphite::params {
+  # Deprecation warnings
+  if $gr_apache_port or $gr_apache_port_https {
+    fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
+  }
+  if $gr_amqp_enable {
+    warning('gr_amqp_enable is deprecated, use gr_cache_amqp_enable instead.')
+  }
+  if $gr_amqp_verbose {
+    warning('gr_amqp_verbose is deprecated, use gr_cache_amqp_verbose instead.')
+  }
+  if $gr_amqp_host {
+    warning('gr_amqp_host is deprecated, use gr_cache_amqp_host instead.')
+  }
+  if $gr_amqp_port {
+    warning('gr_amqp_port is deprecated, use gr_cache_amqp_port instead.')
+  }
+  if $gr_amqp_vhost {
+    warning('gr_amqp_vhost is deprecated, use gr_cache_amqp_vhost instead.')
+  }
+  if $gr_amqp_user {
+    warning('gr_amqp_user is deprecated, use gr_cache_amqp_user instead.')
+  }
+  if $gr_amqp_password {
+    warning('gr_amqp_password is deprecated, use gr_cache_amqp_password instead.')
+  }
+  if $gr_amqp_exchange {
+    warning('gr_amqp_exchange is deprecated, use gr_cache_amqp_exchange instead.')
+  }
+  if $gr_amqp_metric_name_in_body {
+    warning('gr_amqp_metric_name_in_body is deprecated, use gr_cache_amqp_metric_name_in_body instead.')
+  }
+
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -729,13 +826,10 @@ class graphite (
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
 
-  if $gr_apache_port or $gr_apache_port_https {
-    fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
-  }
-
   # validate integers
   validate_integer($gr_web_server_port)
   validate_integer($gr_web_server_port_https)
+
 
   $base_dir_REAL                    = $gr_base_dir
   $storage_dir_REAL                 = pick($gr_storage_dir,            "${base_dir_REAL}/storage")
@@ -749,6 +843,16 @@ class graphite (
   $graphiteweb_webapp_dir_REAL      = pick($gr_graphiteweb_webapp_dir, "${base_dir_REAL}/webapp")
   $graphiteweb_storage_dir_REAL     = $gr_graphiteweb_storage_dir
   $graphiteweb_install_lib_dir_REAL = pick($gr_graphiteweb_install_lib_dir, "${graphiteweb_webapp_dir_REAL}/graphite")
+
+  $cache_amqp_enable_REAL              = pick($gr_amqp_enable, $gr_cache_amqp_enable)
+  $cache_amqp_verbose_REAL             = pick($gr_amqp_verbose, $gr_cache_amqp_verbose)
+  $cache_amqp_host_REAL                = pick($gr_amqp_host, $gr_cache_amqp_host)
+  $cache_amqp_port_REAL                = pick($gr_amqp_port, $gr_cache_amqp_port)
+  $cache_amqp_vhost_REAL               = pick($gr_amqp_vhost, $gr_cache_amqp_vhost)
+  $cache_amqp_user_REAL                = pick($gr_amqp_user, $gr_cache_amqp_user)
+  $cache_amqp_password_REAL            = pick($gr_amqp_password, $gr_cache_amqp_password)
+  $cache_amqp_exchange_REAL            = pick($gr_amqp_exchange, $gr_cache_amqp_exchange)
+  $cache_amqp_metric_name_in_body_REAL = pick($gr_amqp_metric_name_in_body, $gr_cache_amqp_metric_name_in_body)
 
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
