@@ -2,6 +2,34 @@ require 'spec_helper'
 
 describe 'graphite::config', :type => 'class' do
 
+  shared_context 'all platforms' do
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('graphite::params') }
+    it { is_expected.to contain_exec('Initial django db creation') }
+    it { is_expected.to contain_class('graphite::config_apache') }
+
+    it { is_expected.to contain_file('/opt/graphite/conf/storage-schemas.conf').with({
+      'ensure' => 'file', 'mode' => '0644', 'notify' => /carbon-cache/, 'content' => /^retentions = 1m:90d$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/carbon.conf').with({
+      'ensure' => 'file', 'mode' => '0644', 'notify' => /carbon-cache/, 'content' => /^MAX_UPDATES_PER_SECOND = 500$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/storage-aggregation.conf').with({
+      'ensure' => 'file', 'mode' => '0644', 'content' => /^aggregationMethod = average$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/whitelist.conf').with({
+      'ensure' => 'file', 'mode' => '0644', 'content' => /^\.\*$/ }) }
+    it { is_expected.to contain_file('/opt/graphite/conf/blacklist.conf').with({
+      'ensure' => 'file', 'mode' => '0644', 'content' => /^# This file is reloaded automatically when changes are made$/ }) }  
+       
+    # cron check
+    it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with({
+      'ensure' => 'file', 'mode' => '0544', 'content' => /^CARBON_LOGS_PATH="\/opt\/graphite\/storage\/log"$/ }) }    
+    it { is_expected.to contain_cron('Rotate carbon logs').with({
+      'command' => '/opt/graphite/bin/carbon-logrotate.sh',
+      'hour'    => '3',
+      'minute'  => '15',
+      'require' => 'File[/opt/graphite/bin/carbon-logrotate.sh]',
+      'user'    => 'root',}) }
+  end
+  
   shared_context 'RedHat supported platforms' do
     it { is_expected.to contain_file('/opt/graphite/storage/whisper').with({
       'ensure' => 'directory', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
@@ -23,6 +51,14 @@ describe 'graphite::config', :type => 'class' do
         'hasstatus'  => 'true',
         'provider'   => 'redhat',
         'require'    => 'File[/etc/init.d/carbon-cache]' }) }
+
+    $attributes_redhat = {'ensure' => 'directory', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
+    ['/opt/graphite/storage',
+      '/opt/graphite/storage/rrd',
+      '/opt/graphite/storage/lists',
+      '/opt/graphite/storage/log'].each { |f|
+      it { is_expected.to contain_file(f).with($attributes_redhat)} 
+    }
   end
 
   shared_context 'RedHat 6 platforms' do
@@ -71,6 +107,14 @@ describe 'graphite::config', :type => 'class' do
       'mode'    => '0750',
       'require' => 'File[/opt/graphite/conf/carbon.conf]',
       'notify'  => [] }) }
+        
+    $attributes_debian = {'ensure' => 'directory', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
+    ['/opt/graphite/storage',
+      '/opt/graphite/storage/rrd',
+      '/opt/graphite/storage/lists',
+      '/opt/graphite/storage/log'].each { |f|
+      it { is_expected.to contain_file(f).with($attributes_debian)} 
+    }
   end
 
 
@@ -88,20 +132,7 @@ describe 'graphite::config', :type => 'class' do
         'include ::graphite' 
       end
       
-      it { is_expected.to compile.with_all_deps }
-      it { is_expected.to contain_class('graphite::params') }
-      it { is_expected.to contain_exec('Initial django db creation') }
-      it { is_expected.to contain_class('graphite::config_apache') }     
-
-      # cron check
-      it { is_expected.to contain_file('/opt/graphite/bin/carbon-logrotate.sh').with({
-        'ensure' => 'file', 'mode' => '0544', 'content' => /^CARBON_LOGS_PATH="\/opt\/graphite\/storage\/log"$/ }) }    
-      it { is_expected.to contain_cron('Rotate carbon logs').with({
-        'command' => '/opt/graphite/bin/carbon-logrotate.sh',
-        'hour'    => '3',
-        'minute'  => '15',
-        'require' => 'File[/opt/graphite/bin/carbon-logrotate.sh]',
-        'user'    => 'root',}) }
+      it_behaves_like 'all platforms'
 
       case facts[:osfamily]
       when 'Debian' then
