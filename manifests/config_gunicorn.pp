@@ -125,7 +125,7 @@ class graphite::config_gunicorn inherits graphite::params {
     $package_name:
       ensure  => installed,
       require => [
-        File[$graphite::gr_pid_dir],
+        File[$graphite::storage_dir_REAL],
         File[$graphite::graphiteweb_log_dir_REAL],
         Exec['Initial django db creation'],
       ];
