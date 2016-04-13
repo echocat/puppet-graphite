@@ -571,6 +571,18 @@ Default is '0.0.0.0' (string)
 
 Default is 2013 (integer)
 
+#####`gr_relay_enable_udp_listener`
+
+Default is 'False'. Enables the UDP listener for carbon-relay.
+
+#####`gr_relay_udp_receiver_interface`
+
+Default is '0.0.0.0' (string)
+
+#####`gr_relay_udp_receiver_port`
+
+Default is 2013 (integer)
+
 #####`gr_relay_pickle_interface`
 
 Default is '0.0.0.0' (string)
