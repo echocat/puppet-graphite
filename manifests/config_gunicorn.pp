@@ -19,7 +19,8 @@ class graphite::config_gunicorn inherits graphite::params {
       # configs. Each config is stored as a separate file in /etc/gunicorn.d/.
       # On debian 8 and Ubuntu 15.10, which use systemd, the gunicorn-debian
       # config file has to be installed before the gunicorn package.
-      file { '/etc/gunicorn.d/':
+      # TODO: special cases for deb 8 and ubuntu 15.10
+      file { '/etc/gunicorn.d':
         ensure => directory,
       }
       file { '/etc/gunicorn.d/graphite':
@@ -35,6 +36,7 @@ class graphite::config_gunicorn inherits graphite::params {
       $package_name = 'python-gunicorn'
 
       # RedHat package is missing initscript
+      # TODO: this will never happen because service_provider is set to 'redhat'
       if $::graphite::params::service_provider == 'systemd' {
 
         file { '/etc/systemd/system/gunicorn.service':
