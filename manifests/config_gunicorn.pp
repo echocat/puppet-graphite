@@ -36,7 +36,7 @@ class graphite::config_gunicorn inherits graphite::params {
       $package_name = 'python-gunicorn'
 
       # RedHat package is missing initscript
-      if $::graphite::params::service_provider == 'systemd' {
+      if $::operatingsystemrelease =~ /^7\.\d+/ {
 
         file { '/etc/systemd/system/gunicorn.service':
           ensure  => file,
@@ -56,6 +56,7 @@ class graphite::config_gunicorn inherits graphite::params {
           mode    => '0644',
         }
 
+        # TODO: we should use the exec graphite-reload-systemd from config class
         exec { 'gunicorn-reload-systemd':
           command => 'systemctl daemon-reload',
           path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
