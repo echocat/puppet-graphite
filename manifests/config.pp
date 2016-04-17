@@ -17,7 +17,7 @@ class graphite::config inherits graphite::params {
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
   if ($::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
-  $::osfamily == 'Debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
+  $::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
     exec { 'graphite-reload-systemd':

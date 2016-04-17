@@ -53,6 +53,7 @@ describe 'graphite::install', :type => 'class' do
     it { is_expected.to contain_package('pyOpenSSL').with_provider(nil) }
     it { is_expected.to contain_package('python-memcached').with_provider(nil) }
     it { is_expected.to contain_package('python-zope-interface').with_provider(nil) }
+    it { is_expected.to contain_package('python-tzlocal').with_provider(nil) }
   end
 
   shared_context 'RedHat 6 platforms' do
