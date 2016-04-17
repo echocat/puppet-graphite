@@ -36,6 +36,7 @@ class graphite::config_gunicorn inherits graphite::params {
       $package_name = 'python-gunicorn'
 
       # RedHat package is missing initscript
+      # RedHat 7+ uses systemd
       if $::operatingsystemrelease =~ /^7\.\d+/ {
 
         file { '/etc/systemd/system/gunicorn.service':
@@ -68,7 +69,7 @@ class graphite::config_gunicorn inherits graphite::params {
           before  => Service['gunicorn']
         }
 
-      } elsif $::graphite::params::service_provider == 'redhat' {
+      } else {
 
         file { '/etc/init.d/gunicorn':
           ensure  => file,

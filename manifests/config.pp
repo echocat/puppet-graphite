@@ -16,8 +16,8 @@ class graphite::config inherits graphite::params {
   #            python-django-tagging, python-simplejson
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
-  if ($::graphite::params::service_provider == 'redhat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
-  $::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
+  if ($::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
+  $::osfamily == 'Debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
     exec { 'graphite-reload-systemd':
