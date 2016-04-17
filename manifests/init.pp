@@ -186,6 +186,15 @@
 #   Default is '0.0.0.0'
 # [*gr_relay_line_port*]
 #   Default is 2013.
+# [*gr_relay_enable_udp_listener*]
+#   Set this to True to enable the UDP listener.
+#   Default is False.
+# [*gr_relay_udp_receiver_interface*]
+#   Its clear, isnt it?
+#   Default is 0.0.0.0
+# [*gr_relay_udp_receiver_port*]
+#   Self explaining.
+#   Default is 2013
 # [*gr_relay_pickle_interface*]
 #   Default is '0.0.0.0'
 # [*gr_relay_pickle_port*]
@@ -586,6 +595,9 @@ class graphite (
   $gr_enable_carbon_relay                 = false,
   $gr_relay_line_interface                = '0.0.0.0',
   $gr_relay_line_port                     = 2013,
+  $gr_relay_enable_udp_listener           = 'False',
+  $gr_relay_udp_receiver_interface        = '0.0.0.0',
+  $gr_relay_udp_receiver_port             = 2013,
   $gr_relay_pickle_interface              = '0.0.0.0',
   $gr_relay_pickle_port                   = 2014,
   $gr_relay_log_listener_connections      = 'True',
@@ -671,7 +683,7 @@ class graphite (
   $gr_graphiteweb_webapp_dir              = undef,
   $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
   $gr_graphiteweb_install_lib_dir         = undef,
-  $gr_apache_logdir                       = '/var/log/httpd/graphite-web',
+  $gr_apache_logdir                       = $::graphite::params::apache_logdir_graphite,
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,

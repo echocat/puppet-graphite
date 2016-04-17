@@ -98,14 +98,14 @@ apache::vhost { graphite.my.domain:
     display-name       => '%{GROUP}',
     inactivity-timeout => '120',
   },
-  wsgi_import_script          => '/opt/graphite/conf/graphite.wsgi',
+  wsgi_import_script          => '/opt/graphite/conf/graphite_wsgi.py',
   wsgi_import_script_options  => {
     process-group     => 'graphite',
     application-group => '%{GLOBAL}'
   },
   wsgi_process_group          => 'graphite',
   wsgi_script_aliases         => {
-    '/' => '/opt/graphite/conf/graphite.wsgi'
+    '/' => '/opt/graphite/conf/graphite_wsgi.py'
   },
   headers => [
     'set Access-Control-Allow-Origin "*"',
@@ -568,6 +568,18 @@ Default is false. Enable carbon relay.
 Default is '0.0.0.0' (string)
 
 #####`gr_relay_line_port`
+
+Default is 2013 (integer)
+
+#####`gr_relay_enable_udp_listener`
+
+Default is 'False'. Enables the UDP listener for carbon-relay.
+
+#####`gr_relay_udp_receiver_interface`
+
+Default is '0.0.0.0' (string)
+
+#####`gr_relay_udp_receiver_port`
 
 Default is 2013 (integer)
 

@@ -1,3 +1,18 @@
+## 2016-04-17 - 6.0.3 (Bugfix release)
+
+#### Bugfixes:
+
+- (1deb7f9)	point Apache to the right WSGI file
+- (e01e6bc) ensure that graphiteweb_storage_dir is created
+- (5e7ce00) properly parameterize gunicorn --chdir option on redhat
+- (6f7fb67) notify web service for local_settings.py and graphite_wsgi.py
+- (1f49faf) add unit tests
+- (7042ddf) Update fail message when gr_web_server = none
+
+#### Features:
+
+- (1aa40af) patch graphite module to support UDP listener in [relay] section
+
 ## 2016-04-11 - 6.0.2 (Bugfix release)
 
 #### Bugfixes:

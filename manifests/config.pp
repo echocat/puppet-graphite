@@ -16,7 +16,7 @@ class graphite::config inherits graphite::params {
   #            python-django-tagging, python-simplejson
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
-  if ($::graphite::params::service_provider == 'redhat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
+  if ($::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
   $::graphite::params::service_provider == 'debian' and $::operatingsystemmajrelease =~ /8|15\.10/) {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
@@ -37,6 +37,7 @@ class graphite::config inherits graphite::params {
       $gr_web_group_REAL = pick($::graphite::gr_web_group, $::graphite::params::apache_web_group)
       include graphite::config_apache
       $web_server_package_require = [Package[$::graphite::params::apache_pkg]]
+      $web_server_service_notify  = Service[$::graphite::params::apache_service_name]
     }
 
     'nginx'    : {
@@ -46,6 +47,7 @@ class graphite::config inherits graphite::params {
       include graphite::config_gunicorn
       include graphite::config_nginx
       $web_server_package_require = [Package['nginx']]
+      $web_server_service_notify  = Service['gunicorn']
     }
 
     'wsgionly' : {
@@ -62,11 +64,12 @@ class graphite::config inherits graphite::params {
     'none'     : {
       # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       if !$::graphite::gr_web_user or !$::graphite::gr_web_group {
-        fail('having $gr_web_server => \'wsgionly\' requires use of $gr_web_user and $gr_web_group')
+        fail('Having $gr_web_server => \'none\' requires use of $gr_web_user and $gr_web_group to set correct file owner for your own webserver setup.')
       }
       $gr_web_user_REAL = pick($::graphite::gr_web_user)
       $gr_web_group_REAL = pick($::graphite::gr_web_group)
       $web_server_package_require = undef
+      $web_server_service_notify  = undef
     }
 
     default    : {
@@ -109,6 +112,7 @@ class graphite::config inherits graphite::params {
     $::graphite::rrd_dir_REAL,
     $::graphite::whitelists_dir_REAL,
     $::graphite::graphiteweb_log_dir_REAL,
+    $::graphite::graphiteweb_storage_dir_REAL,
     "${::graphite::base_dir_REAL}/bin"]:
     ensure    => directory,
     group     => $gr_web_group_REAL,
@@ -158,7 +162,8 @@ class graphite::config inherits graphite::params {
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
-      require => $web_server_package_require;
+      require => $web_server_package_require,
+      notify  => $web_server_service_notify;
 
     "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py":
       ensure  => file,
@@ -166,12 +171,14 @@ class graphite::config inherits graphite::params {
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
-      require => $web_server_package_require;
+      require => $web_server_package_require,
+      notify  => $web_server_service_notify;
 
     "${::graphite::graphiteweb_install_lib_dir_REAL}/graphite_wsgi.py":
       ensure  => link,
       target  => "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py",
-      require => File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"];
+      require => File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"],
+      notify  => $web_server_service_notify;
   }
 
   if $::graphite::gr_remote_user_header_name {

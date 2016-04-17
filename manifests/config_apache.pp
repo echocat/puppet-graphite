@@ -61,6 +61,16 @@ class graphite::config_apache inherits graphite::params {
     }
   }
 
+  # Create the log dir if it doesn't exist
+  file { $::graphite::gr_apache_logdir:
+    ensure  => directory,
+    group   => $::graphite::config::gr_web_group_REAL,
+    mode    => '0644',
+    owner   => $::graphite::config::gr_web_user_REAL,
+    require => Package[$::graphite::params::apache_pkg],
+    before  => Service[$::graphite::params::apache_service_name]
+  }
+
   # fix graphite's race condition on start
   # if the exec fails, assume we're using a version of graphite that doesn't need it
   file { '/tmp/fix-graphite-race-condition.py':
@@ -90,8 +100,6 @@ class graphite::config_apache inherits graphite::params {
     hasrestart => true,
     hasstatus  => true;
   }
-
-
 
   # Deploy configfiles
   file {

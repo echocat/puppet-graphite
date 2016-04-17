@@ -19,7 +19,8 @@ class graphite::config_gunicorn inherits graphite::params {
       # configs. Each config is stored as a separate file in /etc/gunicorn.d/.
       # On debian 8 and Ubuntu 15.10, which use systemd, the gunicorn-debian
       # config file has to be installed before the gunicorn package.
-      file { '/etc/gunicorn.d/':
+      # TODO: special cases for deb 8 and ubuntu 15.10
+      file { '/etc/gunicorn.d':
         ensure => directory,
       }
       file { '/etc/gunicorn.d/graphite':
@@ -35,7 +36,8 @@ class graphite::config_gunicorn inherits graphite::params {
       $package_name = 'python-gunicorn'
 
       # RedHat package is missing initscript
-      if $::graphite::params::service_provider == 'systemd' {
+      # RedHat 7+ uses systemd
+      if $::operatingsystemrelease =~ /^7\.\d+/ {
 
         file { '/etc/systemd/system/gunicorn.service':
           ensure  => file,
@@ -55,6 +57,7 @@ class graphite::config_gunicorn inherits graphite::params {
           mode    => '0644',
         }
 
+        # TODO: we should use the exec graphite-reload-systemd from config class
         exec { 'gunicorn-reload-systemd':
           command => 'systemctl daemon-reload',
           path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
@@ -66,7 +69,7 @@ class graphite::config_gunicorn inherits graphite::params {
           before  => Service['gunicorn']
         }
 
-      } elsif $::graphite::params::service_provider == 'redhat' {
+      } else {
 
         file { '/etc/init.d/gunicorn':
           ensure  => file,
@@ -125,7 +128,7 @@ class graphite::config_gunicorn inherits graphite::params {
     $package_name:
       ensure  => installed,
       require => [
-        File[$graphite::gr_pid_dir],
+        File[$graphite::storage_dir_REAL],
         File[$graphite::graphiteweb_log_dir_REAL],
         Exec['Initial django db creation'],
       ];
