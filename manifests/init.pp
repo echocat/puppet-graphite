@@ -683,7 +683,7 @@ class graphite (
   $gr_graphiteweb_webapp_dir              = undef,
   $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
   $gr_graphiteweb_install_lib_dir         = undef,
-  $gr_apache_logdir                       = '/var/log/httpd/graphite-web',
+  $gr_apache_logdir                       = $::graphite::params::apache_logdir_graphite,
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,

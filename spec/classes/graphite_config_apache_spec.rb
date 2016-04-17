@@ -17,6 +17,21 @@ describe 'graphite::config_apache', :type => 'class' do
         :hasrestart => 'true',
         :hasstatus  => 'true'})
     }
+    it { is_expected.to contain_file('/var/log/httpd/graphite-web').only_with({
+        :path    => '/var/log/httpd/graphite-web',
+        :ensure  => 'directory',
+        :group   => 'apache',
+        :owner   => 'apache',
+        :mode    => '0644',
+        :require => 'Package[httpd]',
+        :before  => 'Service[httpd]'})
+    }
+    it { is_expected.to contain_file('/etc/httpd/conf.d/welcome.conf').only_with({
+        :path    => '/etc/httpd/conf.d/welcome.conf',
+        :ensure  => 'absent',
+        :require => 'Package[mod_wsgi]',
+        :notify  => 'Service[httpd]'})
+    }
   end
 
   shared_context 'Debian supported platforms' do
@@ -28,6 +43,22 @@ describe 'graphite::config_apache', :type => 'class' do
         :enable     => 'true',
         :hasrestart => 'true',
         :hasstatus  => 'true'})
+    }
+    it { is_expected.to contain_file('/var/log/apache2/graphite-web').only_with({
+        :path    => '/var/log/apache2/graphite-web',
+        :ensure  => 'directory',
+        :group   => 'www-data',
+        :owner   => 'www-data',
+        :mode    => '0644',
+        :require => 'Package[apache2]',
+        :before  => 'Service[apache2]'})
+    }
+    it { is_expected.to contain_exec('Disable default apache site').only_with({
+        :name    => nil,
+        :command => 'a2dissite 000-default',
+        :notify  => 'Service[apache2]',
+        :onlyif  => 'test -f /etc/apache2/sites-enabled/000-default -o -f /etc/apache2/sites-enabled/000-default.conf',
+        :require => 'Package[libapache2-mod-wsgi]',})
     }
   end
 
