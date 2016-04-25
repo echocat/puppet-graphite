@@ -131,6 +131,7 @@ class graphite::config_gunicorn inherits graphite::params {
     enable     => true,
     hasrestart => true,
     hasstatus  => false,
+    provider   => $::graphite::params::service_provider,
     require    => [
       Package[$package_name],
       File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"]
