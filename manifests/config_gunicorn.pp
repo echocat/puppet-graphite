@@ -104,12 +104,13 @@ class graphite::config_gunicorn inherits graphite::params {
       logoutput   => true,
       group       => $graphite::config::gr_web_group_REAL,
       returns     => [0, 1],
+      refreshonly => true,
       require     => [
         File['/tmp/fix-graphite-race-condition.py'],
-        Exec['Initial django db creation'],
         Service['carbon-cache'],
       ],
       before      => Package[$package_name],
+      subscribe   => Exec['Initial django db creation'],
     }
   }
 
