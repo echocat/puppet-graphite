@@ -59,14 +59,15 @@ class graphite::config_gunicorn inherits graphite::params {
 
         # TODO: we should use the exec graphite-reload-systemd from config class
         exec { 'gunicorn-reload-systemd':
-          command => 'systemctl daemon-reload',
-          path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-          require => [
+          command     => 'systemctl daemon-reload',
+          path        => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+          refreshonly => true,
+          subscribe   => [
             File['/etc/systemd/system/gunicorn.service'],
             File['/etc/systemd/system/gunicorn.socket'],
             File['/etc/tmpfiles.d/gunicorn.conf'],
           ],
-          before  => Service['gunicorn']
+          before      => Service['gunicorn']
         }
 
       } else {
