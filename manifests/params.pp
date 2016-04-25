@@ -48,7 +48,6 @@ class graphite::params {
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
       $apache_logdir_graphite    = '/var/log/apache2/graphite-web'
-      $service_provider          = undef
 
       $nginxconf_dir    = '/etc/nginx/sites-available'
 
@@ -68,6 +67,20 @@ class graphite::params {
         'python-simplejson',
         'python-sqlite',
       ]
+
+      if $::operatingsystem == 'Ubuntu' {
+        if versioncmp($::lsbdistrelease, 15.10) == -1 {
+          $service_provider   = 'debian'
+        } else {
+          $service_provider   = 'systemd'
+        }
+      } elsif $::operatingsystem == 'Debian' {
+        if versioncmp($::lsbdistrelease, 8.0) == -1 {
+          $service_provider   = 'debian'
+        } else {
+          $service_provider   = 'systemd'
+        }
+      }
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
