@@ -109,7 +109,6 @@ class graphite::params {
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
       $apache_logdir_graphite    = '/var/log/httpd/graphite-web'
-      $service_provider          = 'redhat'
 
       $nginxconf_dir    = '/etc/nginx/conf.d'
 
@@ -134,11 +133,13 @@ class graphite::params {
         /^6\.\d+$/: {
           $apache_24           = false
           $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
+          $service_provider    = 'redhat'
         }
 
         /^7\.\d+/: {
           $apache_24           = true
           $graphitepkgs        = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
+          $service_provider    = 'systemd'
         }
 
         default: {
