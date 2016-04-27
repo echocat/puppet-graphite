@@ -69,13 +69,13 @@ class graphite::params {
       ]
 
       if $::operatingsystem == 'Ubuntu' {
-        if versioncmp($::lsbdistrelease, 15.10) == -1 {
+        if versioncmp($::lsbdistrelease, '15.10') == -1 {
           $service_provider   = 'debian'
         } else {
           $service_provider   = 'systemd'
         }
       } elsif $::operatingsystem == 'Debian' {
-        if versioncmp($::lsbdistrelease, 8.0) == -1 {
+        if versioncmp($::lsbdistrelease, '8.0') == -1 {
           $service_provider   = 'debian'
         } else {
           $service_provider   = 'systemd'
