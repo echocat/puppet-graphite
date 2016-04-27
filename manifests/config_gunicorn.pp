@@ -28,7 +28,7 @@ class graphite::config_gunicorn inherits graphite::params {
         content => template('graphite/etc/gunicorn.d/graphite.erb'),
         mode    => '0644',
         before  => Package[$package_name],
-        require => File['/etc/gunicorn.d/'],
+        require => File['/etc/gunicorn.d'],
       }
     }
 

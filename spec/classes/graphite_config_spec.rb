@@ -56,13 +56,6 @@ describe 'graphite::config', :type => 'class' do
         'target'  => '/opt/graphite/conf/graphite_wsgi.py',
         'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]',
         'notify'  => 'Service[httpd]' }) }
-    it { is_expected.to contain_service('carbon-cache').with({
-        'ensure'     => 'running',
-        'enable'     => 'true',
-        'hasrestart' => 'true',
-        'hasstatus'  => 'true',
-        'provider'   => 'redhat',
-        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
 
     $attributes_redhat = {'ensure' => 'directory', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite/storage',
@@ -81,6 +74,13 @@ describe 'graphite::config', :type => 'class' do
         'mode'    => '0750',
         'require' => 'File[/opt/graphite/conf/carbon.conf]',
         'notify'  => [] }) }
+    it { is_expected.to contain_service('carbon-cache').with({
+        'ensure'     => 'running',
+        'enable'     => 'true',
+        'hasrestart' => 'true',
+        'hasstatus'  => 'true',
+        'provider'   => 'redhat',
+        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
   end
 
   shared_context 'RedHat 7 platforms' do
@@ -91,6 +91,13 @@ describe 'graphite::config', :type => 'class' do
         'mode'    => '0750',
         'require' => 'File[/opt/graphite/conf/carbon.conf]',
         'notify'  => /graphite-reload-systemd/ }) }
+    it { is_expected.to contain_service('carbon-cache').with({
+        'ensure'     => 'running',
+        'enable'     => 'true',
+        'hasrestart' => 'true',
+        'hasstatus'  => 'true',
+        'provider'   => 'systemd',
+        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
   end
 
   shared_context 'Debian supported platforms' do
@@ -120,19 +127,6 @@ describe 'graphite::config', :type => 'class' do
         'target'  => '/opt/graphite/conf/graphite_wsgi.py',
         'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]',
         'notify'  => 'Service[apache2]'}) }
-    it { is_expected.to contain_service('carbon-cache').only_with({
-        'ensure'     => 'running',
-        'enable'     => 'true',
-        'hasrestart' => 'true',
-        'hasstatus'  => 'true',
-        'provider'   => nil,
-        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
-    it { is_expected.to contain_file('/etc/init.d/carbon-cache').with({
-        'ensure'  => 'file',
-        'content' => /^GRAPHITE_DIR="\/opt\/graphite"$/,
-        'mode'    => '0750',
-        'require' => 'File[/opt/graphite/conf/carbon.conf]',
-        'notify'  => [] }) }
 
     $attributes_debian = {'ensure' => 'directory', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite/storage',
@@ -142,6 +136,39 @@ describe 'graphite::config', :type => 'class' do
       '/var/lib/graphite-web'].each { |f|
       it { is_expected.to contain_file(f).with($attributes_debian)}
     }
+  end
+
+  shared_context 'Debian sysv platforms' do
+    it { is_expected.to contain_file('/etc/init.d/carbon-cache').with({
+        'ensure'  => 'file',
+        'content' => /^GRAPHITE_DIR="\/opt\/graphite"$/,
+        'mode'    => '0750',
+        'require' => 'File[/opt/graphite/conf/carbon.conf]',
+        'notify'  => [] }) }
+    it { is_expected.to contain_service('carbon-cache').with({
+        'ensure'     => 'running',
+        'enable'     => 'true',
+        'hasrestart' => 'true',
+        'hasstatus'  => 'true',
+        'provider'   => 'debian',
+        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
+  end
+
+  shared_context 'Debian systemd platforms' do
+    it { is_expected.to contain_exec('graphite-reload-systemd') }
+    it { is_expected.to contain_file('/etc/init.d/carbon-cache').with({
+        'ensure'  => 'file',
+        'content' => /^GRAPHITE_DIR="\/opt\/graphite"$/,
+        'mode'    => '0750',
+        'require' => 'File[/opt/graphite/conf/carbon.conf]',
+        'notify'  => /graphite-reload-systemd/ }) }
+    it { is_expected.to contain_service('carbon-cache').with({
+        'ensure'     => 'running',
+        'enable'     => 'true',
+        'hasrestart' => 'true',
+        'hasstatus'  => 'true',
+        'provider'   => 'systemd',
+        'require'    => 'File[/etc/init.d/carbon-cache]' }) }
   end
 
   context 'Unsupported OS' do
@@ -163,6 +190,14 @@ describe 'graphite::config', :type => 'class' do
       case facts[:osfamily]
       when 'Debian' then
         it_behaves_like 'Debian supported platforms'
+        case facts[:lsbdistcodename]
+        when /squeeze|wheezy|precise|trusty|utopic|vivid/ then
+          it_behaves_like 'Debian sysv platforms'
+        when /jessie|wily/ then
+          it_behaves_like 'Debian systemd platforms'
+        else
+          it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
+        end
       when 'RedHat' then
         it_behaves_like 'RedHat supported platforms'
         case facts[:operatingsystemrelease]
