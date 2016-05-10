@@ -769,12 +769,14 @@ class graphite (
   # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   Anchor['graphite::begin'] ->
   Class['graphite::install'] ~>
-  Class['graphite::config'] ->
+  Class['graphite::config'] ~>
+  Class['graphite::service'] ->
   Anchor['graphite::end']
 
   anchor { 'graphite::begin': }
   include graphite::install
   include graphite::config
+  include graphite::service
 
   anchor { 'graphite::end': }
 }
