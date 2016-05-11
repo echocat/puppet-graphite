@@ -91,16 +91,19 @@ CONTENT_DIR = '<%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>/c
 WHISPER_DIR = '<%= scope.lookupvar('graphite::local_data_dir_REAL') %>'
 RRD_DIR = '<%= scope.lookupvar('graphite::rrd_dir_REAL') %>'
 <%
-  cache_instances = scope.lookupvar('graphite::gr_cache_instances')
-  if cache_instances != nil
-    cache_instances.sort.each do |name, params|
-    params.sort.each do |param_name, param_value| 
-      if param_name == 'LOCAL_DATA_DIR'
-        whisper_dirs << param_value << ','
-      end; end; end %>
-DATA_DIRS = [WHISPER_DIR, RRD_DIR,<% whisper_dirs %>] # Default: set from the above variables
-
-<%end -%>
+  if scope.lookupvar('graphite::gr_cache_instances')
+    cache_instances = scope.lookupvar('graphite::gr_cache_instances')
+  end
+  whisper_dirs = Array.new
+  #if cache_instances != nil
+   cache_instances.each do |name, params|
+      if params["LOCAL_DATA_DIR"] then
+        whisper_dirs << params["LOCAL_DATA_DIR"]
+      end
+   end
+  unless whisper_dirs.empty? %>
+DATA_DIRS = [WHISPER_DIR, RRD_DIR,<%= whisper_dirs.map{|s| "'#{s}'" }.join(',') %>] # Default: set from the above variables
+<% end -%>
 LOG_DIR = '<%= scope.lookupvar('graphite::graphiteweb_log_dir_REAL') %>'
 #INDEX_FILE = '/opt/graphite/storage/index'  # Search index file
 
