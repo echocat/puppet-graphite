@@ -115,7 +115,7 @@ restart() {
         
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start;
         retval=$?
-        pidfile=$${PIDFILE_DIR}/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
+        pidfile=${PIDFILE_DIR}/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         echo -n $"Starting carbon-${CARBON_DAEMON}:${INSTANCE}..."
         sleep 1
         if rh_status_q; then
