@@ -28,7 +28,7 @@ class graphite::config_gunicorn inherits graphite::params {
         content => template('graphite/etc/gunicorn.d/graphite.erb'),
         mode    => '0644',
         before  => Package[$package_name],
-        require => File['/etc/gunicorn.d/'],
+        require => File['/etc/gunicorn.d'],
       }
     }
 
@@ -37,7 +37,7 @@ class graphite::config_gunicorn inherits graphite::params {
 
       # RedHat package is missing initscript
       # RedHat 7+ uses systemd
-      if $::operatingsystemrelease =~ /^7\.\d+/ {
+      if $::graphite::params::service_provider == 'systemd' {
 
         file { '/etc/systemd/system/gunicorn.service':
           ensure  => file,
@@ -59,14 +59,15 @@ class graphite::config_gunicorn inherits graphite::params {
 
         # TODO: we should use the exec graphite-reload-systemd from config class
         exec { 'gunicorn-reload-systemd':
-          command => 'systemctl daemon-reload',
-          path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-          require => [
+          command     => 'systemctl daemon-reload',
+          path        => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+          refreshonly => true,
+          subscribe   => [
             File['/etc/systemd/system/gunicorn.service'],
             File['/etc/systemd/system/gunicorn.socket'],
             File['/etc/tmpfiles.d/gunicorn.conf'],
           ],
-          before  => Service['gunicorn']
+          before      => Service['gunicorn']
         }
 
       } else {
@@ -88,16 +89,6 @@ class graphite::config_gunicorn inherits graphite::params {
 
   }
 
-  # The `gunicorn-debian` command doesn't require this, as it
-  # uses the deprecated `gunicorn_django` command. But, I hope
-  # that debian will eventually update their gunicorn package
-  # to use the non-deprecated version.
-  file { "${graphite::graphiteweb_install_lib_dir_REAL}/wsgi.py":
-    ensure => link,
-    target => "${graphite::graphiteweb_conf_dir_REAL}/graphite.wsgi",
-    before => Service['gunicorn'],
-  }
-
   # fix graphite's race condition on start
   # if the exec fails, assume we're using a version of graphite that doesn't need it
   if $graphite::gunicorn_workers > 1 {
@@ -114,12 +105,15 @@ class graphite::config_gunicorn inherits graphite::params {
       logoutput   => true,
       group       => $graphite::config::gr_web_group_REAL,
       returns     => [0, 1],
+      refreshonly => true,
       require     => [
         File['/tmp/fix-graphite-race-condition.py'],
-        Exec['Initial django db creation'],
-        Service['carbon-cache'],
+        File[$::graphite::storage_dir_REAL],
+        File[$::graphite::graphiteweb_log_dir_REAL],
+        File[$::graphite::graphiteweb_storage_dir_REAL],
       ],
       before      => Package[$package_name],
+      subscribe   => Exec['Initial django db creation'],
     }
   }
 
@@ -139,11 +133,11 @@ class graphite::config_gunicorn inherits graphite::params {
     enable     => true,
     hasrestart => true,
     hasstatus  => false,
+    provider   => $::graphite::params::service_provider,
     require    => [
       Package[$package_name],
       File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"]
     ],
-    subscribe  => File[$::graphite::config::local_settings_py_file],
   }
 
 }

@@ -86,12 +86,15 @@ class graphite::config_apache inherits graphite::params {
     logoutput   => true,
     group       => $graphite::config::gr_web_group_REAL,
     returns     => [0, 1],
+    refreshonly => true,
     require     => [
       File['/tmp/fix-graphite-race-condition.py'],
-      Exec['Initial django db creation'],
-      Service['carbon-cache'],
+      File[$::graphite::storage_dir_REAL],
+      File[$::graphite::graphiteweb_log_dir_REAL],
+      File[$::graphite::graphiteweb_storage_dir_REAL],
     ],
     before      => Service[$::graphite::params::apache_service_name],
+    subscribe   => Exec['Initial django db creation'],
   }
 
   service { $::graphite::params::apache_service_name:
