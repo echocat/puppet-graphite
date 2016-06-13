@@ -117,15 +117,23 @@ class graphite::params {
       $nginx_web_group  = 'nginx'
       $nginx_web_user   = 'nginx'
 
-      $python_dev_pkg = ['python-devel','gcc']
+      if $::operatingsystem =~ /^[Aa]mazon$/ {
+        $python    = 'python27'
+        $pyopenssl = "${python}-pyOpenSSL"
+      } else {
+        $python    = 'python'
+        $pyopenssl = 'pyOpenSSL'
+      }
+
+      $python_dev_pkg = ["${python}-devel", 'gcc']
       $common_os_pkgs = [
-        'MySQL-python',
-        'pyOpenSSL',
-        'python-ldap',
-        'python-memcached',
-        'python-psycopg2',
-        'python-zope-interface',
-        'python-tzlocal',
+        "MySQL-${python}",
+        $pyopenssl,
+        "${python}-ldap",
+        "${python}-memcached",
+        "${python}-psycopg2",
+        "${python}-zope-interface",
+        "python-tzlocal",
       ]
 
       # see https://github.com/graphite-project/carbon/issues/86
@@ -142,10 +150,18 @@ class graphite::params {
           $service_provider    = 'systemd'
         }
 
+        # Amazon Linux 2016.03
+        /^20\d{2}.\d{2}/: {
+          $apache_24           = false
+          $graphitepkgs        = union($common_os_pkgs,["${python}-sqlite2", 'bitmap', "${python}-pycairo","${python}-crypto"])
+          $service_provider    = 'redhat'
+        }
+
         default: {
           fail("Unsupported RedHat release: '${::operatingsystemrelease}'")
         }
       }
+
       $libpath = "/usr/lib/python${pyver}/site-packages"
     }
 
