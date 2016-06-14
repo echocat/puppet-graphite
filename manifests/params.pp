@@ -117,7 +117,7 @@ class graphite::params {
       $nginx_web_user   = 'nginx'
 
       if $::operatingsystem =~ /^[Aa]mazon$/ {
-        $_pyver          = regsubst($pyver, '.', '')
+        $_pyver          = regsubst($pyver, '\.', '')
         $python          = "python${_pyver}"
         $pyopenssl       = "${python}-pyOpenSSL"
         $apache_wsgi_pkg = "mod_wsgi-${python}"
