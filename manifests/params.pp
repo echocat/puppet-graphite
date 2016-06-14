@@ -152,10 +152,10 @@ class graphite::params {
           $service_provider    = 'systemd'
         }
 
-        # Amazon Linux 2016.03
+        # Amazon Linux 20xx.xx
         /^20\d{2}.\d{2}/: {
           $apache_24           = false
-          $graphitepkgs        = union($common_os_pkgs,["python-sqlite2", 'bitmap', "${python}-pycairo","${python}-crypto"])
+          $graphitepkgs        = union($common_os_pkgs,['bitmap', "${python}-pycairo","${python}-crypto"])
           $service_provider    = 'redhat'
         }
 
