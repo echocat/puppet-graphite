@@ -104,7 +104,6 @@ class graphite::params {
       $apache_dir                = '/etc/httpd'
       $apache_pkg                = 'httpd'
       $apache_service_name       = 'httpd'
-      $apache_wsgi_pkg           = 'mod_wsgi'
       $apache_wsgi_socket_prefix = 'run/wsgi'
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
@@ -118,11 +117,14 @@ class graphite::params {
       $nginx_web_user   = 'nginx'
 
       if $::operatingsystem =~ /^[Aa]mazon$/ {
-        $python    = 'python27'
-        $pyopenssl = "${python}-pyOpenSSL"
+        $_pyver          = regsubst($pyver, '.', '')
+        $python          = "python${_pyver}"
+        $pyopenssl       = "${python}-pyOpenSSL"
+        $apache_wsgi_pkg = "mod_wsgi-${python}"
       } else {
-        $python    = 'python'
-        $pyopenssl = 'pyOpenSSL'
+        $python          = 'python'
+        $pyopenssl       = 'pyOpenSSL'
+        $apache_wsgi_pkg = 'mod_wsgi'
       }
 
       $python_dev_pkg = ["${python}-devel", 'gcc']
