@@ -121,10 +121,12 @@ class graphite::params {
         $python          = "python${_pyver}"
         $pyopenssl       = "${python}-pyOpenSSL"
         $apache_wsgi_pkg = "mod_wsgi-${python}"
+        $pytz            = "${python}-pytz"
       } else {
         $python          = 'python'
         $pyopenssl       = 'pyOpenSSL'
         $apache_wsgi_pkg = 'mod_wsgi'
+        $pytz            = 'python-tzlocal'
       }
 
       $python_dev_pkg = ["${python}-devel", 'gcc']
@@ -135,7 +137,7 @@ class graphite::params {
         "${python}-memcached",
         "${python}-psycopg2",
         "${python}-zope-interface",
-        "python-tzlocal",
+        $pytz,
       ]
 
       # see https://github.com/graphite-project/carbon/issues/86
