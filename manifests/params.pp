@@ -10,7 +10,6 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
-  $python_pip_pkg     = 'python-pip'
   $django_tagging_pkg = 'django-tagging'
   $django_tagging_ver = '0.3.1'
   $twisted_pkg        = 'Twisted'
@@ -40,6 +39,7 @@ class graphite::params {
   }
   case $::osfamily {
     'Debian': {
+      $python_pip_pkg            = 'python-pip'
       $apache_dir                = '/etc/apache2'
       $apache_pkg                = 'apache2'
       $apache_service_name       = 'apache2'
@@ -122,11 +122,13 @@ class graphite::params {
         $pyopenssl       = "${python}-pyOpenSSL"
         $apache_wsgi_pkg = "mod_wsgi-${python}"
         $pytz            = "${python}-pytz"
+        $python_pip_pkg  = "${python}-pip"
       } else {
         $python          = 'python'
         $pyopenssl       = 'pyOpenSSL'
         $apache_wsgi_pkg = 'mod_wsgi'
         $pytz            = 'python-tzlocal'
+        $python_pip_pkg  = 'python-pip'
       }
 
       $python_dev_pkg = ["${python}-devel", 'gcc']
@@ -143,22 +145,22 @@ class graphite::params {
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $apache_24           = false
-          $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
-          $service_provider    = 'redhat'
+          $apache_24        = false
+          $graphitepkgs     = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
+          $service_provider = 'redhat'
         }
 
         /^7\.\d+/: {
-          $apache_24           = true
-          $graphitepkgs        = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
-          $service_provider    = 'systemd'
+          $apache_24        = true
+          $graphitepkgs     = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
+          $service_provider = 'systemd'
         }
 
         # Amazon Linux 20xx.xx
         /^20\d{2}.\d{2}/: {
-          $apache_24           = false
-          $graphitepkgs        = union($common_os_pkgs,['bitmap', "${python}-pycairo","${python}-crypto"])
-          $service_provider    = 'redhat'
+          $apache_24        = false
+          $graphitepkgs     = union($common_os_pkgs,['bitmap', "${python}-pycairo","${python}-crypto"])
+          $service_provider = 'redhat'
         }
 
         default: {
