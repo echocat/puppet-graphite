@@ -87,7 +87,7 @@ This setup will use the [puppetlabs-apache](https://forge.puppetlabs.com/puppetl
 ```puppet
 include '::apache'
 
-apache::vhost { graphite.my.domain:
+apache::vhost { 'graphite.my.domain':
   port    => '80',
   docroot => '/opt/graphite/webapp',
   wsgi_application_group      => '%{GLOBAL}',
