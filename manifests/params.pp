@@ -88,7 +88,7 @@ class graphite::params {
           $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
 
-        /jessie|trusty|utopic|vivid|wily/: {
+        /jessie|trusty|utopic|vivid|wily|xenial/: {
           $apache_24          = true
           $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
