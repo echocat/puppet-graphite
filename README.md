@@ -82,7 +82,7 @@ The defaults are determined by your operating system e.g. Debian systems have on
 
 ###Configure Graphite with Grafana
 
-This setup will use the [puppetlabs-apache](https://forge.puppetlabs.com/puppetlabs/apache) and [dwerder-grafana](https://forge.puppetlabs.com/dwerder/grafana) modules to setup a graphite system with grafana frontend. You will also need an elasticsearch as it is required for grafana.
+This setup will use the [puppetlabs-apache](https://forge.puppetlabs.com/puppetlabs/apache) and [bfraser-grafana](https://forge.puppet.com/bfraser/grafana) modules to setup a graphite system with grafana frontend. You will also need an elasticsearch as it is required for grafana.
 
 ```puppet
 include '::apache'
@@ -123,26 +123,8 @@ class { 'graphite':
   gr_disable_webapp_cache => true,
 }
 
-apache::vhost { 'grafana.my.domain':
-  servername      => 'grafana.my.domain',
-  port            => 80,
-  docroot         => '/opt/grafana',
-  error_log_file  => 'grafana_error.log',
-  access_log_file => 'grafana_access.log',
-  directories     => [
-    {
-      path            => '/opt/grafana',
-      options         => [ 'None' ],
-      allow           => 'from All',
-      allow_override  => [ 'None' ],
-      order           => 'Allow,Deny',
-    }
-  ]
-}->
 class {'grafana':
-  graphite_host      => 'graphite.my.domain',
-  elasticsearch_host => 'elasticsearach.my.domain',
-  elasticsearch_port => 9200,
+ # see manual of this module
 }
 ```
 

@@ -1,8 +1,20 @@
+## 2016-05-31 - 6.0.4 (Bugfix release)
+
+#### Bugfixes:
+
+- (2b3364c) better detection of service provider systemd
+- (2b3364c) The `wsgi.py` link is no longer needed
+- (2b3364c) Removing subscription to `$local_settings_py_file`. It is not defined when `config_gunicorn.pp` is evaluated
+- (2b3364c) run race condition fix after initial db creation
+- (2b3364c) Add service provider definition for Debian-based OSs
+- (2b3364c) Set RedHat service provider based on OS version
+- (2b3364c) Fix for float vs string problem
+
 ## 2016-04-17 - 6.0.3 (Bugfix release)
 
 #### Bugfixes:
 
-- (1deb7f9)	point Apache to the right WSGI file
+- (1deb7f9) point Apache to the right WSGI file
 - (e01e6bc) ensure that graphiteweb_storage_dir is created
 - (5e7ce00) properly parameterize gunicorn --chdir option on redhat
 - (6f7fb67) notify web service for local_settings.py and graphite_wsgi.py
