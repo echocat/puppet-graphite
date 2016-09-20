@@ -78,6 +78,9 @@ class graphite::install inherits graphite::params {
       ensure => $::graphite::gr_txamqp_ver,
       name   => $::graphite::gr_txamqp_pkg,
       source => $::graphite::gr_txamqp_source,
+      before => [
+        Package['carbon'],
+        ],
     }
     ,
     'whisper'        => {
