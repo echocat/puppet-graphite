@@ -46,14 +46,13 @@ class graphite::install inherits graphite::params {
   #           python-django-tagging, python-simplejson
   # optional: python-ldap, python-memcache, memcached, python-sqlite
 
-  ensure_packages($::graphite::params::graphitepkgs, {
-      before => Package['carbon']
-  })
+  ensure_packages($::graphite::params::graphitepkgs)
 
   create_resources('package', {
-    'carbon'         => {
-      ensure => $::graphite::gr_carbon_ver,
-      name   => $::graphite::gr_carbon_pkg,
+    'carbon'  => {
+      ensure  => $::graphite::gr_carbon_ver,
+      name    => $::graphite::gr_carbon_pkg,
+      require => Package[$::graphite::params::graphitepkgs],
     }
     ,
     'django-tagging' => {
