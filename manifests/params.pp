@@ -124,7 +124,6 @@ class graphite::params {
         'python-ldap',
         'python-memcached',
         'python-psycopg2',
-        'python-zope-interface',
         'python-tzlocal',
       ]
 
@@ -132,7 +131,7 @@ class graphite::params {
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
           $apache_24           = false
-          $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
+          $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo', 'python-crypto','python-zope-interface',])
           $service_provider    = 'redhat'
         }
 
