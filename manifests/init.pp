@@ -439,42 +439,63 @@
 # [*gr_django_tagging_ver*]
 #   String. The version of the django tagging package to install
 #   Default: 0.3.1
+# [*gr_django_tagging_source*]
+#   String. The source of the django tagging package to install
+#   Default: undef
 # [*gr_twisted_pkg*]
 #   String. The name of the twisted package to install
 #   Default: Twisted
 # [*gr_twisted_ver*]
 #   String. The version of the twisted package to install
 #   Default: 11.1.0
+# [*gr_twisted_source*]
+#   String. The source of the twisted package to install
+#   Default: undef
 # [*gr_txamqp_pkg*]
 #   String. The name of the txamqp package to install
 #   Default: txAMQP
 # [*gr_txamqp_ver*]
 #   String. The version of the txamqp package to install
 #   Default: 0.4
+# [*gr_txamqp_source*]
+#   String. The source of the txamqp package to install
+#   Default: undef
 # [*gr_graphite_pkg*]
 #   String. The name of the graphite package to install
 #   Default: graphite-web
 # [*gr_graphite_ver*]
 #   String. The version of the graphite package to install
 #   Default: 0.9.15
+# [*gr_graphite_source*]
+#   String. The source of the graphite package to install
+#   Default: undef
 # [*gr_carbon_pkg*]
 #   String. The name of the carbon package to install
 #   Default: carbon
 # [*gr_carbon_ver*]
 #   String. The version of the carbon package to install
 #   Default: 0.9.15
+# [*gr_carbon_source*]
+#   String. The source of the carbon package to install
+#   Default: undef
 # [*gr_whisper_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
 # [*gr_whisper_ver*]
 #   String. The version of the whisper package to install
 #   Default: 0.9.15
+# [*gr_whisper_source*]
+#   String. The source of the whisper package to install
+#   Default: undef
 # [*gr_django_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
 # [*gr_django_ver*]
 #   String. The version of the whisper package to install
 #   Default: 0.9.15
+# [*gr_django_source*]
+#   String. The source of the django package to install
+#   Default: undef
 # [*gr_django_provider*]
 #   String. The provider to use for installing django.
 #   Default: pip
