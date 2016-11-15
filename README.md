@@ -478,6 +478,7 @@ This is needed for tools like Grafana.
 #####`gr_use_ssl`
 
 If true, alter web server config to enable SSL. Default is false (boolean).
+Only used for apache at the moment.
 
 #####`gr_ssl_cert`
 
