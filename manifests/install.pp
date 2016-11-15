@@ -30,12 +30,11 @@ class graphite::install inherits graphite::params {
         Package[$::graphite::params::python_pip_pkg],
         Package[$::graphite::params::python_dev_pkg],
         ],
-      default => undef,
-    } } else {
-    $gr_pkg_require = $::graphite::gr_pip_install ? {
-      true    => [Package[$::graphite::params::graphitepkgs],],
-      default => undef,
-    } }
+      default => [Package[$::graphite::params::graphitepkgs]],
+    }
+  } else {
+    $gr_pkg_require = [Package[$::graphite::params::graphitepkgs]]
+  }
 
   $carbon = "carbon-${::graphite::gr_carbon_ver}-py${::graphite::params::pyver}.egg-info"
   $gweb = "graphite_web-${::graphite::gr_graphite_ver}-py${::graphite::params::pyver}.egg-info"
@@ -54,7 +53,6 @@ class graphite::install inherits graphite::params {
       ensure  => $::graphite::gr_carbon_ver,
       name    => $::graphite::gr_carbon_pkg,
       source  => $::graphite::gr_carbon_source,
-      require => Package[$::graphite::params::graphitepkgs],
     }
     ,
     'django-tagging' => {
