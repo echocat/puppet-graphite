@@ -147,7 +147,7 @@ class graphite::config inherits graphite::params {
   }
 
   # Lets ensure graphite.db owner is the same as gr_web_user_REAL
-  file { "${::graphite::storage_dir_REAL}/graphite.db":
+  file { "${::graphite::graphiteweb_storage_dir_REAL}/graphite.db":
     ensure => file,
     group  => $gr_web_group_REAL,
     mode   => '0644',

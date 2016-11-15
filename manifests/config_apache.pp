@@ -129,6 +129,11 @@ class graphite::config_apache inherits graphite::params {
         File["${::graphite::params::apache_dir}/ports.conf"],
       ],
       notify  => Service[$::graphite::params::apache_service_name];
+      
+      # If installing from package the default vhost config file needs removing
+    "${::graphite::params::apacheconf_dir}/graphite_web.conf":
+      ensure  => absent,
+      notify  => Service[$::graphite::params::apache_service_name];
   }
 
   case $::osfamily {
