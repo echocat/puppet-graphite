@@ -32,9 +32,9 @@ describe 'graphite::config', :type => 'class' do
 
   shared_context 'RedHat supported platforms' do
     it { is_expected.to contain_file('/opt/graphite/storage/whisper').with({
-        'ensure' => 'directory', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
+        'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
     it { is_expected.to contain_file('/opt/graphite/storage/log/carbon-cache').with({
-        'ensure' => 'directory', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
+        'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0755', }) }
     it { is_expected.to contain_file('/opt/graphite/storage/graphite.db').with({
         'ensure' => 'file', 'owner' => 'apache', 'group' => 'apache', 'mode' => '0644', }) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with({
@@ -42,6 +42,7 @@ describe 'graphite::config', :type => 'class' do
         'owner'   => 'apache',
         'group'   => 'apache',
         'mode'    => '0644',
+        'seltype' => 'httpd_sys_content_t',
         'content' => /^CONF_DIR = '\/opt\/graphite\/conf'$/,
         'notify'  => 'Service[httpd]'}).that_requires('Package[httpd]') }
     it { is_expected.to contain_file('/opt/graphite/conf/graphite_wsgi.py').with({
@@ -50,6 +51,7 @@ describe 'graphite::config', :type => 'class' do
         'owner'   => 'apache',
         'group'   => 'apache',
         'mode'    => '0644',
+        'seltype' => 'httpd_sys_content_t',
         'notify'  => 'Service[httpd]'}).that_requires('Package[httpd]') }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/graphite_wsgi.py').with({
         'ensure'  => 'link',
@@ -57,7 +59,7 @@ describe 'graphite::config', :type => 'class' do
         'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]',
         'notify'  => 'Service[httpd]' }) }
 
-    $attributes_redhat = {'ensure' => 'directory', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
+    $attributes_redhat = {'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite/storage',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/lists',

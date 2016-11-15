@@ -118,6 +118,7 @@ class graphite::config inherits graphite::params {
     group     => $gr_web_group_REAL,
     mode      => '0755',
     owner     => $gr_web_user_REAL,
+    seltype   => 'httpd_sys_rw_content_t',
     subscribe => Exec['Initial django db creation'],
   }
 
@@ -134,24 +135,27 @@ class graphite::config inherits graphite::params {
 
   file {
     $::graphite::local_data_dir_REAL:
-      ensure => directory,
-      group  => $carbon_group,
-      mode   => '0755',
-      owner  => $carbon_user;
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      seltype => 'httpd_sys_rw_content_t',
+      owner   => $carbon_user;
 
     $::graphite::carbon_log_dir_REAL:
-      ensure => directory,
-      group  => $carbon_group,
-      mode   => '0755',
-      owner  => $carbon_user;
+      ensure  => directory,
+      group   => $carbon_group,
+      mode    => '0755',
+      seltype => 'httpd_sys_rw_content_t',
+      owner   => $carbon_user;
   }
 
   # Lets ensure graphite.db owner is the same as gr_web_user_REAL
   file { "${::graphite::storage_dir_REAL}/graphite.db":
-    ensure => file,
-    group  => $gr_web_group_REAL,
-    mode   => '0644',
-    owner  => $gr_web_user_REAL;
+    ensure  => file,
+    group   => $gr_web_group_REAL,
+    mode    => '0644',
+    seltype => 'httpd_sys_rw_content_t',
+    owner   => $gr_web_user_REAL;
   }
 
   # Deploy configfiles
@@ -163,6 +167,7 @@ class graphite::config inherits graphite::params {
       mode    => '0644',
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require,
+      seltype => 'httpd_sys_content_t',
       notify  => $web_server_service_notify;
 
     "${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py":
@@ -172,7 +177,9 @@ class graphite::config inherits graphite::params {
       mode    => '0644',
       owner   => $gr_web_user_REAL,
       require => $web_server_package_require,
+      seltype => 'httpd_sys_content_t',
       notify  => $web_server_service_notify;
+
 
     "${::graphite::graphiteweb_install_lib_dir_REAL}/graphite_wsgi.py":
       ensure  => link,
@@ -188,6 +195,7 @@ class graphite::config inherits graphite::params {
       group   => $gr_web_group_REAL,
       mode    => '0644',
       owner   => $gr_web_user_REAL,
+      seltype => 'httpd_sys_rw_content_t',
       require => $web_server_package_require,
     }
   }
@@ -219,6 +227,7 @@ class graphite::config inherits graphite::params {
       content => template('graphite/opt/graphite/conf/relay-rules.conf.erb'),
       mode    => '0644',
       notify  => $notify_services,
+      seltype => 'httpd_sys_content_t',
     }
   }
 
@@ -227,6 +236,7 @@ class graphite::config inherits graphite::params {
       ensure  => file,
       mode    => '0644',
       content => template('graphite/opt/graphite/conf/aggregation-rules.conf.erb'),
+      seltype => 'httpd_sys_content_t',
       notify  => $notify_services;
     }
   }
@@ -236,6 +246,7 @@ class graphite::config inherits graphite::params {
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-schemas.conf.erb'),
       mode    => '0644',
+      seltype => 'httpd_sys_content_t',
       notify  => $notify_services;
 
     $carbon_conf_file:
@@ -247,16 +258,19 @@ class graphite::config inherits graphite::params {
     "${::graphite::carbon_conf_dir_REAL}/storage-aggregation.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/storage-aggregation.conf.erb'),
+      seltype => 'httpd_sys_content_t',
       mode    => '0644';
 
     "${::graphite::carbon_conf_dir_REAL}/whitelist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/whitelist.conf.erb'),
+      seltype => 'httpd_sys_content_t',
       mode    => '0644';
 
     "${::graphite::carbon_conf_dir_REAL}/blacklist.conf":
       ensure  => file,
       content => template('graphite/opt/graphite/conf/blacklist.conf.erb'),
+      seltype => 'httpd_sys_content_t',
       mode    => '0644';
   }
 
