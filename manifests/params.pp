@@ -33,8 +33,6 @@ class graphite::params {
   $django_source         = undef
   $django_provider       = 'pip'
 
-  $install_prefix     = '/opt/'
-
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
   $pyver              = $::osfamily ? {

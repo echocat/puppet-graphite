@@ -488,10 +488,10 @@
 #   String. The source of the whisper package to install
 #   Default: undef
 # [*gr_django_pkg*]
-#   String. The name of the whisper package to install
+#   String. The name of the django package to install
 #   Default: whisper
 # [*gr_django_ver*]
-#   String. The version of the whisper package to install
+#   String. The version of the django package to install
 #   Default: 0.9.15
 # [*gr_django_source*]
 #   String. The source of the django package to install

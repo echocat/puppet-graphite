@@ -47,7 +47,7 @@ class graphite::install inherits graphite::params {
   # optional: python-ldap, python-memcache, memcached, python-sqlite
 
   ensure_packages($::graphite::params::graphitepkgs, {
-      before => Package['carbon']
+    before => Package['carbon']
   })
 
   create_resources('package', {
