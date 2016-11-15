@@ -60,10 +60,11 @@ describe 'graphite::config', :type => 'class' do
         'notify'  => 'Service[httpd]' }) }
 
     it { is_expected.to contain_file('/opt/graphite').with({
-        'ensure' => 'directory',
-        'group'  => 'apache',
-        'mode'   => '0755',
-        'owner' => 'apache'}) }
+        'ensure'  => 'directory',
+        'group'   => 'apache',
+        'mode'    => '0755',
+        'owner'   => 'apache',
+        'seltype' => 'httpd_sys_rw_content_t' }) }
 
     $attributes_redhat = {'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite/storage',
@@ -137,12 +138,13 @@ describe 'graphite::config', :type => 'class' do
         'notify'  => 'Service[apache2]'}) }
 
     it { is_expected.to contain_file('/opt/graphite').with({
-        'ensure' => 'directory',
-        'group'  => 'www-data',
-        'mode'   => '0755',
-        'owner' => 'www-data'}) }
+        'ensure'  => 'directory',
+        'group'   => 'www-data',
+        'mode'    => '0755',
+        'owner'   => 'www-data',
+        'seltype' => 'httpd_sys_rw_content_t' }) }
 
-    $attributes_debian = {'ensure' => 'directory', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
+    $attributes_debian = {'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite/storage',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/lists',
