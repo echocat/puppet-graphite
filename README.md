@@ -911,7 +911,7 @@ Default is '0.9.12' (string) The version of the carbon package that should be in
 
 #####`gr_carbon_source`
 
-Default is `undef` (string). The version of the carbon package that should be installed.
+Default is `undef` (string). The source of the carbon package that should be installed.
 
 #####`gr_whisper_pkg`
 
