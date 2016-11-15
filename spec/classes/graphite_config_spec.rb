@@ -59,6 +59,12 @@ describe 'graphite::config', :type => 'class' do
         'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]',
         'notify'  => 'Service[httpd]' }) }
 
+    it { is_expected.to contain_file('/opt/graphite').with({
+        'ensure' => 'directory',
+        'group'  => 'apache',
+        'mode'   => '0755',
+        'owner' => 'apache'}) }
+
     $attributes_redhat = {'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
     ['/opt/graphite',
       '/opt/graphite/storage',
@@ -131,15 +137,21 @@ describe 'graphite::config', :type => 'class' do
         'require' => 'File[/opt/graphite/conf/graphite_wsgi.py]',
         'notify'  => 'Service[apache2]'}) }
 
+    it { is_expected.to contain_file('/opt/graphite').with({
+        'ensure' => 'directory',
+        'group'  => 'www-data',
+        'mode'   => '0755',
+        'owner' => 'www-data'}) }
+
     $attributes_debian = {'ensure' => 'directory', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
-    ['/opt/graphite',
-      '/opt/graphite/storage',
+    ['/opt/graphite/storage',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/lists',
       '/opt/graphite/storage/log',
       '/var/lib/graphite-web'].each { |f|
       it { is_expected.to contain_file(f).with($attributes_debian)}
     }
+    
   end
 
   shared_context 'Debian sysv platforms' do
