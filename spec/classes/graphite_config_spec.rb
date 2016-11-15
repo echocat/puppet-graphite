@@ -60,7 +60,8 @@ describe 'graphite::config', :type => 'class' do
         'notify'  => 'Service[httpd]' }) }
 
     $attributes_redhat = {'ensure' => 'directory', 'seltype' => 'httpd_sys_rw_content_t', 'group' => 'apache', 'mode' => '0755', 'owner' => 'apache', 'subscribe' => 'Exec[Initial django db creation]'}
-    ['/opt/graphite/storage',
+    ['/opt/graphite',
+      '/opt/graphite/storage',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/lists',
       '/opt/graphite/storage/log',
@@ -131,7 +132,8 @@ describe 'graphite::config', :type => 'class' do
         'notify'  => 'Service[apache2]'}) }
 
     $attributes_debian = {'ensure' => 'directory', 'group' => 'www-data', 'mode' => '0755', 'owner' => 'www-data', 'subscribe' => 'Exec[Initial django db creation]'}
-    ['/opt/graphite/storage',
+    ['/opt/graphite',
+      '/opt/graphite/storage',
       '/opt/graphite/storage/rrd',
       '/opt/graphite/storage/lists',
       '/opt/graphite/storage/log',

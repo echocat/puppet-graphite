@@ -108,6 +108,7 @@ class graphite::config inherits graphite::params {
   # change access permissions for web server
 
   file { [
+    $::graphite::base_dir_REAL,
     $::graphite::storage_dir_REAL,
     $::graphite::rrd_dir_REAL,
     $::graphite::whitelists_dir_REAL,
