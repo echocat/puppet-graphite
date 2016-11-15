@@ -240,6 +240,26 @@ If gr_pip_install is set to true, both python-pip and Python development package
     gr_manage_python_packages => false,
   }
 
+###Installing with pip from a non-PyPI source
+
+You can also chose to install the pip packages from a source other than PyPI, such as a file on disk or an HTTP server. If you do this you will also have to set the package versions to `'present'` to avoid errors from Puppet:
+```puppet
+  class { '::graphite':
+    gr_django_tagging_ver    => 'present',
+    gr_django_tagging_source => 'http://example.com/django-tagging-0.3.1.tar.gz',
+    gr_twisted_ver           => 'present',
+    gr_twisted_source        => 'http://example.com/Twisted-11.1.0.tar.bz2',
+    gr_txamqp_ver            => 'present',
+    gr_txamqp_source         => 'http://example.com/txAMQP-0.4.tar.gz',
+    gr_graphite_ver          => 'present',
+    gr_graphite_source       => 'http://example.com/graphite-web-0.9.15.tar.gz',
+    gr_carbon_ver            => 'present',
+    gr_carbon_source         => 'http://example.com/carbon-0.9.15.tar.gz',
+    gr_whisper_ver           => 'present',
+    gr_whisper_source        => 'http://example.com/whisper-0.9.15.tar.gz',
+  }
+```
+
 ##Usage
 
 ####Class: `graphite`
@@ -841,6 +861,10 @@ Default is 'django-tagging' (string) The name of the django-tagging package that
 
 Default is '0.3.1' (string) The version of the django-tagging package that should be installed
 
+#####`gr_django_tagging_source`
+
+Default is `undef` (string). The source of the django-tagging package that should be installed.
+
 #####`gr_twisted_pkg`
 
 Default is 'Twisted' (string) The name of the twisted package that should be installed
@@ -848,6 +872,10 @@ Default is 'Twisted' (string) The name of the twisted package that should be ins
 #####`gr_twisted_ver`
 
 Default is '11.1.0' (string) The version of the twisted package that should be installed
+
+#####`gr_twisted_source`
+
+Default is `undef` (string). The source of the twisted package that should be installed.
 
 #####`gr_txamqp_pkg`
 
@@ -857,6 +885,10 @@ Default is 'txAMQP' (string) The name of the txamqp package that should be insta
 
 Default is '0.4' (string) The version of the txamqp package that should be installed
 
+#####`gr_txamqp_source`
+
+Default is `undef` (string). The source of the txamqp package that should be installed.
+
 #####`gr_graphite_pkg`
 
 Default is 'graphite-web' (string) The name of the graphite package that should be installed
@@ -864,6 +896,10 @@ Default is 'graphite-web' (string) The name of the graphite package that should 
 #####`gr_graphite_ver`
 
 Default is '0.9.12' (string) The version of the graphite package that should be installed
+
+#####`gr_graphite_source`
+
+Default is `undef` (string). The source of the graphite package that should be installed.
 
 #####`gr_carbon_pkg`
 
@@ -873,6 +909,10 @@ Default is 'carbon' (string) The name of the carbon package that should be insta
 
 Default is '0.9.12' (string) The version of the carbon package that should be installed
 
+#####`gr_carbon_source`
+
+Default is `undef` (string). The version of the carbon package that should be installed.
+
 #####`gr_whisper_pkg`
 
 Default is 'whisper' (string) The name of the whisper package that should be installed
@@ -881,6 +921,10 @@ Default is 'whisper' (string) The name of the whisper package that should be ins
 
 Default is '0.9.12' (string) The version of the whisper package that should be installed
 
+#####`gr_whisper_source`
+
+Default is `undef` (string). The source of the whisper package that should be installed.
+
 #####`gr_django_pkg`
 
 Default is a platform-specific name of the django package that should be installed (string).
@@ -888,6 +932,10 @@ Default is a platform-specific name of the django package that should be install
 #####`gr_django_ver`
 
 Default is 'installed' (string) The version of the django package that should be installed.
+
+#####`gr_django_source`
+
+Default is `undef` (string). The source of the django package that should be installed.
 
 #####`gr_django_provider`
 

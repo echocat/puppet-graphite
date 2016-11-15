@@ -54,21 +54,25 @@ class graphite::install inherits graphite::params {
     'carbon'         => {
       ensure => $::graphite::gr_carbon_ver,
       name   => $::graphite::gr_carbon_pkg,
+      source => $::graphite::gr_carbon_source,
     }
     ,
     'django-tagging' => {
       ensure => $::graphite::gr_django_tagging_ver,
       name   => $::graphite::gr_django_tagging_pkg,
+      source => $::graphite::gr_django_tagging_source,
     }
     ,
     'graphite-web'   => {
       ensure => $::graphite::gr_graphite_ver,
       name   => $::graphite::gr_graphite_pkg,
+      source => $::graphite::gr_graphite_source,
     }
     ,
     'twisted'        => {
       ensure => $::graphite::gr_twisted_ver,
       name   => $::graphite::gr_twisted_pkg,
+      source => $::graphite::gr_twisted_source,
       before => [
         Package['txamqp'],
         Package['carbon'],
@@ -78,11 +82,13 @@ class graphite::install inherits graphite::params {
     'txamqp'         => {
       ensure => $::graphite::gr_txamqp_ver,
       name   => $::graphite::gr_txamqp_pkg,
+      source => $::graphite::gr_txamqp_source,
     }
     ,
     'whisper'        => {
       ensure => $::graphite::gr_whisper_ver,
       name   => $::graphite::gr_whisper_pkg,
+      source => $::graphite::gr_whisper_source,
     }
     ,
   }
@@ -96,6 +102,7 @@ class graphite::install inherits graphite::params {
     package { $::graphite::gr_django_pkg:
       ensure   => $::graphite::gr_django_ver,
       provider => $::graphite::gr_django_provider,
+      source   => $::graphite::gr_django_source,
     }
   }
 
