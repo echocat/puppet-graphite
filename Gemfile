@@ -18,6 +18,7 @@ gem 'metadata-json-lint',                 :require => false
 # rubi <1.9 versus rake 11.0.0 workaround
 gem 'rake', '< 11.0.0',                   :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 gem 'json', '< 2.0.0',                    :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
+gem 'json_pure', '<= 2.0.1',              :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 
 gem 'puppet', *location_for(ENV['PUPPET_GEM_VERSION'])
 
