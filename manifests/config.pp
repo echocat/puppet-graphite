@@ -17,7 +17,7 @@ class graphite::config inherits graphite::params {
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
   if ($::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^7\.\d+/) or (
-  $::graphite::params::service_provider == 'systemd') {
+  $::graphite::gr_service_provider == 'systemd') {
     $initscript_notify = [Exec['graphite-reload-systemd'],]
 
     exec { 'graphite-reload-systemd':
@@ -283,7 +283,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
-      provider   => $::graphite::params::service_provider,
+      provider   => $::graphite::gr_service_provider,
       require    => File['/etc/init.d/carbon-cache'],
     }
 
@@ -302,7 +302,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
-      provider   => $::graphite::params::service_provider,
+      provider   => $::graphite::gr_service_provider,
       require    => File['/etc/init.d/carbon-relay'],
     }
 
@@ -321,7 +321,7 @@ class graphite::config inherits graphite::params {
       enable     => true,
       hasrestart => true,
       hasstatus  => true,
-      provider   => $::graphite::params::service_provider,
+      provider   => $::graphite::gr_service_provider,
       require    => File['/etc/init.d/carbon-aggregator'],
     }
 
