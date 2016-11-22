@@ -37,7 +37,7 @@ class graphite::config_gunicorn inherits graphite::params {
 
       # RedHat package is missing initscript
       # RedHat 7+ uses systemd
-      if $::graphite::params::service_provider == 'systemd' {
+      if $::graphite::gr_service_provider == 'systemd' {
 
         file { '/etc/systemd/system/gunicorn.service':
           ensure  => file,
@@ -133,7 +133,7 @@ class graphite::config_gunicorn inherits graphite::params {
     enable     => true,
     hasrestart => true,
     hasstatus  => false,
-    provider   => $::graphite::params::service_provider,
+    provider   => $::graphite::gr_service_provider,
     require    => [
       Package[$package_name],
       File["${::graphite::graphiteweb_conf_dir_REAL}/graphite_wsgi.py"]
