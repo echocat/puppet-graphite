@@ -11,6 +11,10 @@
 #   The user who runs graphite. If this is empty carbon runs as the user that
 #   invokes it.
 #   Default is empty.
+# [*gr_service_provider*]
+#   Service provider used to start, stop, restart etc. services managed by this
+#   module.
+#   Default is debian / redhat / systemd (autodected. see params.pp)
 # [*gr_enable_carbon_cache*]
 #   Enable carbon cache.
 #   Default is true.
@@ -527,6 +531,7 @@
 class graphite (
   $gr_group                               = '',
   $gr_user                                = '',
+  $gr_service_provider                    = $::graphite::params::service_provider,
   $gr_enable_carbon_cache                 = true,
   $gr_max_cache_size                      = inf,
   $gr_max_updates_per_second              = 500,
