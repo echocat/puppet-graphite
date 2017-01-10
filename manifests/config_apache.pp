@@ -79,7 +79,7 @@ class graphite::config_apache inherits graphite::params {
     mode   => '0755',
   }
   exec { 'fix graphite race condition':
-    command     => "$::graphite::gr_python_binary /tmp/fix-graphite-race-condition.py",
+    command     => "${::graphite::gr_python_binary} /tmp/fix-graphite-race-condition.py",
     cwd         => $graphite::graphiteweb_webapp_dir_REAL,
     environment => 'DJANGO_SETTINGS_MODULE=graphite.settings',
     user        => $graphite::config::gr_web_user_REAL,
