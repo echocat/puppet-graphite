@@ -26,6 +26,7 @@ class graphite::params {
   $django_pkg         = 'Django'
   $django_ver         = '1.5'
   $django_provider    = 'pip'
+  $python_binary      = 'python'
 
   $install_prefix     = '/opt/'
 

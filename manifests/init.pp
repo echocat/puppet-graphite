@@ -716,6 +716,7 @@ class graphite (
   $gr_django_provider                     = $::graphite::params::django_provider,
   $gr_pip_install                         = true,
   $gr_manage_python_packages              = true,
+  $gr_python_binary                       = $::graphite::params::python_binary,
   $gr_disable_webapp_cache                = false,
   $gr_carbonlink_query_bulk               = undef,
   $gr_carbonlink_hosts_timeout            = '1.0',
