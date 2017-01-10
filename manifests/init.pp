@@ -11,6 +11,10 @@
 #   The user who runs graphite. If this is empty carbon runs as the user that
 #   invokes it.
 #   Default is empty.
+# [*gr_service_provider*]
+#   Service provider used to start, stop, restart etc. services managed by this
+#   module.
+#   Default is debian / redhat / systemd (autodected. see params.pp)
 # [*gr_enable_carbon_cache*]
 #   Enable carbon cache.
 #   Default is true.
@@ -439,42 +443,63 @@
 # [*gr_django_tagging_ver*]
 #   String. The version of the django tagging package to install
 #   Default: 0.3.1
+# [*gr_django_tagging_source*]
+#   String. The source of the django tagging package to install
+#   Default: undef
 # [*gr_twisted_pkg*]
 #   String. The name of the twisted package to install
 #   Default: Twisted
 # [*gr_twisted_ver*]
 #   String. The version of the twisted package to install
 #   Default: 11.1.0
+# [*gr_twisted_source*]
+#   String. The source of the twisted package to install
+#   Default: undef
 # [*gr_txamqp_pkg*]
 #   String. The name of the txamqp package to install
 #   Default: txAMQP
 # [*gr_txamqp_ver*]
 #   String. The version of the txamqp package to install
 #   Default: 0.4
+# [*gr_txamqp_source*]
+#   String. The source of the txamqp package to install
+#   Default: undef
 # [*gr_graphite_pkg*]
 #   String. The name of the graphite package to install
 #   Default: graphite-web
 # [*gr_graphite_ver*]
 #   String. The version of the graphite package to install
 #   Default: 0.9.15
+# [*gr_graphite_source*]
+#   String. The source of the graphite package to install
+#   Default: undef
 # [*gr_carbon_pkg*]
 #   String. The name of the carbon package to install
 #   Default: carbon
 # [*gr_carbon_ver*]
 #   String. The version of the carbon package to install
 #   Default: 0.9.15
+# [*gr_carbon_source*]
+#   String. The source of the carbon package to install
+#   Default: undef
 # [*gr_whisper_pkg*]
 #   String. The name of the whisper package to install
 #   Default: whisper
 # [*gr_whisper_ver*]
 #   String. The version of the whisper package to install
 #   Default: 0.9.15
+# [*gr_whisper_source*]
+#   String. The source of the whisper package to install
+#   Default: undef
 # [*gr_django_pkg*]
-#   String. The name of the whisper package to install
+#   String. The name of the django package to install
 #   Default: whisper
 # [*gr_django_ver*]
-#   String. The version of the whisper package to install
+#   String. The version of the django package to install
 #   Default: 0.9.15
+# [*gr_django_source*]
+#   String. The source of the django package to install
+#   Default: undef
 # [*gr_django_provider*]
 #   String. The provider to use for installing django.
 #   Default: pip
@@ -506,6 +531,7 @@
 class graphite (
   $gr_group                               = '',
   $gr_user                                = '',
+  $gr_service_provider                    = $::graphite::params::service_provider,
   $gr_enable_carbon_cache                 = true,
   $gr_max_cache_size                      = inf,
   $gr_max_updates_per_second              = 500,
@@ -701,21 +727,29 @@ class graphite (
   $wsgi_inactivity_timeout                = 120,
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
+  $gr_django_tagging_source               = $::graphite::params::django_tagging_source,
   $gr_twisted_pkg                         = $::graphite::params::twisted_pkg,
   $gr_twisted_ver                         = $::graphite::params::twisted_ver,
+  $gr_twisted_source                      = $::graphite::params::twisted_source,
   $gr_txamqp_pkg                          = $::graphite::params::txamqp_pkg,
   $gr_txamqp_ver                          = $::graphite::params::txamqp_ver,
+  $gr_txamqp_source                       = $::graphite::params::txamqp_source,
   $gr_graphite_pkg                        = $::graphite::params::graphite_pkg,
   $gr_graphite_ver                        = $::graphite::params::graphite_ver,
+  $gr_graphite_source                     = $::graphite::params::graphite_source,
   $gr_carbon_pkg                          = $::graphite::params::carbon_pkg,
   $gr_carbon_ver                          = $::graphite::params::carbon_ver,
+  $gr_carbon_source                       = $::graphite::params::carbon_source,
   $gr_whisper_pkg                         = $::graphite::params::whisper_pkg,
   $gr_whisper_ver                         = $::graphite::params::whisper_ver,
+  $gr_whisper_source                      = $::graphite::params::whisper_source,
   $gr_django_pkg                          = $::graphite::params::django_pkg,
   $gr_django_ver                          = $::graphite::params::django_ver,
+  $gr_django_source                       = $::graphite::params::django_source,
   $gr_django_provider                     = $::graphite::params::django_provider,
   $gr_pip_install                         = true,
   $gr_manage_python_packages              = true,
+  $gr_python_binary                       = $::graphite::params::python_binary,
   $gr_disable_webapp_cache                = false,
   $gr_carbonlink_query_bulk               = undef,
   $gr_carbonlink_hosts_timeout            = '1.0',
