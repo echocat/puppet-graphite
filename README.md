@@ -946,6 +946,10 @@ Default is `undef` (string) The provider of the django package that should be in
 
 Default is true (Bool). Should packages be installed via pip
 
+#####`gr_python_binary`
+
+Default is 'python' (string). Can be set to a fully-qualify path or an alternative binary name.
+
 #####`gr_disable_webapp_cache`
 
 Default is false (Bool). Should the caching of the webapp be disabled. This helps with some
