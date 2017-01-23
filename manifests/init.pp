@@ -678,6 +678,7 @@ class graphite (
   $gr_whitelists_dir                      = undef,
   $gr_carbon_conf_dir                     = undef,
   $gr_carbon_log_dir                      = undef,
+  $gr_carbon_log_rotate                   = 'True',
   $gr_graphiteweb_log_dir                 = undef,
   $gr_graphiteweb_conf_dir                = undef,
   $gr_graphiteweb_webapp_dir              = undef,
