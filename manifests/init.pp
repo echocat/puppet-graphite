@@ -513,6 +513,8 @@
 #   Boolean. Should the caching of the webapp be disabled. This helps with some
 #   display issues in grafana.
 #   Default: false
+# [*gr_enable_logrotation*]
+#   Boolean. Sets up a cronjob to rotate carbon and webapp logs.
 # [*gr_apache_port*]
 #   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
 #   cause puppet to fail.
@@ -751,6 +753,7 @@ class graphite (
   $gr_manage_python_packages              = true,
   $gr_python_binary                       = $::graphite::params::python_binary,
   $gr_disable_webapp_cache                = false,
+  $gr_enable_logrotation                  = true,
   $gr_carbonlink_query_bulk               = undef,
   $gr_carbonlink_hosts_timeout            = '1.0',
   $gr_rendering_hosts                     = undef,
