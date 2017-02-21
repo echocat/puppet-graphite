@@ -92,6 +92,7 @@ class graphite::config_apache inherits graphite::params {
       File[$::graphite::storage_dir_REAL],
       File[$::graphite::graphiteweb_log_dir_REAL],
       File[$::graphite::graphiteweb_storage_dir_REAL],
+      File["${::graphite::storage_dir_REAL}/graphite.db"],
     ],
     before      => Service[$::graphite::params::apache_service_name],
     subscribe   => Exec['Initial django db creation'],
