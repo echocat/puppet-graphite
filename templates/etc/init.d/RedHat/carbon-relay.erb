@@ -38,8 +38,8 @@ start()
         if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
             INSTANCE="a";
         fi;
-        <% if @gr_carbon_relay_ulimit -%>
-          ulimit -n <%= @gr_carbon_relay_ulimit %>
+        <% if scope.lookupvar('graphite::gr_carbon_relay_ulimit') -%>
+            ulimit -n <%= scope.lookupvar('graphite::gr_carbon_relay_ulimit') %>
         <% end -%>
         pidfile=${PIDFILE_DIR}/carbon-${CARBON_DAEMON}-${INSTANCE}.pid
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
