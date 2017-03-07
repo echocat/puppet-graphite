@@ -36,9 +36,6 @@ class graphite::install inherits graphite::params {
     $gr_pkg_require = [Package[$::graphite::params::graphitepkgs]]
   }
 
-  $carbon = "carbon-${::graphite::gr_carbon_ver}-py${::graphite::params::pyver}.egg-info"
-  $gweb = "graphite_web-${::graphite::gr_graphite_ver}-py${::graphite::params::pyver}.egg-info"
-
   # # Manage resources
 
   # for full functionality we need these packages:
@@ -110,21 +107,22 @@ class graphite::install inherits graphite::params {
     }
 
     # hack unusual graphite install target
-    create_resources('file', {
+    $carbon = "\"carbon-\"*\"-py${::graphite::params::pyver}.egg-info\""
+    $gweb = "\"graphite_web-\"*\"-py${::graphite::params::pyver}.egg-info\""
+    create_resources('exec', {
       'carbon_hack' => {
-        path   => "${::graphite::params::libpath}/${carbon}",
-        target => "${::graphite::base_dir_REAL}/lib/${carbon}"
+        command => "ln -s \"${::graphite::base_dir_REAL}/lib/\"${carbon} \"${::graphite::params::libpath}/\""
       }
       ,
       'gweb_hack'   => {
-        path   => "${::graphite::params::libpath}/${gweb}",
-        target => "${::graphite::base_dir_REAL}/webapp/${gweb}"
+        command => "ln -s \"${::graphite::base_dir_REAL}/webapp/\"${gweb} \"${::graphite::params::libpath}/\""
       }
       ,
     }
     , {
-      ensure  => 'link',
-      require => Package['carbon', 'graphite-web', 'whisper'],
+      refreshonly => true,
+      subscribe   => Package['carbon', 'graphite-web', 'whisper'],
+      provider    => 'shell',
     }
     )
   }
