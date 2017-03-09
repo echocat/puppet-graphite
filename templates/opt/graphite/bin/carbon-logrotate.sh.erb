@@ -1,11 +1,20 @@
 #!/bin/bash
 
 # Because graphite has now way to configure the logrotation,
-# we do that with a cronjab and this script.
+# we do that with a cronjob and this script.
+ 
+CARBON_LOGS_PATH="<%= scope.lookupvar('graphite::graphiteweb_log_dir_REAL') %>"
+CARBON_LOGS="carbon-cache/ carbon-relay/ carbon-aggregator/"
 
-CARBON_LOGS=/opt/graphite/storage/log/carbon-cache/
+ROTATE_DAYS=3
+RETENTION=30
 
-# gzip log files older than 3 days
-find $CARBON_LOGS -type f -mtime +3 -exec gzip -q "{}" \;
-# removes log files older than 30 days
-find $CARBON_LOGS -type f -ctime +30 -exec rm "{}" \;
+for CARBON_LOG in $CARBON_LOGS; do
+  if [ -d "${CARBON_LOGS_PATH}/${CARBON_LOG}" ]; then
+    # gzip log files older than $ROTATE_DAYS days
+    find "${CARBON_LOGS_PATH}/${CARBON_LOG}" -type f -mtime +${ROTATE_DAYS} ! -name "*.gz" -exec gzip -q "{}" \;
+    # removes log files older than $RETENTION days
+    find "${CARBON_LOGS_PATH}/${CARBON_LOG}" -type f -ctime +${RETENTION} -delete
+  fi
+done
+

@@ -10,24 +10,34 @@
 class graphite::params {
   $build_dir = '/usr/local/src/'
 
-  $python_pip_pkg  = 'python-pip'
-  $graphiteVersion = '0.9.12'
-  $carbonVersion   = '0.9.12'
-  $whisperVersion  = '0.9.12'
+  $python_pip_pkg     = 'python-pip'
+  $django_tagging_pkg = 'django-tagging'
+  $django_tagging_ver = '0.3.1'
+  $twisted_pkg        = 'Twisted'
+  $twisted_ver        = '11.1.0'
+  $txamqp_pkg         = 'txAMQP'
+  $txamqp_ver         = '0.4'
+  $graphite_pkg       = 'graphite-web'
+  $graphite_ver       = '0.9.15'
+  $carbon_pkg         = 'carbon'
+  $carbon_ver         = '0.9.15'
+  $whisper_pkg        = 'whisper'
+  $whisper_ver        = '0.9.15'
+  $django_pkg         = 'Django'
+  $django_ver         = '1.5'
+  $django_provider    = 'pip'
 
-  $whisper_dl_url = "http://github.com/graphite-project/whisper/archive/${::graphite::params::whisperVersion}.tar.gz"
-  $whisper_dl_loc = "${build_dir}/whisper-${::graphite::params::whisperVersion}"
+  $install_prefix     = '/opt/'
 
-  $webapp_dl_url = "http://github.com/graphite-project/graphite-web/archive/${::graphite::params::graphiteVersion}.tar.gz"
-  $webapp_dl_loc = "${build_dir}/graphite-web-${::graphite::params::graphiteVersion}"
-
-  $carbon_dl_url = "https://github.com/graphite-project/carbon/archive/${::graphite::params::carbonVersion}.tar.gz"
-  $carbon_dl_loc = "${build_dir}/carbon-${::graphite::params::carbonVersion}"
-
-  $install_prefix      = '/opt/'
-  $enable_carbon_relay = false
-  $nginxconf_dir       = '/etc/nginx/sites-available'
-
+  # variables to workaround unusual graphite install target:
+  # https://github.com/graphite-project/carbon/issues/86
+  $pyver              = $::osfamily ? {
+    'RedHat' => $::operatingsystemrelease ? {
+      /^6/    => '2.6',
+      default => '2.7'
+    },
+    default  => '2.7',
+  }
   case $::osfamily {
     'Debian': {
       $apache_dir                = '/etc/apache2'
@@ -37,52 +47,57 @@ class graphite::params {
       $apache_wsgi_socket_prefix = '/var/run/apache2/wsgi'
       $apacheconf_dir            = '/etc/apache2/sites-available'
       $apacheports_file          = 'ports.conf'
+      $apache_logdir_graphite    = '/var/log/apache2/graphite-web'
 
-      if $graphite::gr_web_group {
-        $web_group = $graphite::gr_web_group
-      } else {
-        $web_group = 'www-data'
-      }
+      $nginxconf_dir    = '/etc/nginx/sites-available'
 
-      if $graphite::gr_web_user {
-        $web_user = $graphite::gr_web_user
-      } else {
-        $web_user = 'www-data'
-      }
+      $apache_web_group = 'www-data'
+      $apache_web_user  = 'www-data'
+      $nginx_web_group  = 'www-data'
+      $nginx_web_user   = 'www-data'
 
       $python_dev_pkg = 'python-dev'
 
-      # see https://github.com/graphite-project/carbon/issues/86
-      $carbin_pip_hack_source = "/usr/lib/python2.7/dist-packages/carbon-${carbonVersion}-py2.7.egg-info"
-      $carbin_pip_hack_target = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
-      $gweb_pip_hack_source   = "/usr/lib/python2.7/dist-packages/graphite_web-${carbonVersion}-py2.7.egg-info"
-      $gweb_pip_hack_target   = "/opt/graphite/webapp/graphite_web-${carbonVersion}-py2.7.egg-info"
-
-      $graphitepkgs = [
-        'python-cairo',
-        'python-django',
+      $common_os_pkgs = [
+        'python-tz',
         'python-ldap',
         'python-memcache',
         'python-mysqldb',
         'python-psycopg2',
         'python-simplejson',
         'python-sqlite',
-        'python-twisted',
       ]
+
+      if $::operatingsystem == 'Ubuntu' {
+        if versioncmp($::lsbdistrelease, '15.10') == -1 {
+          $service_provider   = 'debian'
+        } else {
+          $service_provider   = 'systemd'
+        }
+      } elsif $::operatingsystem == 'Debian' {
+        if versioncmp($::lsbdistrelease, '8.0') == -1 {
+          $service_provider   = 'debian'
+        } else {
+          $service_provider   = 'systemd'
+        }
+      }
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
-          $apache_24               = false
+          $apache_24          = false
+          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
 
-        /jessie|trusty|utopic|vivid/: {
-          $apache_24               = true
+        /jessie|trusty|utopic|vivid|wily/: {
+          $apache_24          = true
+          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
         }
 
         default: {
           fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/dist-packages"
     }
 
     'RedHat': {
@@ -93,77 +108,49 @@ class graphite::params {
       $apache_wsgi_socket_prefix = 'run/wsgi'
       $apacheconf_dir            = '/etc/httpd/conf.d'
       $apacheports_file          = 'graphite_ports.conf'
+      $apache_logdir_graphite    = '/var/log/httpd/graphite-web'
 
-      if $graphite::gr_web_group {
-        $web_group = $graphite::gr_web_group
-      } else {
-        $web_group = 'apache'
-      }
+      $nginxconf_dir    = '/etc/nginx/conf.d'
 
-      if $graphite::gr_web_user {
-        $web_user = $graphite::gr_web_user
-      } else {
-        $web_user = 'apache'
-      }
+      $apache_web_group = 'apache'
+      $apache_web_user  = 'apache'
+      $nginx_web_group  = 'nginx'
+      $nginx_web_user   = 'nginx'
 
-      $python_dev_pkg = 'python-devel'
+      $python_dev_pkg = ['python-devel','gcc']
+      $common_os_pkgs = [
+        'MySQL-python',
+        'pyOpenSSL',
+        'python-ldap',
+        'python-memcached',
+        'python-psycopg2',
+        'python-zope-interface',
+        'python-tzlocal',
+      ]
 
       # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
-          $carbin_pip_hack_source     = "/usr/lib/python2.6/site-packages/carbon-${carbonVersion}-py2.6.egg-info"
-          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.6.egg-info"
-          $apache_24               = false
-          $gweb_pip_hack_source       = "/usr/lib/python2.6/site-packages/graphite_web-${graphiteVersion}-py2.6.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.6.egg-info"
-          $graphitepkgs = [
-            'Django14',
-            'MySQL-python',
-            'bitmap',
-            'bitmap-fonts-compat',
-            'gcc',
-            'pyOpenSSL',
-            'pycairo',
-            'python-crypto',
-            'python-ldap',
-            'python-memcached',
-            'python-psycopg2',
-            'python-sqlite2',
-            'python-zope-interface',
-          ]
+          $apache_24           = false
+          $graphitepkgs        = union($common_os_pkgs,['python-sqlite2', 'bitmap-fonts-compat', 'bitmap', 'pycairo','python-crypto'])
+          $service_provider    = 'redhat'
         }
 
         /^7\.\d+/: {
-          $carbin_pip_hack_source     = "/usr/lib/python2.7/site-packages/carbon-${carbonVersion}-py2.7.egg-info"
-          $carbin_pip_hack_target     = "/opt/graphite/lib/carbon-${carbonVersion}-py2.7.egg-info"
-          $apache_24               = true
-          $gweb_pip_hack_source       = "/usr/lib/python2.7/site-packages/graphite_web-${graphiteVersion}-py2.7.egg-info"
-          $gweb_pip_hack_target       = "/opt/graphite/webapp/graphite_web-${graphiteVersion}-py2.7.egg-info"
-          $graphitepkgs = [
-            'python-django',
-            'MySQL-python',
-            'bitmap',
-            'bitmap-fonts-compat',
-            'gcc',
-            'pyOpenSSL',
-            'pycairo',
-            'python-crypto',
-            'python-ldap',
-            'python-memcached',
-            'python-psycopg2',
-            'python-sqlite3dbm',
-            'python-zope-interface',
-          ]
+          $apache_24           = true
+          $graphitepkgs        = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
+          $service_provider    = 'systemd'
         }
 
         default: {
           fail("Unsupported RedHat release: '${::operatingsystemrelease}'")
         }
       }
+      $libpath = "/usr/lib/python${pyver}/site-packages"
     }
 
     default: {
-      fail('unsupported os.')
+      fail("unsupported os, ${::operatingsystem}.")
     }
   }
 

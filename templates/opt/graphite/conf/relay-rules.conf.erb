@@ -4,7 +4,10 @@
   rules = scope.lookupvar('graphite::gr_relay_rules')
   rules.sort.each do |name, rule| %>
 [<%= name %>]
-<%- if rule['default'] then %>default = true<% end %>
-<%- if rule['pattern'] then %>pattern = <%= rule['pattern'] %><% end %>
-destinations = <%= rule['destinations'].join(', ') %>
+<% rule.sort.each do |rule_name, rule_value| -%>
+<% if rule_value.kind_of?(Array) -%>
+<%= rule_name %> = <%= rule_value.join(', ') %>
+<% else -%>
+<%= rule_name %> = <%= rule_value %>
+<% end; end -%>
 <% end %>

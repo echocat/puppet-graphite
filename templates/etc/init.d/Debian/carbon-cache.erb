@@ -14,49 +14,56 @@
 
 PYTHON_CMD='python -W ignore'
 CARBON_DAEMON="cache"
-GRAPHITE_DIR="/opt/graphite"
+GRAPHITE_DIR="<%= scope.lookupvar('graphite::base_dir_REAL') %>"
+STOP_COUNTER=12 # 12 times 5s -> 60 secs
 
 OPERATION="$1"
 if [ $# -gt 1 ]; then
     shift
-    INSTANCES=$@
+    INSTANCES=$*
 else
-	INSTANCES=`grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2`
+    INSTANCES=$(grep "^\[${CARBON_DAEMON}" ${GRAPHITE_DIR}/conf/carbon.conf | cut -d \[ -f 2 | cut -d \] -f 1 | cut -d : -f 2)
 fi
 
 case "${OPERATION}" in
     start)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
+                INSTANCE="a";
+            fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start
         done
         ;;
     stop)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
+                INSTANCE="a";
+            fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop
             sleep 3
-            while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
+            CNT=${STOP_COUNTER}
+            while [ $(/usr/bin/pgrep -cf "carbon-${CARBON_DAEMON}.py --instance=${INSTANCE}") -eq 1 ]; do
                 echo "waiting another 5 secs for carbon-${CARBON_DAEMON}-${INSTANCE} to stop"
                 sleep 5
-                #TODO: add timer to prevend endless waiting
+                if [ ${CNT} -lt 1 ]; then
+                    pid=$(/usr/bin/pgrep -f "carbon-${CARBON_DAEMON}.py --instance=${INSTANCE}")
+                    test -n ${pid} && kill -9 ${pid}
+                    break
+                fi
+                CNT=$(expr ${CNT} - 1)
             done
         done
         ;;
     status)
-        for instance in ${INSTANCES}; do
+        for INSTANCE in ${INSTANCES}; do
+            if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
+                INSTANCE="a";
+            fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} status
         done
         ;;
     restart)
-        for instance in ${INSTANCES}; do
-            ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop
-            sleep 3
-            while [ -f ${GRAPHITE_DIR}/storage/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
-                echo "waiting another 5 secs for carbon-${CARBON_DAEMON}-${INSTANCE} to stop"
-                sleep 5
-                #TODO: add timer to prevend endless waiting
-            done
-            ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} start
-        done
+        $0 stop ${INSTANCES} && sleep 2 && $0 start ${INSTANCES}
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status} [instance instance ...]"
