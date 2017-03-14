@@ -91,17 +91,26 @@ class graphite::install inherits graphite::params {
     ,
   }
   , {
-    provider => $gr_pkg_provider,
-    require  => $gr_pkg_require,
+    provider        => $gr_pkg_provider,
+    require         => $gr_pkg_require,
+    install_options => $gr_pkg_provider ? {
+      'pip'   => $::graphite::params::pip_install_options,
+      default => undef,
+    },
   }
   )
 
   if $::graphite::gr_django_pkg {
+    $django_install_options = $::graphite::gr_django_provider ? {
+      'pip'   => $::graphite::params::pip_install_options,
+      default => undef,
+    }
     package { $::graphite::gr_django_pkg:
-      ensure   => $::graphite::gr_django_ver,
-      provider => $::graphite::gr_django_provider,
-      source   => $::graphite::gr_django_source,
-      require  => $gr_pkg_require,
+      ensure          => $::graphite::gr_django_ver,
+      provider        => $::graphite::gr_django_provider,
+      source          => $::graphite::gr_django_source,
+      require         => $gr_pkg_require,
+      install_options => $django_install_options,
     }
   }
 

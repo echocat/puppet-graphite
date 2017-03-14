@@ -92,21 +92,24 @@ class graphite::params {
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
-          $apache_24          = false
-          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
-          $libpath            = "/usr/lib/python${pyver}/dist-packages"
+          $apache_24           = false
+          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
+          $libpath             = "/usr/lib/python${pyver}/dist-packages"
+          $pip_install_options = undef
         }
 
         /jessie|trusty|utopic|vivid|wily/: {
-          $apache_24          = true
-          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
-          $libpath            = "/usr/lib/python${pyver}/dist-packages"
+          $apache_24           = true
+          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
+          $libpath             = "/usr/lib/python${pyver}/dist-packages"
+          $pip_install_options = undef
         }
 
         /xenial/: {
-          $apache_24          = true
-          $graphitepkgs       = union($common_os_pkgs, ['python-cairo',])
-          $libpath            = "/usr/local/lib/python${pyver}/dist-packages"
+          $apache_24           = true
+          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
+          $libpath             = "/usr/local/lib/python${pyver}/dist-packages"
+          $pip_install_options = [{'--no-binary' => ':all:'}]
         }
 
         default: {
@@ -184,6 +187,8 @@ class graphite::params {
       }
 
       $libpath = "/usr/lib/python${pyver}/site-packages"
+
+      $pip_install_options = undef
     }
 
     default: {
