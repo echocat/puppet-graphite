@@ -32,6 +32,7 @@ class graphite::params {
   $django_ver            = '1.5'
   $django_source         = undef
   $django_provider       = 'pip'
+  $pip_install_options   = undef
   $python_binary         = 'python'
 
   $install_prefix     = '/opt/'
@@ -92,24 +93,24 @@ class graphite::params {
 
       case $::lsbdistcodename {
         /squeeze|wheezy|precise/: {
-          $apache_24           = false
-          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
-          $libpath             = "/usr/lib/python${pyver}/dist-packages"
-          $pip_install_options = undef
+          $apache_24                 = false
+          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = undef
         }
 
         /jessie|trusty|utopic|vivid|wily/: {
-          $apache_24           = true
-          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
-          $libpath             = "/usr/lib/python${pyver}/dist-packages"
-          $pip_install_options = undef
+          $apache_24                 = true
+          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = undef
         }
 
         /xenial/: {
-          $apache_24           = true
-          $graphitepkgs        = union($common_os_pkgs, ['python-cairo',])
-          $libpath             = "/usr/local/lib/python${pyver}/dist-packages"
-          $pip_install_options = [{'--no-binary' => ':all:'}]
+          $apache_24                 = true
+          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+          $libpath                   = "/usr/local/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = [{'--no-binary' => ':all:'}]
         }
 
         default: {
@@ -188,7 +189,7 @@ class graphite::params {
 
       $libpath = "/usr/lib/python${pyver}/site-packages"
 
-      $pip_install_options = undef
+      $extra_pip_install_options = undef
     }
 
     default: {

@@ -945,6 +945,10 @@ Default is `undef` (string). The source of the django package that should be ins
 
 Default is `undef` (string) The provider of the django package that should be installed.
 
+##### `gr_pip_install_options`
+
+Default is `undef` (array). An array of options to pass to `pip install` when installing graphite.
+
 ##### `gr_pip_install`
 
 Default is true (Bool). Should packages be installed via pip
