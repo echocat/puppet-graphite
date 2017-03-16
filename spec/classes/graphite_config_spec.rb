@@ -152,7 +152,7 @@ describe 'graphite::config', :type => 'class' do
       '/var/lib/graphite-web'].each { |f|
       it { is_expected.to contain_file(f).with($attributes_debian)}
     }
-    
+
   end
 
   shared_context 'Debian sysv platforms' do
@@ -210,7 +210,7 @@ describe 'graphite::config', :type => 'class' do
         case facts[:lsbdistcodename]
         when /squeeze|wheezy|precise|trusty|utopic|vivid/ then
           it_behaves_like 'Debian sysv platforms'
-        when /jessie|wily/ then
+        when /jessie|wily|xenial/ then
           it_behaves_like 'Debian systemd platforms'
         else
           it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
