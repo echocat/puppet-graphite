@@ -987,6 +987,7 @@ the package-provided configuration file. You will have to either manually remove
 than port 80.
 * nginx/gunicorn requires a `systemctl restart gunicorn` after installing on Ubuntu 15.10
 * SELinux must be disabled
+* Installing on Ubuntu 16.04 Xenial requires Puppet 4.1+ (see commit [71251c9](https://github.com/echocat/puppet-graphite/commit/71251c92c8a1b85b7eb1515a009b7808756c7bee))
 
 ##Contributing
 
