@@ -503,6 +503,9 @@
 # [*gr_django_provider*]
 #   String. The provider to use for installing django.
 #   Default: pip
+# [*gr_pip_install_options*]
+#   Array. Options to pass to `pip install` when installing graphite.
+#   Default: undef
 # [*gr_pip_install*]
 #   Boolean. Should the package be installed via pip
 #   Default: true
@@ -750,6 +753,7 @@ class graphite (
   $gr_django_ver                          = $::graphite::params::django_ver,
   $gr_django_source                       = $::graphite::params::django_source,
   $gr_django_provider                     = $::graphite::params::django_provider,
+  $gr_pip_install_options                 = $::graphite::params::pip_install_options,
   $gr_pip_install                         = true,
   $gr_manage_python_packages              = true,
   $gr_python_binary                       = $::graphite::params::python_binary,

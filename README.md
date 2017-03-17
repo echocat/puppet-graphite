@@ -260,6 +260,18 @@ You can also chose to install the pip packages from a source other than PyPI, su
   }
 ```
 
+You can also specify an alternate source for all packages (and their dependencies) by passing options to `pip install` using `gr_pip_install_options`:
+```puppet
+  class { '::graphite':
+    gr_pip_install_options => [
+      '--no-index',
+      '--find-links', 'https://example.com/pip_packages/',
+    ],
+  }
+```
+
+For more details on how these options work, see the [documentation for `pip install`](https://pip.pypa.io/en/stable/reference/pip_install/).
+
 ## Usage
 
 #### Class: `graphite`
@@ -944,6 +956,20 @@ Default is `undef` (string). The source of the django package that should be ins
 ##### `gr_django_provider`
 
 Default is `undef` (string) The provider of the django package that should be installed.
+
+##### `gr_pip_install_options`
+
+Default is `undef` (array). An array of options to pass to `pip install` when installing graphite.
+
+For example, to install packages from a repository other than PyPI, you could pass `--index-url` like this:
+
+```puppet
+  class { 'graphite':
+    gr_pip_install_options => ['--index-url', 'https://custom-packge-server/simple/'],
+  }
+```
+
+For details on available options, see the [documentation for `pip install`](https://pip.pypa.io/en/stable/reference/pip_install/).
 
 ##### `gr_pip_install`
 
