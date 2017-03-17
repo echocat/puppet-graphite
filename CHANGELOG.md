@@ -1,3 +1,19 @@
+## 2017-03-17 - 7.0.0 (Major release)
+
+#### Features:
+
+- Add support for Ubuntu Xenial (see compatibility part of README)
+- Add the ability to specify an alternative python binary
+- Allow setting service provider by parameter
+- Make logrotation optional
+- Autodetect additional whisper dirs
+- Optimizations for Amazon Linux
+- Add parameter gr_carbon_log_rotate
+
+#### Bugfixes:
+
+- Some smaller fixes
+
 ## 2016-05-31 - 6.0.4 (Bugfix release)
 
 #### Bugfixes:
