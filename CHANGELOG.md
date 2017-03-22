@@ -1,3 +1,9 @@
+## 2017-03-22 - 7.1.0 (Feature release)
+
+#### Features:
+
+- Add `gr_pip_install_options` param for setting install_options for pip
+
 ## 2017-03-17 - 7.0.0 (Major release)
 
 #### Features:

@@ -17,6 +17,14 @@ class graphite::install inherits graphite::params {
     )
   }
 
+  $pip_install_options = $::graphite::params::extra_pip_install_options ? {
+    undef   => $::graphite::gr_pip_install_options,
+    default => union(
+      $::graphite::params::extra_pip_install_options,
+      pick($::graphite::gr_pip_install_options, [])
+    )
+  }
+
   # # Set class variables
   $gr_pkg_provider = $::graphite::gr_pip_install ? {
     true    => 'pip',
@@ -91,7 +99,7 @@ class graphite::install inherits graphite::params {
     provider        => $gr_pkg_provider,
     require         => $gr_pkg_require,
     install_options => $gr_pkg_provider ? {
-      'pip'   => $::graphite::params::pip_install_options,
+      'pip'   => $pip_install_options,
       default => undef,
     },
   }
@@ -99,7 +107,7 @@ class graphite::install inherits graphite::params {
 
   if $::graphite::gr_django_pkg {
     $django_install_options = $::graphite::gr_django_provider ? {
-      'pip'   => $::graphite::params::pip_install_options,
+      'pip'   => $pip_install_options,
       default => undef,
     }
     package { $::graphite::gr_django_pkg:
