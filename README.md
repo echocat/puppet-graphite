@@ -833,23 +833,23 @@ Example value:
     }
 }
 ```
-#####`gr_relay_instances`
+##### `gr_relay_instances`
 
 Default is empty array. Allow multiple additional relay instances. (beside the default one)
 
 Example: see gr_cache_instances
 
-#####`gr_aggregator_instances`
+##### `gr_aggregator_instances`
 
 Default is empty array. Allow multiple additional aggregator instances. (beside the default one)
 
 Example: see gr_cache_instances
 
-#####`gr_whisper_autoflush`
+##### `gr_whisper_autoflush`
 
 Default is 'False'. Set autoflush for whisper
 
-#####`gr_whisper_lock_writes`
+##### `gr_whisper_lock_writes`
 
 Default is false. Set lock writes for whisper
 
