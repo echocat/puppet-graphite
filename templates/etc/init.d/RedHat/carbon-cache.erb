@@ -54,6 +54,7 @@ start()
         sleep 1
         if rh_status_q; then
             touch /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
+            ps -ef | grep carbon-${CARBON_DAEMON} | grep -v grep | tr -s [:space:] | cut -f 2 -d ' ' | head -1 > $pidfile
             echo_success
             echo
         else
