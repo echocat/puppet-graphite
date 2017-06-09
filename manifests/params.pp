@@ -147,7 +147,13 @@ class graphite::params {
         $pyopenssl       = 'pyOpenSSL'
         $apache_wsgi_pkg = 'mod_wsgi'
         $pytz            = 'python-tzlocal'
-        $python_pip_pkg  = 'python-pip'
+        $python_pip_pkg  = $::osfamily ? {
+          'RedHat' => $::operatingsystemrelease ? {
+            /^7/    => 'python2-pip',
+            default => 'python-pip'
+          },
+          default  => 'python-pip',
+        }
       }
 
       $python_dev_pkg = ["${python}-devel", 'gcc']

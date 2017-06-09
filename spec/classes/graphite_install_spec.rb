@@ -74,6 +74,7 @@ describe 'graphite::install', :type => 'class' do
   end
 
   shared_context 'RedHat 7 platforms' do
+    it { is_expected.to contain_package('python2-pip').with_provider(nil) }
     it { is_expected.to contain_package('python-cairocffi').with_provider(nil) }
     it { is_expected.to contain_package('Django').with_provider('pip') }
     it { is_expected.to contain_package('python-sqlite3dbm').with_provider(nil) }
@@ -128,11 +129,11 @@ describe 'graphite::install', :type => 'class' do
           it_behaves_like 'no django'
         end
       when 'RedHat' then
-        it_behaves_like 'supported platforms'
         it_behaves_like 'RedHat supported platforms'
 
         case facts[:operatingsystemrelease]
         when /^6/ then
+          it_behaves_like 'supported platforms'
           it_behaves_like 'RedHat 6 platforms'
         when /^7/ then
           it_behaves_like 'RedHat 7 platforms'
