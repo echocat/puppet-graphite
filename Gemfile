@@ -18,7 +18,7 @@ gem 'rspec-puppet-facts',                 :require => false
 gem 'rake', '< 11.0.0',                   :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 gem 'json', '< 2.0.0',                    :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 gem 'json_pure', '<= 2.0.1',              :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
-gem 'metadata-json-lint' '<= 1.2.1',      :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
+gem 'metadata-json-lint' '<= 1.1.0',      :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 
 gem 'puppet', *location_for(ENV['PUPPET_GEM_VERSION'])
 
