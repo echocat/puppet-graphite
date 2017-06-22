@@ -387,7 +387,7 @@ Default is '/opt/graphite'. Set base install location of Graphite. This forms th
 
 #### `gr_base_dir_managed_externally`
 
-Default is 'False'. Useful if the base install location of Graphite is managed by other Puppet resource (like a mountpoint for example)
+Boolean, default to false . Useful if the base install location of Graphite is managed by other Puppet resource (like a mountpoint for example)
 
 ##### `gr_storage_dir`
 
