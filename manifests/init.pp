@@ -702,7 +702,7 @@ class graphite (
   ,
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
-  $gr_base_dir_managed_externally         = 'False',
+  $gr_base_dir_managed_externally         = undef,
   $gr_base_dir                            = '/opt/graphite',
   $gr_storage_dir                         = undef,
   $gr_local_data_dir                      = undef,
