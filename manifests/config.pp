@@ -105,13 +105,15 @@ class graphite::config inherits graphite::params {
     subscribe   => Class['graphite::install'],
   }
 
-  # change access permissions for web server
-  file { $::graphite::base_dir_REAL:
-    ensure  => directory,
-    group   => $gr_web_group_REAL,
-    mode    => '0755',
-    owner   => $gr_web_user_REAL,
-    seltype => 'httpd_sys_rw_content_t',
+  if !$::graphite::gr_base_dir_managed_externally {
+    # change access permissions for web server
+    file { $::graphite::base_dir_REAL:
+      ensure  => directory,
+      group   => $gr_web_group_REAL,
+      mode    => '0755',
+      owner   => $gr_web_user_REAL,
+      seltype => 'httpd_sys_rw_content_t',
+    }
   }
 
   file { [

@@ -702,6 +702,7 @@ class graphite (
   ,
   $gr_use_remote_user_auth                = 'False',
   $gr_remote_user_header_name             = undef,
+  $gr_base_dir_managed_externally         = false,
   $gr_base_dir                            = '/opt/graphite',
   $gr_storage_dir                         = undef,
   $gr_local_data_dir                      = undef,
@@ -782,6 +783,7 @@ class graphite (
   validate_bool($gr_pip_install)
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
+  validate_bool($gr_base_dir_managed_externally)
 
   if $gr_apache_port or $gr_apache_port_https {
     fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
