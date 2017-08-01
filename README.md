@@ -385,6 +385,10 @@ Default is 'GMT' (string). Timezone for graphite to be used.
 
 Default is '/opt/graphite'. Set base install location of Graphite. This forms the base location for installs, predominantly appropriate for pip installations. When not installing using pip a typical location for this may be '/opt/carbon'.
 
+#### `gr_base_dir_managed_externally`
+
+Boolean, default to false . Useful if the base install location of Graphite is managed by other Puppet resource (like a mountpoint for example)
+
 ##### `gr_storage_dir`
 
 Default is '${gr_base_dir}/storage'. Set location of base storage files.  When not installing using pip a typical location for this may be '/opt/carbon'. This dir is also used as pid dir on RedHat.
@@ -833,23 +837,23 @@ Example value:
     }
 }
 ```
-#####`gr_relay_instances`
+##### `gr_relay_instances`
 
 Default is empty array. Allow multiple additional relay instances. (beside the default one)
 
 Example: see gr_cache_instances
 
-#####`gr_aggregator_instances`
+##### `gr_aggregator_instances`
 
 Default is empty array. Allow multiple additional aggregator instances. (beside the default one)
 
 Example: see gr_cache_instances
 
-#####`gr_whisper_autoflush`
+##### `gr_whisper_autoflush`
 
 Default is 'False'. Set autoflush for whisper
 
-#####`gr_whisper_lock_writes`
+##### `gr_whisper_lock_writes`
 
 Default is false. Set lock writes for whisper
 

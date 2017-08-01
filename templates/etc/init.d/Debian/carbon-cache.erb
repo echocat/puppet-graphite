@@ -55,12 +55,15 @@ case "${OPERATION}" in
         done
         ;;
     status)
+        rc=0
         for INSTANCE in ${INSTANCES}; do
             if [ "${INSTANCE}" = "${CARBON_DAEMON}" ]; then
                 INSTANCE="a";
             fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} status
+            let rc=${rc}+$?
         done
+        exit ${rc}
         ;;
     restart)
         $0 stop ${INSTANCES} && sleep 2 && $0 start ${INSTANCES}
