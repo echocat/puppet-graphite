@@ -37,6 +37,10 @@ class graphite::params {
 
   $install_prefix     = '/opt/'
 
+  # variables for django db initialization
+  $gr_django_init_provider = 'posix'
+  $gr_django_init_command  = "${::graphite::gr_python_binary} manage.py syncdb --noinput"
+
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
   $pyver              = $::osfamily ? {

@@ -732,6 +732,8 @@ class graphite (
   $wsgi_processes                         = 5,
   $wsgi_threads                           = 5,
   $wsgi_inactivity_timeout                = 120,
+  $gr_django_init_provider                = $::graphite::params::gr_django_init_provider,
+  $gr_django_init_command                 = $::graphite::params::gr_django_init_command,
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
   $gr_django_tagging_source               = $::graphite::params::django_tagging_source,
