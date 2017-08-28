@@ -322,6 +322,9 @@
 # [*gr_carbonlink_query_bulk*]
 #   Boolean. 0.9.13 function. Using 'query-bulk' queries for carbon.
 #   Default: false
+# [*gr_carbonlink_hashing_type*]
+#   String. 0.9.16 function. Defining 'consistent-hashing' type.
+#   Default: carbon_ch
 # [*gr_cluster_fetch_timeout*]
 #   Timeout to fetch series data.   Default = 6
 # [*gr_cluster_find_timeout*]
@@ -761,6 +764,7 @@ class graphite (
   $gr_disable_webapp_cache                = false,
   $gr_enable_logrotation                  = true,
   $gr_carbonlink_query_bulk               = undef,
+  $gr_carbonlink_hashing_type             = undef,
   $gr_carbonlink_hosts_timeout            = '1.0',
   $gr_rendering_hosts                     = undef,
   $gr_rendering_hosts_timeout             = '1.0',
