@@ -442,7 +442,7 @@
 #   Default: 'posix'
 # [*gr_django_init_command]
 #   Command to use for the Django DB initialization exec.
-#   default: "${::graphite::gr_python_binary} manage.py syncdb --noinput"
+#   default: "${::graphite::params::python_binary} manage.py syncdb --noinput"
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
@@ -738,8 +738,8 @@ class graphite (
   $wsgi_processes                         = 5,
   $wsgi_threads                           = 5,
   $wsgi_inactivity_timeout                = 120,
-  $gr_django_init_provider                = "${::graphite::params::gr_python_binary} manage.py syncdb --noinput",
-  $gr_django_init_command                 = $::graphite::params::django_init_command,
+  $gr_django_init_provider                = $::graphite::params::django_init_provider,
+  $gr_django_init_command                 = "${::graphite::params::python_binary} manage.py syncdb --noinput",
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
   $gr_django_tagging_source               = $::graphite::params::django_tagging_source,

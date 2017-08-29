@@ -39,7 +39,6 @@ class graphite::params {
 
   # variables for django db initialization
   $django_init_provider = 'posix'
-#  $django_init_command  = "${::graphite::gr_python_binary} manage.py syncdb --noinput"
 
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
