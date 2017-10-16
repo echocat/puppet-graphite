@@ -37,6 +37,9 @@ class graphite::params {
 
   $install_prefix     = '/opt/'
 
+  # variables for django db initialization
+  $django_init_provider = 'posix'
+
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
   $pyver              = $::osfamily ? {
