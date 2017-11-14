@@ -35,7 +35,8 @@ class graphite::params {
   $pip_install_options   = undef
   $python_binary         = 'python'
 
-  $install_prefix     = '/opt/'
+  $install_prefix        = '/opt/'
+  $gr_pidfile_dir        = '/run'
 
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
