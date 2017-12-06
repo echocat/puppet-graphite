@@ -75,6 +75,7 @@ class graphite::params {
         'python-psycopg2',
         'python-simplejson',
         'python-sqlite',
+        'python-setuptools',
       ]
 
       if $::operatingsystem == 'Ubuntu' {
@@ -99,7 +100,7 @@ class graphite::params {
           $extra_pip_install_options = undef
         }
 
-        /jessie|trusty|utopic|vivid|wily/: {
+        /stretch|jessie|trusty|utopic|vivid|wily/: {
           $apache_24                 = true
           $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
           $libpath                   = "/usr/lib/python${pyver}/dist-packages"
