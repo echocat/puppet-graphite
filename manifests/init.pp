@@ -818,6 +818,9 @@ class graphite (
   $graphiteweb_storage_dir_REAL     = $gr_graphiteweb_storage_dir
   $graphiteweb_install_lib_dir_REAL = pick($gr_graphiteweb_install_lib_dir, "${graphiteweb_webapp_dir_REAL}/graphite")
 
+  # Check for Graphite version 1 and above
+  $version_1 = versioncmp($gr_graphite_ver, '1.0')
+
   # The anchor resources allow the end user to establish relationships
   # to the "main" class and preserve the relationship to the
   # implementation classes through a transitive relationship to
