@@ -230,9 +230,12 @@ DATABASES = {
 #REMOTE_STORE_FIND_TIMEOUT = 2.5  # Timeout for metric find requests
 #REMOTE_STORE_RETRY_DELAY = 60    # Time before retrying a failed remote webapp
 #REMOTE_FIND_CACHE_DURATION = 300 # Time to cache remote metric find results
+
 <% else %>
 CLUSTER_SERVERS = ['<%= scope.lookupvar('graphite::gr_cluster_servers').join("','") %>']
 
+# Remote cluster settings config names changed in Graphite 1.0.
+# See https://github.com/echocat/puppet-graphite/pull/356 for more info
 <% if scope.lookupvar('graphite::version_1') >= 0 %>
 REMOTE_FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
 REMOTE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
