@@ -38,6 +38,9 @@ class graphite::params {
   $install_prefix        = '/opt/'
   $gr_pidfile_dir        = '/run'
 
+  # variables for django db initialization
+  $django_init_provider = 'posix'
+
   # variables to workaround unusual graphite install target:
   # https://github.com/graphite-project/carbon/issues/86
   $pyver              = $::osfamily ? {
@@ -76,6 +79,7 @@ class graphite::params {
         'python-psycopg2',
         'python-simplejson',
         'python-sqlite',
+        'python-setuptools',
       ]
 
       if $::operatingsystem == 'Ubuntu' {
@@ -100,7 +104,7 @@ class graphite::params {
           $extra_pip_install_options = undef
         }
 
-        /jessie|trusty|utopic|vivid|wily/: {
+        /stretch|jessie|trusty|utopic|vivid|wily/: {
           $apache_24                 = true
           $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
           $libpath                   = "/usr/lib/python${pyver}/dist-packages"
