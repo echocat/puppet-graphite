@@ -35,7 +35,8 @@ class graphite::params {
   $pip_install_options   = undef
   $python_binary         = 'python'
 
-  $install_prefix     = '/opt/'
+  $install_prefix        = '/opt/'
+  $gr_pidfile_dir        = '/run'
 
   # variables for django db initialization
   $django_init_provider = 'posix'

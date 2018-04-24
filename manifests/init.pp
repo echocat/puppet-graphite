@@ -715,6 +715,7 @@ class graphite (
   $gr_base_dir                            = '/opt/graphite',
   $gr_storage_dir                         = undef,
   $gr_local_data_dir                      = undef,
+  $gr_pidfile_dir                         = $::graphite::params::gr_pidfile_dir,
   $gr_rrd_dir                             = undef,
   $gr_whitelists_dir                      = undef,
   $gr_carbon_conf_dir                     = undef,
@@ -782,6 +783,7 @@ class graphite (
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
+  validate_string($gr_pidfile_dir)
 
   # validate bools
   validate_bool($gr_enable_carbon_cache)
