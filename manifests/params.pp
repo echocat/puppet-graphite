@@ -22,6 +22,7 @@ class graphite::params {
   $graphite_pkg          = 'graphite-web'
   $graphite_ver          = '0.9.15'
   $graphite_source       = undef
+  $carbon_pidfile_dir    = '/run'
   $carbon_pkg            = 'carbon'
   $carbon_ver            = '0.9.15'
   $carbon_source         = undef

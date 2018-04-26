@@ -755,6 +755,7 @@ class graphite (
   $gr_graphite_pkg                        = $::graphite::params::graphite_pkg,
   $gr_graphite_ver                        = $::graphite::params::graphite_ver,
   $gr_graphite_source                     = $::graphite::params::graphite_source,
+  $gr_carbon_pidfile_dir                  = $::graphite::params::carbon_pidfile_dir,
   $gr_carbon_pkg                          = $::graphite::params::carbon_pkg,
   $gr_carbon_ver                          = $::graphite::params::carbon_ver,
   $gr_carbon_source                       = $::graphite::params::carbon_source,
@@ -782,6 +783,7 @@ class graphite (
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
+  validate_string($gr_carbon_pidfile_dir)
 
   # validate bools
   validate_bool($gr_enable_carbon_cache)
