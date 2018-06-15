@@ -76,7 +76,7 @@ CACHES = {
 #STORAGE_DIR = '/opt/graphite/storage'
 #CONTENT_DIR = '/opt/graphite/webapp/content'
 CONF_DIR = '<%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>'
-STORAGE_DIR = '<%= scope.lookupvar('graphite::graphiteweb_storage_dir_REAL') %>'
+STORAGE_DIR = '<%= scope.lookupvar('graphite::storage_dir_REAL') %>'
 CONTENT_DIR = '<%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>/content'
 
 # To further or fully customize the paths, modify the following. Note that the
