@@ -97,12 +97,11 @@ restart() {
         prog=carbon-${CARBON_DAEMON}-${INSTANCE}
 
         ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} stop;
-        sleep 3
-        while [ -f ${PIDFILE_DIR}/carbon-${CARBON_DAEMON}-${INSTANCE}.pid ]; do
-            echo "waiting another 5 secs for carbon-${CARBON_DAEMON}-${INSTANCE} to stop"
-            sleep 5
-            #TODO: add timer to prevend endless waiting
-        done
+        if [ `sleep 3; /usr/bin/pgrep -f "carbon-${CARBON_DAEMON}.py --instance=${INSTANCE}" | /usr/bin/wc -l` -gt 0 ]; then
+            echo "Carbon did not stop yet. Sleeping longer, then force killing it...";
+            sleep 20;
+            /usr/bin/pkill -9 -f "carbon-${CARBON_DAEMON}.py --instance=${INSTANCE}";
+        fi;
         rm -f /var/lock/subsys/carbon-${CARBON_DAEMON}-${INSTANCE}
         echo -n $"Stopping carbon-${CARBON_DAEMON}:${INSTANCE}..."
         echo_success
