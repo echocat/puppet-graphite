@@ -305,7 +305,10 @@
 #   Default is 'False' (String).
 # [*gr_memcache_hosts*]
 #   Array of memcache hosts. e.g.: ['127.0.0.1:11211', '10.10.10.1:11211']
-#   Defalut is undef.
+#   Default is undef.
+# [*rr_default_cache_duration*]
+#   Default expiration, in seconds, of cached data and images.
+#   Default is 60
 # [*secret_key*]
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
@@ -690,6 +693,7 @@ class graphite (
   $gr_amqp_exchange                       = 'graphite',
   $gr_amqp_metric_name_in_body            = 'False',
   $gr_memcache_hosts                      = undef,
+  $gr_default_cache_duration              = 60,
   $secret_key                             = 'UNSAFE_DEFAULT',
   $gr_cluster_servers                     = undef,
   $gr_carbonlink_hosts                    = undef,

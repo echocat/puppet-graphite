@@ -41,6 +41,13 @@ describe 'graphite', :type => 'class' do
 
   end
 
+  shared_context 'gr_default_cache_duration' do
+    let(:params) {{
+      :gr_default_cache_duration => 0,
+    }}
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/DEFAULT_CACHE_DURATION = 0/) }
+  end
+
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -56,6 +63,7 @@ describe 'graphite', :type => 'class' do
 
       it_behaves_like 'Graphite 0.9 cluster settings'
       it_behaves_like 'Graphite 1.0 cluster settings'
+      it_behaves_like 'gr_default_cache_duration'
 
     end
   end

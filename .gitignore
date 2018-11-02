@@ -50,3 +50,4 @@ Gemfile.lock
 # others
 *swp
 .DS_Store
+vendor/
