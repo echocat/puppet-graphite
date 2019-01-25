@@ -54,7 +54,6 @@ describe 'graphite::config_apache', :type => 'class' do
         :before  => 'Service[apache2]'})
     }
     it { is_expected.to contain_exec('Disable default apache site').only_with({
-        :name    => nil,
         :command => 'a2dissite 000-default',
         :notify  => 'Service[apache2]',
         :onlyif  => 'test -f /etc/apache2/sites-enabled/000-default -o -f /etc/apache2/sites-enabled/000-default.conf',
