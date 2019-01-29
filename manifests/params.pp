@@ -18,11 +18,11 @@ class graphite::params {
   $txamqp_pkg         = 'txAMQP'
   $txamqp_ver         = '0.4'
   $graphite_pkg       = 'graphite-web'
-  $graphite_ver       = '0.9.15'
+  $graphite_ver       = hiera('graphite::params::graphite_ver', '0.9.15')
   $carbon_pkg         = 'carbon'
-  $carbon_ver         = '0.9.15'
+  $carbon_ver         = hiera('graphite::params::carbon_ver', '0.9.15')
   $whisper_pkg        = 'whisper'
-  $whisper_ver        = '0.9.15'
+  $whisper_ver        = hiera('graphite::params::whisper_ver', '0.9.15')
   $django_pkg         = 'Django'
   $django_ver         = '1.5'
   $django_provider    = 'pip'
