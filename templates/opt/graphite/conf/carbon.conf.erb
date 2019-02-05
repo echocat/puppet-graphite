@@ -212,6 +212,9 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 # Example: store everything
 # BIND_PATTERNS = #
 
+# Tag support, when enabled carbon will make HTTP calls to graphite-web to update the tag index
+ENABLE_TAGS = <%= scope.lookupvar('graphite::gr_carbon_enable_tags') %>
+
 # To configure special settings for the carbon-cache instance 'b', uncomment this:
 #[cache:b]
 #LINE_RECEIVER_PORT = 2103
