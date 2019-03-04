@@ -446,6 +446,8 @@
 # [*gr_django_init_command]
 #   Command to use for the Django DB initialization exec.
 #   default: "${::graphite::params::python_binary} manage.py syncdb --noinput"
+#   Since Django 1.7 sysndb is deprecated and the command should be
+#   "${::graphite::params::python_binary} manage.py migrate --run-syncd"
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
