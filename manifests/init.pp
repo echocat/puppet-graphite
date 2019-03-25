@@ -333,6 +333,12 @@
 #   Time before retrying a failed remote webapp.  Default = 60
 # [*gr_cluster_cache_duration*]
 #   Time to cache remote metric find results.  Default = 300
+# [*gr_cluster_store_merge_results*]
+#   During a rebalance of a consistent hash cluster, after a partition
+#   event on a replication > 1 cluster or in other cases we  might
+#   receive multiple TimeSeries data for a metric key. Merge them together
+#   rather than choosing the "most complete" one (pre-0.9.14 behaviour).
+#   Default is 'True' (String).
 # [*gr_rendering_hosts*]
 #   Array of remote rendering hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 #   Default is undef, setting this also enabled REMOTE_RENDER=True
@@ -697,6 +703,7 @@ class graphite (
   $gr_cluster_find_timeout                = 2.5,
   $gr_cluster_retry_delay                 = 60,
   $gr_cluster_cache_duration              = 300,
+  $gr_cluster_store_merge_results         = 'True',
   $nginx_htpasswd                         = undef,
   $nginx_proxy_read_timeout               = 10,
   $manage_ca_certificate                  = true,
