@@ -757,6 +757,10 @@ Default is 10.  Time before retrying a failed remote webapp.
 
 Default is 300. Time to cache remote metric find results.
 
+##### `gr_cluster_store_merge_results`
+
+Default is 'True'. During a rebalance of a consistent hash cluster, after a partition event on a replication > 1 cluster or in other cases we might receive multiple TimeSeries data for a metric key. Merge them together rather than choosing the "most complete" one (pre-0.9.14 behaviour).  
+
 ##### `nginx_htpasswd`
 
 Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'

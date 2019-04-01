@@ -15,12 +15,14 @@ describe 'graphite', :type => 'class' do
       :gr_cluster_find_timeout => 2,
       :gr_cluster_retry_delay => 10,
       :gr_cluster_cache_duration => 120,
+      :gr_cluster_store_merge_results => 'True',
     }}
 
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_STORE_FETCH_TIMEOUT = 6/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_STORE_FIND_TIMEOUT = 2/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_STORE_RETRY_DELAY = 10/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_FIND_CACHE_DURATION = 120/) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_STORE_MERGE_RESULTS = True/) }
 
   end
 
@@ -32,12 +34,14 @@ describe 'graphite', :type => 'class' do
       :gr_cluster_find_timeout => 2,
       :gr_cluster_retry_delay => 10,
       :gr_cluster_cache_duration => 120,
+      :gr_cluster_store_merge_results => 'True',
     }}
 
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_FETCH_TIMEOUT = 6/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_FIND_TIMEOUT = 2/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_RETRY_DELAY = 10/) }
     it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/FIND_CACHE_DURATION = 120/) }
+    it { is_expected.to contain_file('/opt/graphite/webapp/graphite/local_settings.py').with_content(/REMOTE_STORE_MERGE_RESULTS = True/) }
 
   end
 
