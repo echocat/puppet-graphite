@@ -873,6 +873,10 @@ Default is false. Set fallocate_create for whisper
 
 Default is 'False' (string). Logs timings for remote calls to carbon-cache
 
+##### `gr_log_cache_queue_sorts`
+
+Default is 'True' (String). Logs time required for the queue sorts
+
 ##### `gr_log_rendering_performance`
 
 Default is 'False' (string). Triggers the creation of rendering.log which logs timings for calls to the The Render URL API
