@@ -429,6 +429,9 @@
 # [*gr_log_cache_performance*]
 #   logs timings for remote calls to carbon-cache
 #   Default is 'False' (String)
+# [*gr_log_cache_queue_sorts]
+#   Logs time required for the queue sorts
+#   Default is 'True' (String)
 # [*gr_log_rendering_performance*]
 #   Triggers the creation of rendering.log which logs timings for calls to
 #   the The Render URL API
@@ -746,6 +749,7 @@ class graphite (
   $gr_whisper_lock_writes                 = 'False',
   $gr_whisper_fallocate_create            = 'False',
   $gr_log_cache_performance               = 'False',
+  $gr_log_cache_queue_sorts               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
   $wsgi_processes                         = 5,
