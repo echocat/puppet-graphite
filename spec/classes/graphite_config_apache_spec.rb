@@ -61,7 +61,7 @@ describe 'graphite::config_apache', :type => 'class' do
         :require => 'Package[libapache2-mod-wsgi]',})
     }
 
-    it { is_expected.to contain_file('/etc/apache2/sites-available/graphite.conf.erb').with_content(/graphite-web-access.log custom/) }
+    it { is_expected.to contain_file('/etc/apache2/sites-available/graphite.conf').with_content(/graphite-web-access.log custom/) }
   end
 
   context 'Unsupported OS' do
