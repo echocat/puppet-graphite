@@ -1,0 +1,20 @@
+#!/bin/bash
+# Managed by graphite puppet module
+
+main() {
+  local d=<%= scope.lookupvar('graphite::local_data_dir_REAL') %>
+  local now=$(date +%s)
+
+  local min_retention=<%= scope.lookupvar('graphite::gr_whisper_clean_retention') %>
+
+  find $d -name '*.wsp' | while read w; do
+    local age=$((now - $(stat -c '%Y' "$w")))
+    if [ $age -gt $min_retention ]; then
+      logger -t whisper-cleanup "Removing $w ($age > $retention)"
+      rm $w
+    fi
+  done
+  find $d -empty -type d -delete
+}
+
+main

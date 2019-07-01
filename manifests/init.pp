@@ -43,6 +43,24 @@
 # [*gr_carbon_relay_ulimit*]
 #   The maximum number of file descriptors available to carbon-relay process
 #   Default is undef
+# [*gr_enable_carbon_tags *]
+#   toring data using tags to identify each series.
+#   Default is false.
+# [*gr_carbon_tag_update_interval*]
+#   Tag update interval, this specifies how frequently updates to existing series will trigger.
+#   an update to the tag index, the default setting is once every 100 updates.
+#   Default: 100
+# [* gr_carbon_tag_hash_filenames*]
+#   Tag hash filenames, this specifies whether tagged metric filenames should use the hash of the metric name
+#   or a human-readable name, using hashed names avoids issues with path length when using a large number of tags
+#   Default: True
+# [* gr_carbon_tag_batch_size*]
+#   Tag batch size, this specifies the maximum number of series to be sent to graphite-web in a single batch
+#   Default: 100
+# [* gr_carbon_tag_queue_size*]
+#   Tag queue size, this specifies the maximum number of series to be queued for sending to graphite-web
+#   There are separate queues for new series and for updates to existing series
+#   Default: 10000
 # [*gr_line_receiver_interface*]
 #   Interface the line receiver listens.
 #   Default is 0.0.0.0
@@ -177,6 +195,12 @@
 # [*gr_apache_24*]
 #   Boolean to enable configuration parts for Apache 2.4 instead of 2.2
 #   Default is false/true (autodected. see params.pp)
+# [*gr_graphiteweb_mpm_limit*]
+#   Sets the maximum configured value for $gr_graphiteweb_mpm_maxrequest for the lifetime of the Apache httpd process with MPM prefork module.
+#   Default is 256.
+# [*gr_graphiteweb_mpm_maxrequest*]
+#   Sets the limit on the number of simultaneous requests that will be served with MPM prefork module.
+#   Default is 256.
 # [*gr_django_1_4_or_less*]
 #   Set to true to use old Django settings style.
 #   Default is false.
@@ -310,6 +334,9 @@
 #   Secret used as salt for things like hashes, cookies, sessions etc.
 #   Has to be the same on all nodes of a graphite cluster.
 #   Default is UNSAFE_DEFAULT (CHANGE IT!)
+# [*gr_cluster_pool_max_workers*]
+#   The maximum number of worker threads that should be created.
+#   Default is 10.
 # [*gr_cluster_servers*]
 #   Array of webbapp hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 #   Default is undef.
@@ -420,6 +447,15 @@
 # [*gr_whisper_fallocate_create*]
 #   Set fallocate_create for whisper
 #   Default is false
+# [*gr_whisper_clean_retention*]
+#   Set retention in seconds for whisper, data older than value will be removed (0 means never)
+#   Default is 0.
+# [*gr_whisper_clean_hour*]
+#   At which hour clean run (use * for every hour)
+#   Default is 1 (1 am).
+# [*gr_whisper_clean_minute*]
+#   At which minute clean run (use * for every minute)
+#   Default is 30.
 # [*gr_log_cache_performance*]
 #   logs timings for remote calls to carbon-cache
 #   Default is 'False' (String)
@@ -533,6 +569,17 @@
 # [*gr_apache_port_https*]
 #   DEPRECATED. Use `gr_web_server_port_https` now. Trying to set this variable will
 #   cause puppet to fail.
+# [*gr_tagdb*]
+#   Graphite stores tag information in a separate tag database (TagDB).
+#   It support redis, http and internal (the graphite-web database)
+#   Default: internal
+# [*gr_tagdb_config*]
+#   Key/Value hash with tagdb configuration. Example for redis tagdb set to
+#    {
+#      TAGDB_REDIS_HOST => 'localhost',
+#      TAGDB_REDIS_PORT => 6379,
+#      TAGDB_REDIS_DB => 0,
+#    }
 #
 # === Examples
 #
@@ -554,6 +601,11 @@ class graphite (
   $gr_carbon_metric_prefix                = 'carbon',
   $gr_carbon_metric_interval              = 60,
   $gr_carbon_relay_ulimit                 = undef,
+  $gr_enable_carbon_tags                  = false,
+  $gr_carbon_tag_update_interval          = 100,
+  $gr_carbon_tag_hash_filenames           = true,
+  $gr_carbon_tag_batch_size               = 100,
+  $gr_carbon_tag_queue_size               = 10000,
   $gr_line_receiver_interface             = '0.0.0.0',
   $gr_line_receiver_port                  = 2003,
   $gr_enable_udp_listener                 = 'False',
@@ -691,6 +743,7 @@ class graphite (
   $gr_amqp_metric_name_in_body            = 'False',
   $gr_memcache_hosts                      = undef,
   $secret_key                             = 'UNSAFE_DEFAULT',
+  $gr_cluster_pool_max_workers            = 10,
   $gr_cluster_servers                     = undef,
   $gr_carbonlink_hosts                    = undef,
   $gr_cluster_fetch_timeout               = 6,
@@ -725,6 +778,8 @@ class graphite (
   $gr_graphiteweb_webapp_dir              = undef,
   $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
   $gr_graphiteweb_install_lib_dir         = undef,
+  $gr_graphiteweb_mpm_limit               = 256,
+  $gr_graphiteweb_mpm_maxrequest          = 256,
   $gr_apache_logdir                       = $::graphite::params::apache_logdir_graphite,
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
@@ -735,6 +790,9 @@ class graphite (
   $gr_whisper_autoflush                   = 'False',
   $gr_whisper_lock_writes                 = 'False',
   $gr_whisper_fallocate_create            = 'False',
+  $gr_whisper_clean_retention             = 2592000,
+  $gr_whisper_clean_hour                  = 1,
+  $gr_whisper_clean_minute                = 30,
   $gr_log_cache_performance               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
@@ -778,7 +836,9 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
   $gr_apache_port                         = undef,
-  $gr_apache_port_https                   = undef,) inherits graphite::params {
+  $gr_apache_port_https                   = undef,
+  $gr_tagdb                               = 'internal',
+  $gr_tagdb_config                        = {},) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -790,12 +850,14 @@ class graphite (
   validate_bool($gr_django_1_4_or_less)
   validate_bool($gr_enable_carbon_relay)
   validate_bool($gr_enable_carbon_aggregator)
+  validate_bool($gr_enable_carbon_tags)
   validate_bool($manage_ca_certificate)
   validate_bool($gr_use_ldap)
   validate_bool($gr_pip_install)
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
   validate_bool($gr_base_dir_managed_externally)
+  validate_bool($gr_carbon_tag_hash_filenames)
 
   if $gr_apache_port or $gr_apache_port_https {
     fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
@@ -804,6 +866,20 @@ class graphite (
   # validate integers
   validate_integer($gr_web_server_port)
   validate_integer($gr_web_server_port_https)
+  validate_integer($gr_cluster_pool_max_workers)
+  validate_integer($gr_graphiteweb_mpm_limit)
+  validate_integer($gr_graphiteweb_mpm_maxrequest)
+  validate_integer($gr_whisper_clean_retention)
+  validate_integer($gr_whisper_clean_hour)
+  validate_integer($gr_whisper_clean_minute)
+  validate_integer($gr_carbon_tag_update_interval)
+  validate_integer($gr_carbon_tag_batch_size)
+  validate_integer($gr_carbon_tag_queue_size)
+
+  validate_hash($gr_tagdb_config)
+  unless $gr_tagdb in ['internal', 'redis', 'http'] {
+    fail("gr_tagdb with value ${gr_tagdb} is not supported, allowed values are internal, redis or http.")
+  }
 
   $base_dir_REAL                    = $gr_base_dir
   $storage_dir_REAL                 = pick($gr_storage_dir,            "${base_dir_REAL}/storage")
