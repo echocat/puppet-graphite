@@ -359,4 +359,19 @@ class graphite::config inherits graphite::params {
     }
   }
 
+  if $::graphite::gr_whisper_clean_retention > 0 {
+    file { "${::graphite::base_dir_REAL}/bin/whisper-cleanup.sh":
+      ensure  => file,
+      mode    => '0544',
+      content => template('graphite/opt/graphite/bin/whisper-cleanup.sh.erb'),
+    }
+
+    cron { 'Clean whisper data':
+      command => "${::graphite::base_dir_REAL}/bin/whisper-cleanup.sh",
+      hour    => $::graphite::gr_whisper_clean_hour,
+      minute  => $::graphite::gr_whisper_clean_minute,
+      require => File["${::graphite::base_dir_REAL}/bin/whisper-cleanup.sh"],
+      user    => root,
+    }
+  }
 }

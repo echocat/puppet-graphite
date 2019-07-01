@@ -39,6 +39,7 @@ PID_DIR = <%= scope.lookupvar('graphite::gr_storage_dir') %>
 # Enable daily log rotation. If disabled, a kill -HUP can be used after a manual rotate
 ENABLE_LOGROTATION = True
 
+
 # Specify the user to drop privileges to
 # If this is blank carbon runs as the user that invokes it
 # This user must have write access to the local data directory
@@ -211,6 +212,24 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 #
 # Example: store everything
 # BIND_PATTERNS = #
+
+# Tag support, when enabled carbon will make HTTP calls to graphite-web to update the tag index
+ENABLE_TAGS = <%= scope.lookupvar('graphite::gr_enable_carbon_tags').to_s.capitalize %>
+
+# Tag update interval, this specifies how frequently updates to existing series will trigger
+# an update to the tag index, the default setting is once every 100 updates
+TAG_UPDATE_INTERVAL = <%= scope.lookupvar('graphite::gr_carbon_tag_update_interval') %>
+
+# Tag hash filenames, this specifies whether tagged metric filenames should use the hash of the metric name
+# or a human-readable name, using hashed names avoids issues with path length when using a large number of tags
+TAG_HASH_FILENAMES = <%= scope.lookupvar('graphite::gr_carbon_tag_hash_filenames').to_s.capitalize %>
+
+# Tag batch size, this specifies the maximum number of series to be sent to graphite-web in a single batch
+TAG_BATCH_SIZE = <%= scope.lookupvar('graphite::gr_carbon_tag_batch_size') %>
+
+# Tag queue size, this specifies the maximum number of series to be queued for sending to graphite-web
+# There are separate queues for new series and for updates to existing series
+TAG_QUEUE_SIZE = <%= scope.lookupvar('graphite::gr_carbon_tag_queue_size') %>
 
 # To configure special settings for the carbon-cache instance 'b', uncomment this:
 #[cache:b]
