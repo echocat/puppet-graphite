@@ -80,45 +80,41 @@ class graphite::params {
         'python-sqlite',
         'python-setuptools',
       ]
+      $graphitepkgs = union($common_os_pkgs, ['python-cairo',])
 
       if $::operatingsystem == 'Ubuntu' {
-        if versioncmp($::lsbdistrelease, '15.10') == -1 {
-          $service_provider   = 'debian'
-        } else {
-          $service_provider   = 'systemd'
+        $apache_24 = versioncmp($::lsbdistrelease, '12.04') ? {
+          -1      => false,
+          default =>  true
         }
-      } elsif $::operatingsystem == 'Debian' {
-        if versioncmp($::lsbdistrelease, '8.0') == -1 {
-          $service_provider   = 'debian'
+        $service_provider = versioncmp($::lsbdistrelease, '15.10') ? {
+          -1      => 'debian',
+          default => 'systemd'
+        }
+
+        if versioncmp($::lsbdistrelease, '16.04') >= 0 {
+          $libpath                   = "/usr/local/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = [{'--no-binary' => ':all:'}]
         } else {
-          $service_provider   = 'systemd'
+          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = undef
         }
       }
 
-      case $::lsbdistcodename {
-        /squeeze|wheezy|precise/: {
-          $apache_24                 = false
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+      if $::operatingsystem == 'Debian' {
+        if versioncmp($::lsbdistrelease, '8.0') == -1 {
+          $service_provider = 'debian'
+          $apache_24        = false
+        } else {
+          $service_provider = 'systemd'
+          $apache_24        = true
+        }
+        if versioncmp($::lsbdistrelease, '10') == -1 {
           $libpath                   = "/usr/lib/python${pyver}/dist-packages"
           $extra_pip_install_options = undef
-        }
-
-        /stretch|jessie|trusty|utopic|vivid|wily/: {
-          $apache_24                 = true
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
-          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
-          $extra_pip_install_options = undef
-        }
-
-        /xenial|bionic/: {
-          $apache_24                 = true
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+        } else {
           $libpath                   = "/usr/local/lib/python${pyver}/dist-packages"
           $extra_pip_install_options = [{'--no-binary' => ':all:'}]
-        }
-
-        default: {
-          fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
     }
