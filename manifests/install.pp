@@ -130,29 +130,29 @@ class graphite::install inherits graphite::params {
     $carbon = "carbon-${::graphite::gr_carbon_ver}-py${::graphite::params::pyver}.egg-info"
     $gweb = "graphite_web-${::graphite::gr_graphite_ver}-py${::graphite::params::pyver}.egg-info"
     exec{ 'gweb_hack':
-        command => "ln -s '${::graphite::base_dir_REAL}/webapp/${gweb}' '${::graphite::params::libpath}/'",
-        unless      => "test -L '${::graphite::params::libpath}/${gweb}'",
-        provider    => 'shell',
+        command   => "ln -s '${::graphite::base_dir_REAL}/webapp/${gweb}' '${::graphite::params::libpath}/'",
+        unless    => "test -L '${::graphite::params::libpath}/${gweb}'",
+        provider  => 'shell',
         subscribe => Package['graphite-web']
     }
     exec{ 'carbon_hack':
-        command     => "ln -s '${::graphite::base_dir_REAL}/lib/${carbon}' '${::graphite::params::libpath}/'",
-        unless      => "test -L '${::graphite::params::libpath}/${carbon}'",
-        provider    => 'shell',
+        command   => "ln -s '${::graphite::base_dir_REAL}/lib/${carbon}' '${::graphite::params::libpath}/'",
+        unless    => "test -L '${::graphite::params::libpath}/${carbon}'",
+        provider  => 'shell',
         subscribe => Package['carbon']
     }
     # Purge duplicate egg-info files having the wrong version
     exec{ 'Purge old graphite-web egg-info':
         command   => "find '${::graphite::base_dir_REAL}/webapp' '${::graphite::params::libpath}' -iname 'graphite_web-*.egg-info' -not  -iname '${gweb}' | xargs rm -rf",
         onlyif    => "ls -d \"${::graphite::base_dir_REAL}/webapp/\"graphite_web*.egg-info \"${::graphite::params::libpath}/\"graphite_web*.egg-info | grep -v '${gweb}'",
-        path      => "/bin:/usr/bin",
+        path      => '/bin:/usr/bin',
         provider  => 'shell',
         subscribe => Package['graphite-web']
     }
     exec{ 'Purge old carbon egg-info':
         command   => "find '${::graphite::base_dir_REAL}/lib' '${::graphite::params::libpath}' -iname 'carbon-*.egg-info' -not  -iname '${carbon}' | xargs rm -rf",
         onlyif    => "ls -d \"${::graphite::base_dir_REAL}/lib/\"carbon*.egg-info \"${::graphite::params::libpath}/\"carbon*.egg-info | grep -v '${carbon}'",
-        path      => "/bin:/usr/bin",
+        path      => '/bin:/usr/bin',
         provider  => 'shell',
         subscribe => Package['carbon']
     }
