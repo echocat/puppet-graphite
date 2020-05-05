@@ -3,10 +3,13 @@ require 'spec_helper'
 describe 'graphite::install', :type => 'class' do
 
   # Convenience variable for 'hack' file checks
-  hack_defaults = {
-    :refreshonly => true,
+  gweb_hack_defaults = {
     :provider    => 'shell',
-    :subscribe   => ['Package[carbon]','Package[graphite-web]','Package[whisper]'],
+    :subscribe   => 'Package[graphite-web]',
+  }
+  carbon_hack_defaults = {
+    :provider    => 'shell',
+    :subscribe   => 'Package[carbon]',
   }
 
   shared_context 'supported platforms' do
@@ -21,8 +24,8 @@ describe 'graphite::install', :type => 'class' do
         'Package[python-ldap]').that_requires(
         'Package[python-psycopg2]') }
     end
-    it { is_expected.to contain_exec('carbon_hack').with(hack_defaults) }
-    it { is_expected.to contain_exec('gweb_hack').with(hack_defaults) }
+    it { is_expected.to contain_exec('carbon_hack').with(carbon_hack_defaults) }
+    it { is_expected.to contain_exec('gweb_hack').with(gweb_hack_defaults) }
   end
 
   shared_context 'no pip' do
@@ -65,11 +68,13 @@ describe 'graphite::install', :type => 'class' do
     it { is_expected.to contain_package('bitmap-fonts-compat').with_provider(nil) }
     it { is_expected.to contain_package('python-crypto').with_provider(nil) }
 
-    it { is_expected.to contain_exec('carbon_hack').only_with(hack_defaults.merge({
-      :command => 'ln -s "/opt/graphite/lib/""carbon-"*"-py2.6.egg-info" "/usr/lib/python2.6/site-packages/"',
+    it { is_expected.to contain_exec('carbon_hack').only_with(carbon_hack_defaults.merge({
+      :command => "ln -s '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.6/site-packages/carbon-0.9.15-py2.6.egg-info'",
     })) }
-    it { should contain_exec('gweb_hack').only_with(hack_defaults.merge({
-      :command => 'ln -s "/opt/graphite/webapp/""graphite_web-"*"-py2.6.egg-info" "/usr/lib/python2.6/site-packages/"',
+    it { should contain_exec('gweb_hack').only_with(gweb_hack_defaults.merge({
+      :command => "ln -s '/opt/graphite/webapp/graphite_web-0.9.15-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.6/site-packages/graphite_web-0.9.15-py2.6.egg-info'",
     })) }
   end
 
@@ -82,11 +87,13 @@ describe 'graphite::install', :type => 'class' do
     it { is_expected.to contain_package('dejavu-sans-fonts').with_provider(nil) }
     it { is_expected.to contain_package('python2-crypto').with_provider(nil) }
 
-    it { is_expected.to contain_exec('carbon_hack').only_with(hack_defaults.merge({
-      :command => 'ln -s "/opt/graphite/lib/""carbon-"*"-py2.7.egg-info" "/usr/lib/python2.7/site-packages/"',
+    it { is_expected.to contain_exec('carbon_hack').only_with(carbon_hack_defaults.merge({
+      :command => "ln -s '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.7/site-packages/carbon-0.9.15-py2.7.egg-info'",
     })) }
-    it { is_expected.to contain_exec('gweb_hack').only_with(hack_defaults.merge({
-      :command => 'ln -s "/opt/graphite/webapp/""graphite_web-"*"-py2.7.egg-info" "/usr/lib/python2.7/site-packages/"',
+    it { is_expected.to contain_exec('gweb_hack').only_with(gweb_hack_defaults.merge({
+      :command => "ln -s '/opt/graphite/webapp/graphite_web-0.9.15-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.7/site-packages/graphite_web-0.9.15-py2.7.egg-info'",
     })) }
   end
 
