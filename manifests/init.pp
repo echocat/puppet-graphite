@@ -539,6 +539,9 @@
 #   Default: false
 # [*gr_enable_logrotation*]
 #   Boolean. Sets up a cronjob to rotate carbon and webapp logs.
+# [*gr_tags_enable*]
+#   Boolean. Enable tag support in carbon. Tags will be sent to the graphite-web service
+#   on 'http://127.0.0.1:${gr_web_server_port}'
 # [*gr_apache_port*]
 #   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
 #   cause puppet to fail.
