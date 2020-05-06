@@ -215,7 +215,7 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 #
 <%- if scope.lookupvar('graphite::gr_carbon_ver') > '1.1.0' %>
 # URL of graphite-web instance, this is used to add incoming series to the tag database
-GRAPHITE_URL = http://127.0.0.1:<%= scope.lookupvar('graphite::gr_web_server_port') %>
+GRAPHITE_URL = http://127.0.0.1:<%= scope.lookupvar('graphite::gr_web_server_port') %><%= scope.lookupvar('graphite::gr_web_url_prefix') %>
 
 # Tag support, when enabled carbon will make HTTP calls to graphite-web to update the tag index
 <%- if scope.lookupvar('graphite::gr_tags_enable') %>

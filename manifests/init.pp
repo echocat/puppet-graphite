@@ -154,6 +154,8 @@
 # [*gr_web_server_remove_default*]
 #   Remove the default configuration for apache or nginx.
 #   Default is undef, which removes the default configuration only if the server is running on port 80.
+# [*gr_web_url_prefix*]
+#   Deploy graphite-web with this URL prefix instead of /
 # [*gr_use_ssl*]
 #   If true, alter web server config to enable SSL.
 #   Default is false.
@@ -632,6 +634,7 @@ class graphite (
   $gr_web_user                            = undef,
   $gr_web_cors_allow_from_all             = false,
   $gr_web_server_remove_default           = undef,
+  $gr_web_url_prefix                      = '/',
   $gr_use_ssl                             = false,
   $gr_ssl_cert                            = undef,
   $gr_ssl_key                             = undef,
