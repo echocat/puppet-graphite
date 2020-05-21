@@ -19,6 +19,9 @@ gem 'rake', '< 11.0.0',                   :require => false if Gem::Version.new(
 gem 'json', '< 2.0.0',                    :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 gem 'json_pure', '<= 2.0.1',              :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
 gem 'metadata-json-lint', '< 1.2.0',      :require => false if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.0.0')
+# Used for Acceptance Tests
+gem 'beaker-puppet_install_helper', :require => false
+gem 'beaker-module_install_helper', :require => false
 
 gem 'puppet', *location_for(ENV['PUPPET_GEM_VERSION'])
 
