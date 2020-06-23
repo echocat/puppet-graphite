@@ -150,6 +150,7 @@ class graphite::params {
         $python_pip_pkg  = $::osfamily ? {
           'RedHat'  => $::operatingsystemrelease ? {
             /^7/    => 'python2-pip',
+            /^8/    => 'python2-pip',
             default => 'python-pip'
           },
           default   => 'python-pip',
