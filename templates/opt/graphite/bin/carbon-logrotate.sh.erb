@@ -12,7 +12,7 @@ RETENTION=30
 for CARBON_LOG in $CARBON_LOGS; do
   if [ -d "${CARBON_LOGS_PATH}/${CARBON_LOG}" ]; then
     # gzip log files older than $ROTATE_DAYS days
-    find "${CARBON_LOGS_PATH}/${CARBON_LOG}" -type f -mtime +${ROTATE_DAYS} ! -name "*.gz" -exec gzip -q "{}" \;
+    find "${CARBON_LOGS_PATH}/${CARBON_LOG}" -type f -mtime +${ROTATE_DAYS} -name "*.log.????_*" ! -name "*.gz" -exec gzip -q "{}" \;
     # removes log files older than $RETENTION days
     find "${CARBON_LOGS_PATH}/${CARBON_LOG}" -type f -ctime +${RETENTION} -delete
   fi
