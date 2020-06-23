@@ -33,8 +33,12 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 	WSGIImportScript <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite_wsgi.py process-group=graphite application-group=%{GLOBAL}
 
 	# XXX You will need to create this file! There is a graphite.wsgi.example
-	# file in this directory that you can safely use, just copy it to graphite.wgsi
-	WSGIScriptAlias / <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite_wsgi.py
+    # file in this directory that you can safely use, just copy it to graphite.wgsi
+    <%- if scope.lookupvar('graphite::gr_web_url_prefix') != '/' -%>
+        WSGIScriptAlias <%= scope.lookupvar('graphite::gr_web_url_prefix') %> <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite_wsgi.py<%= scope.lookupvar('graphite::gr_web_url_prefix') %>
+    <%- else -%>
+        WSGIScriptAlias / <%= scope.lookupvar('graphite::graphiteweb_conf_dir_REAL') %>/graphite_wsgi.py
+    <%- end -%>
 
 	Alias /content/ <%= scope.lookupvar('graphite::graphiteweb_webapp_dir_REAL') %>/content/
 	<Location "/content/">
