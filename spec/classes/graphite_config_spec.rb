@@ -92,7 +92,7 @@ describe 'graphite::config', :type => 'class' do
         'require'    => 'File[/etc/init.d/carbon-cache]' }) }
   end
 
-  shared_context 'RedHat 7 platforms' do
+  shared_context 'RedHat 7 and 8 platforms' do
     it { is_expected.to contain_exec('graphite-reload-systemd') }
     it { is_expected.to contain_file('/etc/init.d/carbon-cache').with({
         'ensure'  => 'file',
@@ -210,7 +210,7 @@ describe 'graphite::config', :type => 'class' do
         case facts[:lsbdistcodename]
         when /squeeze|wheezy|precise|trusty|utopic|vivid/ then
           it_behaves_like 'Debian sysv platforms'
-        when /jessie|wily|xenial|stretch/ then
+        when /jessie|wily|xenial|stretch|bionic|buster/ then
           it_behaves_like 'Debian systemd platforms'
         else
           it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
@@ -221,7 +221,9 @@ describe 'graphite::config', :type => 'class' do
         when /^6/ then
           it_behaves_like 'RedHat 6 platforms'
         when /^7/ then
-          it_behaves_like 'RedHat 7 platforms'
+          it_behaves_like 'RedHat 7 and 8 platforms'
+        when /^8/ then
+          it_behaves_like 'RedHat 7 and 8 platforms'
         else
           it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
         end
