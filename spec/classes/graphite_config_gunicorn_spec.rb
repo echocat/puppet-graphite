@@ -27,7 +27,7 @@ describe 'graphite::config_gunicorn', :type => 'class' do
            'File[/etc/init.d/gunicorn]']) }
   end
 
-  shared_context 'RedHat 7 platforms' do
+  shared_context 'RedHat 7 and 8 platforms' do
     it { is_expected.to contain_exec('gunicorn-reload-systemd') }
     it { is_expected.to contain_file('/etc/systemd/system/gunicorn.service').with({
         'ensure'  => 'file',
@@ -118,7 +118,9 @@ describe 'graphite::config_gunicorn', :type => 'class' do
         when /^6/ then
           it_behaves_like 'RedHat 6 platforms'
         when /^7/ then
-          it_behaves_like 'RedHat 7 platforms'
+          it_behaves_like 'RedHat 7 and 8 platforms'
+        when /^8/ then
+          it_behaves_like 'RedHat 7 and 8 platforms'
         else
           it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
         end
