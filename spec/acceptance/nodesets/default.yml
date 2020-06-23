@@ -1,10 +1,10 @@
 HOSTS:
-  ubuntu-server-1204-x64:
+  ubuntu-server-1804-x64:
     roles:
       - master
-    platform: ubuntu-1204-amd64
-    box: puppetlabs/ubuntu-12.04-64-nocm
-    box_url: https://vagrantcloud.com/puppetlabs/boxes/ubuntu-12.04-64-nocm
+    platform: ubuntu-1804-amd64
+    box: ubuntu/bionic64
+    box_url: https://vagrantcloud.com/ubuntu/boxes/bionic64
     hypervisor: vagrant
 CONFIG:
   type: foss
