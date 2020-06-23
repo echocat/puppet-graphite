@@ -212,6 +212,33 @@ AMQP_METRIC_NAME_IN_BODY = <%= scope.lookupvar('graphite::gr_amqp_metric_name_in
 #
 # Example: store everything
 # BIND_PATTERNS = #
+#
+<%- if scope.lookupvar('graphite::gr_carbon_ver') > '1.1.0' %>
+# URL of graphite-web instance, this is used to add incoming series to the tag database
+GRAPHITE_URL = http://127.0.0.1:<%= scope.lookupvar('graphite::gr_web_server_port') %>
+
+# Tag support, when enabled carbon will make HTTP calls to graphite-web to update the tag index
+<%- if scope.lookupvar('graphite::gr_tags_enable') %>
+ENABLE_TAGS = True
+<%- else %>
+ENABLE_TAGS = False
+<%- end %>
+
+# Tag update interval, this specifies how frequently updates to existing series will trigger
+# an update to the tag index, the default setting is once every 100 updates
+# TAG_UPDATE_INTERVAL = 100
+
+# Tag hash filenames, this specifies whether tagged metric filenames should use the hash of the metric name
+# or a human-readable name, using hashed names avoids issues with path length when using a large number of tags
+# TAG_HASH_FILENAMES = True
+
+# Tag batch size, this specifies the maximum number of series to be sent to graphite-web in a single batch
+# TAG_BATCH_SIZE = 100
+
+# Tag queue size, this specifies the maximum number of series to be queued for sending to graphite-web
+# There are separate queues for new series and for updates to existing series
+# TAG_QUEUE_SIZE = 10000
+<%- end %>
 
 # To configure special settings for the carbon-cache instance 'b', uncomment this:
 #[cache:b]

@@ -539,6 +539,9 @@
 #   Default: false
 # [*gr_enable_logrotation*]
 #   Boolean. Sets up a cronjob to rotate carbon and webapp logs.
+# [*gr_tags_enable*]
+#   Boolean. Enable tag support in carbon. Tags will be sent to the graphite-web service
+#   on 'http://127.0.0.1:${gr_web_server_port}'
 # [*gr_apache_port*]
 #   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
 #   cause puppet to fail.
@@ -792,7 +795,8 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
   $gr_apache_port                         = undef,
-  $gr_apache_port_https                   = undef,) inherits graphite::params {
+  $gr_apache_port_https                   = undef,
+  $gr_tags_enable                         = false,) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -810,6 +814,7 @@ class graphite (
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
   validate_bool($gr_base_dir_managed_externally)
+  validate_bool($gr_tags_enable)
 
   if $gr_apache_port or $gr_apache_port_https {
     fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')
