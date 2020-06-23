@@ -78,7 +78,7 @@ describe 'graphite::install', :type => 'class' do
     })) }
   end
 
-  shared_context 'RedHat 7 platforms' do
+  shared_context 'RedHat 7 and 8 platforms' do
     it { is_expected.to contain_package('python2-pip').with_provider(nil) }
     it { is_expected.to contain_package('python-cairocffi').with_provider(nil) }
     it { is_expected.to contain_package('Django').with_provider('pip') }
@@ -144,7 +144,9 @@ describe 'graphite::install', :type => 'class' do
           it_behaves_like 'supported platforms'
           it_behaves_like 'RedHat 6 platforms'
         when /^7/ then
-          it_behaves_like 'RedHat 7 platforms'
+          it_behaves_like 'RedHat 7 and 8 platforms'
+        when /^8/ then
+          it_behaves_like 'RedHat 7 and 8 platforms'
         else
           it { is_expected.to raise_error(Puppet::Error,/unsupported os,.+\./ )}
         end
