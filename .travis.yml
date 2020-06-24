@@ -45,5 +45,6 @@ branches:
   only:
     - master
     - /^v\d/
+    - pdk-convert
 notifications:
   email: false
