@@ -69,12 +69,12 @@ describe 'graphite::install', :type => 'class' do
     it { is_expected.to contain_package('python-crypto').with_provider(nil) }
 
     it { is_expected.to contain_exec('carbon_hack').only_with(carbon_hack_defaults.merge({
-      :command => "ln -s '/opt/graphite/lib/carbon-0.9.15-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
-      :unless  => "test -L '/usr/lib/python2.6/site-packages/carbon-0.9.15-py2.6.egg-info'",
+      :command => "ln -s '/opt/graphite/lib/carbon-1.1.7-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.6/site-packages/carbon-1.1.7-py2.6.egg-info'",
     })) }
     it { should contain_exec('gweb_hack').only_with(gweb_hack_defaults.merge({
-      :command => "ln -s '/opt/graphite/webapp/graphite_web-0.9.15-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
-      :unless  => "test -L '/usr/lib/python2.6/site-packages/graphite_web-0.9.15-py2.6.egg-info'",
+      :command => "ln -s '/opt/graphite/webapp/graphite_web-1.1.7-py2.6.egg-info' '/usr/lib/python2.6/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.6/site-packages/graphite_web-1.1.7-py2.6.egg-info'",
     })) }
   end
 
@@ -88,12 +88,12 @@ describe 'graphite::install', :type => 'class' do
     it { is_expected.to contain_package('python2-crypto').with_provider(nil) }
 
     it { is_expected.to contain_exec('carbon_hack').only_with(carbon_hack_defaults.merge({
-      :command => "ln -s '/opt/graphite/lib/carbon-0.9.15-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
-      :unless  => "test -L '/usr/lib/python2.7/site-packages/carbon-0.9.15-py2.7.egg-info'",
+      :command => "ln -s '/opt/graphite/lib/carbon-1.1.7-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.7/site-packages/carbon-1.1.7-py2.7.egg-info'",
     })) }
     it { is_expected.to contain_exec('gweb_hack').only_with(gweb_hack_defaults.merge({
-      :command => "ln -s '/opt/graphite/webapp/graphite_web-0.9.15-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
-      :unless  => "test -L '/usr/lib/python2.7/site-packages/graphite_web-0.9.15-py2.7.egg-info'",
+      :command => "ln -s '/opt/graphite/webapp/graphite_web-1.1.7-py2.7.egg-info' '/usr/lib/python2.7/site-packages/'",
+      :unless  => "test -L '/usr/lib/python2.7/site-packages/graphite_web-1.1.7-py2.7.egg-info'",
     })) }
   end
 
