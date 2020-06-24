@@ -61,7 +61,7 @@ case "${OPERATION}" in
                 INSTANCE="a";
             fi;
             ${PYTHON_CMD} ${GRAPHITE_DIR}/bin/carbon-${CARBON_DAEMON}.py --instance=${INSTANCE} status
-            let rc=${rc}+$?
+	    rc=$((${rc}+${?}))
         done
         exit ${rc}
         ;;

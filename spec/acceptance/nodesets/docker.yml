@@ -1,0 +1,25 @@
+HOSTS:
+  graphite-0.9:
+    roles:
+      - default
+      - graphite_1
+    platform: ubuntu-1804-x86_64
+    image: ubuntu:bionic
+    hypervisor: docker
+    docker_cmd: '["/sbin/init"]'
+    docker_image_commands:
+    - 'apt install -y init cron iproute2 libffi-dev netcat-openbsd'
+
+  graphite-1.1-fresh:
+    roles:
+      - graphite_1
+    platform: ubuntu-1804-x86_64
+    image: ubuntu:bionic
+    hypervisor: docker
+    docker_cmd: '["/sbin/init"]'
+    docker_image_commands:
+    - 'apt install -y init cron iproute2 libffi-dev netcat-openbsd'
+
+
+CONFIG:
+    type: foss

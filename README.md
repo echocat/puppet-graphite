@@ -201,6 +201,30 @@ ones set for the principal instance.
 
 So in this case you would have 3 cache instances, the first one is `cache` (you can refer to it as `cache:a` too), `cache:b` and `cache:c`. cache:a will listen on ports 2003, 2004 and 7002 for line, pickle and query respectively. But, cache:b will do it on ports 2103, 2104, and 7102, and cache:c on 2203, 2204 and 7202. All other parameters from cache:a will be inherited by cache:b and c.
 
+### Install Graphite 1.1 and enable tag-support
+
+Taged metrics are available in Graphite/Carbon 1.1.1 and later. To use tags Carbon has to add tags to a TagDB (see https://graphite.readthedocs.io/en/latest/tags.html) for details. To enable this feature in Carbon set the parameter `gr_tags_enable` to `true`. This will configure Carbon to pass tags to Graphite-web listening on `127.0.0.1` and port `gr_web_server_port`. Redis and HTTP(S) Tag DBs are not yet supported.
+
+To use tags at least version 1.1.1 of Graphite-Web/Carbopn/Whisper as well as compatible versions of Django, Django Tagging and Twisted have to be installed. 
+
+```
+class { 'graphite': 
+    gr_tags_enable            => true,
+    #
+    # Needed to install / upgrade to Graphite 1.1
+    #
+    gr_graphite_ver           => '1.1.7',
+    gr_carbon_ver             => '1.1.7',
+    gr_whisper_ver            => '1.1.7',
+    gr_django_ver             => '1.11',
+    gr_django_tagging_ver     => '0.4.6',
+    gr_twisted_ver            => '20.3.0',
+    gr_django_init_command    => 'PYTHONPATH=/opt/graphite/webapp /usr/local/bin/django-admin.py migrate --setting=graphite.settings --fake-initial',
+    gr_django_init_provider   => 'shell',
+}
+```
+ 
+
 ### Installing with something other than pip and specifying package names and versions
 If you need to install via something other than pip, an internal apt repo with fpm converted packages for instance, you can set `gr_pip_install` to false.
 If you're doing this you'll most likely have to override the default package names and versions as well.
@@ -757,6 +781,10 @@ Default is 10.  Time before retrying a failed remote webapp.
 
 Default is 300. Time to cache remote metric find results.
 
+##### `gr_cluster_store_merge_results`
+
+Default is 'True'. During a rebalance of a consistent hash cluster, after a partition event on a replication > 1 cluster or in other cases we might receive multiple TimeSeries data for a metric key. Merge them together rather than choosing the "most complete" one (pre-0.9.14 behaviour).  
+
 ##### `nginx_htpasswd`
 
 Default is undef (string). The user and salted SHA-1 (SSHA) password for Nginx authentication. If set, Nginx will be configured to use HTTP Basic authentication with the given user & password. e.g.: 'testuser:$jsfak3.c3Fd0i1k2kel/3sdf3'
@@ -868,6 +896,10 @@ Default is false. Set fallocate_create for whisper
 ##### `gr_log_cache_performance`
 
 Default is 'False' (string). Logs timings for remote calls to carbon-cache
+
+##### `gr_log_cache_queue_sorts`
+
+Default is 'True' (String). Logs time required for the queue sorts
 
 ##### `gr_log_rendering_performance`
 

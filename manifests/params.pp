@@ -11,25 +11,25 @@ class graphite::params {
   $build_dir = '/usr/local/src/'
 
   $django_tagging_pkg    = 'django-tagging'
-  $django_tagging_ver    = '0.3.1'
+  $django_tagging_ver    = '0.4.6'
   $django_tagging_source = undef
   $twisted_pkg           = 'Twisted'
-  $twisted_ver           = '11.1.0'
+  $twisted_ver           = '13.2.0'
   $twisted_source        = undef
   $txamqp_pkg            = 'txAMQP'
   $txamqp_ver            = '0.4'
   $txamqp_source         = undef
   $graphite_pkg          = 'graphite-web'
-  $graphite_ver          = '0.9.15'
+  $graphite_ver          = '1.1.7'
   $graphite_source       = undef
   $carbon_pkg            = 'carbon'
-  $carbon_ver            = '0.9.15'
+  $carbon_ver            = '1.1.7'
   $carbon_source         = undef
   $whisper_pkg           = 'whisper'
-  $whisper_ver           = '0.9.15'
+  $whisper_ver           = '1.1.7'
   $whisper_source        = undef
   $django_pkg            = 'Django'
-  $django_ver            = '1.5'
+  $django_ver            = '1.11'
   $django_source         = undef
   $django_provider       = 'pip'
   $pip_install_options   = undef
@@ -80,45 +80,41 @@ class graphite::params {
         'python-sqlite',
         'python-setuptools',
       ]
+      $graphitepkgs = union($common_os_pkgs, ['python-cairo',])
 
       if $::operatingsystem == 'Ubuntu' {
-        if versioncmp($::lsbdistrelease, '15.10') == -1 {
-          $service_provider   = 'debian'
-        } else {
-          $service_provider   = 'systemd'
+        $apache_24 = versioncmp($::lsbdistrelease, '12.04') ? {
+          -1      => false,
+          default =>  true
         }
-      } elsif $::operatingsystem == 'Debian' {
-        if versioncmp($::lsbdistrelease, '8.0') == -1 {
-          $service_provider   = 'debian'
+        $service_provider = versioncmp($::lsbdistrelease, '15.10') ? {
+          -1      => 'debian',
+          default => 'systemd'
+        }
+
+        if versioncmp($::lsbdistrelease, '16.04') >= 0 {
+          $libpath                   = "/usr/local/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = [{'--no-binary' => ':all:'}]
         } else {
-          $service_provider   = 'systemd'
+          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
+          $extra_pip_install_options = undef
         }
       }
 
-      case $::lsbdistcodename {
-        /squeeze|wheezy|precise/: {
-          $apache_24                 = false
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+      if $::operatingsystem == 'Debian' {
+        if versioncmp($::lsbdistrelease, '8.0') == -1 {
+          $service_provider = 'debian'
+          $apache_24        = false
+        } else {
+          $service_provider = 'systemd'
+          $apache_24        = true
+        }
+        if versioncmp($::lsbdistrelease, '10') == -1 {
           $libpath                   = "/usr/lib/python${pyver}/dist-packages"
           $extra_pip_install_options = undef
-        }
-
-        /stretch|jessie|trusty|utopic|vivid|wily/: {
-          $apache_24                 = true
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
-          $libpath                   = "/usr/lib/python${pyver}/dist-packages"
-          $extra_pip_install_options = undef
-        }
-
-        /xenial|bionic/: {
-          $apache_24                 = true
-          $graphitepkgs              = union($common_os_pkgs, ['python-cairo',])
+        } else {
           $libpath                   = "/usr/local/lib/python${pyver}/dist-packages"
           $extra_pip_install_options = [{'--no-binary' => ':all:'}]
-        }
-
-        default: {
-          fail("Unsupported Debian release: '${::lsbdistcodename}'")
         }
       }
     }
@@ -154,6 +150,7 @@ class graphite::params {
         $python_pip_pkg  = $::osfamily ? {
           'RedHat'  => $::operatingsystemrelease ? {
             /^7/    => 'python2-pip',
+            /^8/    => 'python2-pip',
             default => 'python-pip'
           },
           default   => 'python-pip',
@@ -180,6 +177,12 @@ class graphite::params {
         }
 
         /^7\.\d+/: {
+          $apache_24        = true
+          $graphitepkgs     = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
+          $service_provider = 'systemd'
+        }
+
+        /^8\.\d+/: {
           $apache_24        = true
           $graphitepkgs     = union($common_os_pkgs,['python-sqlite3dbm', 'dejavu-fonts-common', 'dejavu-sans-fonts', 'python-cairocffi','python2-crypto'])
           $service_provider = 'systemd'

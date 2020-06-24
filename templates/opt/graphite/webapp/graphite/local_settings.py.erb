@@ -62,6 +62,10 @@ CACHES = {
 
 <% end -%>
 
+<% if scope.lookupvar('graphite::gr_web_url_prefix') != "/" -%>
+URL_PREFIX = "<%= scope.lookupvar('graphite::gr_web_url_prefix') %>"
+<% end -%>
+
 #####################################
 # Filesystem Paths #
 #####################################
@@ -247,6 +251,7 @@ REMOTE_STORE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeo
 REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
 REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
 <% end %>
+REMOTE_STORE_MERGE_RESULTS = <%= scope.lookupvar('graphite::gr_cluster_store_merge_results') %>
 
 <% end %>
 

@@ -154,6 +154,8 @@
 # [*gr_web_server_remove_default*]
 #   Remove the default configuration for apache or nginx.
 #   Default is undef, which removes the default configuration only if the server is running on port 80.
+# [*gr_web_url_prefix*]
+#   Deploy graphite-web with this URL prefix instead of /
 # [*gr_use_ssl*]
 #   If true, alter web server config to enable SSL.
 #   Default is false.
@@ -333,6 +335,12 @@
 #   Time before retrying a failed remote webapp.  Default = 60
 # [*gr_cluster_cache_duration*]
 #   Time to cache remote metric find results.  Default = 300
+# [*gr_cluster_store_merge_results*]
+#   During a rebalance of a consistent hash cluster, after a partition
+#   event on a replication > 1 cluster or in other cases we  might
+#   receive multiple TimeSeries data for a metric key. Merge them together
+#   rather than choosing the "most complete" one (pre-0.9.14 behaviour).
+#   Default is 'True' (String).
 # [*gr_rendering_hosts*]
 #   Array of remote rendering hosts. eg.: ['10.0.2.2:80', '10.0.2.3:80']
 #   Default is undef, setting this also enabled REMOTE_RENDER=True
@@ -423,6 +431,9 @@
 # [*gr_log_cache_performance*]
 #   logs timings for remote calls to carbon-cache
 #   Default is 'False' (String)
+# [*gr_log_cache_queue_sorts]
+#   Logs time required for the queue sorts
+#   Default is 'True' (String)
 # [*gr_log_rendering_performance*]
 #   Triggers the creation of rendering.log which logs timings for calls to
 #   the The Render URL API
@@ -446,6 +457,9 @@
 # [*gr_django_init_command]
 #   Command to use for the Django DB initialization exec.
 #   default: "${::graphite::params::python_binary} manage.py syncdb --noinput"
+#   Since Django 1.7 sysndb is deprecated and the command should be
+#   "${::graphite::params::python_binary} manage.py migrate --run-syncd" or
+#   'django-admin migrate --settings=graphite.settings --run-syncdb'
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
@@ -527,6 +541,9 @@
 #   Default: false
 # [*gr_enable_logrotation*]
 #   Boolean. Sets up a cronjob to rotate carbon and webapp logs.
+# [*gr_tags_enable*]
+#   Boolean. Enable tag support in carbon. Tags will be sent to the graphite-web service
+#   on 'http://127.0.0.1:${gr_web_server_port}'
 # [*gr_apache_port*]
 #   DEPRECATED. Use `gr_web_server_port` now. Trying to set this variable will
 #   cause puppet to fail.
@@ -617,6 +634,7 @@ class graphite (
   $gr_web_user                            = undef,
   $gr_web_cors_allow_from_all             = false,
   $gr_web_server_remove_default           = undef,
+  $gr_web_url_prefix                      = '/',
   $gr_use_ssl                             = false,
   $gr_ssl_cert                            = undef,
   $gr_ssl_key                             = undef,
@@ -697,6 +715,7 @@ class graphite (
   $gr_cluster_find_timeout                = 2.5,
   $gr_cluster_retry_delay                 = 60,
   $gr_cluster_cache_duration              = 300,
+  $gr_cluster_store_merge_results         = 'True',
   $nginx_htpasswd                         = undef,
   $nginx_proxy_read_timeout               = 10,
   $manage_ca_certificate                  = true,
@@ -736,6 +755,7 @@ class graphite (
   $gr_whisper_lock_writes                 = 'False',
   $gr_whisper_fallocate_create            = 'False',
   $gr_log_cache_performance               = 'False',
+  $gr_log_cache_queue_sorts               = 'False',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
   $wsgi_processes                         = 5,
@@ -778,7 +798,8 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef,
   $gr_apache_port                         = undef,
-  $gr_apache_port_https                   = undef,) inherits graphite::params {
+  $gr_apache_port_https                   = undef,
+  $gr_tags_enable                         = false,) inherits graphite::params {
   # Validation of input variables.
   # TODO - validate all the things
   validate_string($gr_use_remote_user_auth)
@@ -796,6 +817,7 @@ class graphite (
   validate_bool($gr_manage_python_packages)
   validate_bool($gr_disable_webapp_cache)
   validate_bool($gr_base_dir_managed_externally)
+  validate_bool($gr_tags_enable)
 
   if $gr_apache_port or $gr_apache_port_https {
     fail('$gr_apache_port and $gr_apache_port_https are deprecated in favour of $gr_web_server_port and $gr_web_server_port_https')

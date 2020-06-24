@@ -131,6 +131,16 @@ class graphite::config inherits graphite::params {
     seltype   => 'httpd_sys_rw_content_t',
     subscribe => Exec['Initial django db creation'],
   }
+  file { [
+    "${::graphite::graphiteweb_log_dir_REAL}/info.log",
+    "${::graphite::graphiteweb_log_dir_REAL}/exception.log"]:
+    ensure    => file,
+    group     => $gr_web_group_REAL,
+    mode      => '0755',
+    owner     => $gr_web_user_REAL,
+    seltype   => 'httpd_sys_rw_content_t',
+    subscribe => Exec['Initial django db creation'],
+  }
 
   # change access permissions for carbon-cache to align with gr_user
   # (if different from web_user)
