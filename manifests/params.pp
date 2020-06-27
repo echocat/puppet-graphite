@@ -14,7 +14,7 @@ class graphite::params {
   $django_tagging_ver    = '0.4.6'
   $django_tagging_source = undef
   $twisted_pkg           = 'Twisted'
-  $twisted_ver           = '13.2.0'
+  $twisted_ver           = '20.3.0'
   $twisted_source        = undef
   $txamqp_pkg            = 'txAMQP'
   $txamqp_ver            = '0.4'
