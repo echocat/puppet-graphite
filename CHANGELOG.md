@@ -1,3 +1,24 @@
+## 2020-06-24 - 8.0.0 (Major release)
+
+!!! Lots of defaults are changed to match graphite 1.1.7 and support Debian Buster and CentOS 7/8 !!!
+
+
+#### Features:
+
+- Add parameter `gr_tags_enable` to activate tag support in Carbon (#387)
+- Add support graphite version 1.1.x
+- Add support and tests for puppet 5
+- Add support and test for Ubuntu binoic and CentOS 7/8
+- Add option REMOTE_STORE_MERGE_RESULTS to local_settings.py.erb template
+- Add parameter `gr_url_prefix` to allow deployment on non-root URLs
+- effectively configure specified carbon logs directory
+
+#### Bugfixes:
+
+- fixes #365 remove sort from storage aggregation rules
+- Update carbon-logrotate - ignore unrotated files
+- fix carbon-cache init script on debian
+
 ## 2019-02-15 - 7.5.0 (Feature release)
 
 #### Features:
