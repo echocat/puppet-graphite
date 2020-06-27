@@ -456,10 +456,7 @@
 #   Default: 'posix'
 # [*gr_django_init_command]
 #   Command to use for the Django DB initialization exec.
-#   default: "${::graphite::params::python_binary} manage.py syncdb --noinput"
-#   Since Django 1.7 sysndb is deprecated and the command should be
-#   "${::graphite::params::python_binary} manage.py migrate --run-syncd" or
-#   'django-admin migrate --settings=graphite.settings --run-syncdb'
+#   default: "PYTHONPATH=${::graphite::graphiteweb_webapp_dir_REAL} django-admin.py migrate --setting=graphite.settings --run-syncdb"
 # [*gr_django_tagging_pkg*]
 #   String. The name of the django tagging package to install
 #   Default: django-tagging
@@ -762,7 +759,7 @@ class graphite (
   $wsgi_threads                           = 5,
   $wsgi_inactivity_timeout                = 120,
   $gr_django_init_provider                = $::graphite::params::django_init_provider,
-  $gr_django_init_command                 = "${::graphite::params::python_binary} manage.py syncdb --noinput",
+  $gr_django_init_command                 = "PYTHONPATH=${::graphite::graphiteweb_webapp_dir_REAL}  django-admin.py migrate --setting=graphite.settings --run-syncdb",
   $gr_django_tagging_pkg                  = $::graphite::params::django_tagging_pkg,
   $gr_django_tagging_ver                  = $::graphite::params::django_tagging_ver,
   $gr_django_tagging_source               = $::graphite::params::django_tagging_source,
