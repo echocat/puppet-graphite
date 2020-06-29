@@ -755,7 +755,7 @@ class graphite (
   $gr_whisper_lock_writes                 = 'False',
   $gr_whisper_fallocate_create            = 'False',
   $gr_log_cache_performance               = 'False',
-  $gr_log_cache_queue_sorts               = 'False',
+  $gr_log_cache_queue_sorts               = 'True',
   $gr_log_rendering_performance           = 'False',
   $gr_log_metric_access                   = 'False',
   $wsgi_processes                         = 5,
