@@ -385,6 +385,8 @@
 #   variable (mainly for nginx use) to tell Graphite a user is authenticated.
 #   Useful when using an external auth handler with X-Accel-Redirect etc.
 #   Example value - HTTP_X_REMOTE_USER
+# [*gr_apache_logformat*]
+#   Specify the log format to use for apache access logs
 # [*gunicorn_arg_timeout*]
 #   value to pass to gunicorn's --timeout arg.
 #   Default is 30
@@ -745,6 +747,7 @@ class graphite (
   $gr_graphiteweb_storage_dir             = '/var/lib/graphite-web',
   $gr_graphiteweb_install_lib_dir         = undef,
   $gr_apache_logdir                       = $::graphite::params::apache_logdir_graphite,
+  $gr_apache_logformat                    = 'common',
   $gunicorn_arg_timeout                   = 30,
   $gunicorn_bind                          = 'unix:/var/run/graphite.sock',
   $gunicorn_workers                       = 2,

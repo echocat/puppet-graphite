@@ -32,6 +32,7 @@ describe 'graphite::config_apache', :type => 'class' do
         :require => 'Package[mod_wsgi]',
         :notify  => 'Service[httpd]'})
     }
+    it { is_expected.to contain_file('/etc/httpd/conf.d/graphite.conf').with_content(/CustomLog \/var\/log\/httpd\/graphite-web\/graphite-web-access.log common/) }
   end
 
   shared_context 'Debian supported platforms' do
@@ -60,6 +61,8 @@ describe 'graphite::config_apache', :type => 'class' do
         :onlyif  => 'test -f /etc/apache2/sites-enabled/000-default -o -f /etc/apache2/sites-enabled/000-default.conf',
         :require => 'Package[libapache2-mod-wsgi]',})
     }
+
+    it { is_expected.to contain_file('/etc/apache2/sites-available/graphite.conf').with_content(/CustomLog \/var\/log\/apache2\/graphite-web\/graphite-web-access.log common/) }
   end
 
   context 'Unsupported OS' do

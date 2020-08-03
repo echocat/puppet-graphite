@@ -23,7 +23,7 @@ WSGISocketPrefix <%= scope.lookupvar('graphite::params::apache_wsgi_socket_prefi
 <% if ![nil, '', :undef].include?(scope.lookupvar('graphite::gr_apache_noproxy')) %>  NoProxy <%= scope.lookupvar('graphite::gr_apache_noproxy') %><% end %>
 
 	ErrorLog <%= scope.lookupvar('graphite::gr_apache_logdir') %>/graphite-web-error.log
-	CustomLog <%= scope.lookupvar('graphite::gr_apache_logdir') %>/graphite-web-access.log common
+	CustomLog <%= scope.lookupvar('graphite::gr_apache_logdir') %>/graphite-web-access.log <%= scope.lookupvar('graphite::gr_apache_logformat') %>
 
 	# I've found that an equal number of processes & threads tends
 	# to show the best performance for Graphite (ymmv).
