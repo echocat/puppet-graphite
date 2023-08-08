@@ -66,6 +66,9 @@ CACHES = {
 URL_PREFIX = "<%= scope.lookupvar('graphite::gr_web_url_prefix') %>"
 <% end -%>
 
+FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
+FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
+
 #####################################
 # Filesystem Paths #
 #####################################
@@ -240,11 +243,17 @@ CLUSTER_SERVERS = ['<%= scope.lookupvar('graphite::gr_cluster_servers').join("',
 
 # Remote cluster settings config names changed in Graphite 1.0.
 # See https://github.com/echocat/puppet-graphite/pull/356 for more info
-FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
-FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
+<% if scope.lookupvar('graphite::version_1') >= 0 %>
 REMOTE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
 FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
+<% else %>
+REMOTE_STORE_FETCH_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_fetch_timeout') %>
+REMOTE_STORE_FIND_TIMEOUT = <%= scope.lookupvar('graphite::gr_cluster_find_timeout') %>
+REMOTE_STORE_RETRY_DELAY = <%= scope.lookupvar('graphite::gr_cluster_retry_delay') %>
+REMOTE_FIND_CACHE_DURATION = <%= scope.lookupvar('graphite::gr_cluster_cache_duration') %>
+<% end %>
 REMOTE_STORE_MERGE_RESULTS = <%= scope.lookupvar('graphite::gr_cluster_store_merge_results') %>
+
 <% end %>
 
 ## Prefetch cache
